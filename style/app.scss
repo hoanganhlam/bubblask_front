@@ -48,7 +48,7 @@
 /*-------------------------
    Reset
 --------------------------*/
-$footer-background-color: #FFF;
+$footer-background-color: whitesmoke;
 $primary: #333;
 $notification-padding: 1rem;
 $radius: 2px;
@@ -93,6 +93,15 @@ body {
 
 .logo {
     font-size: 25px;
+
+    .primary {
+        color: #d8ab34;
+    }
+
+    .second {
+        font-weight: normal;
+        font-size: 1rem;
+    }
 }
 
 .main-content {
@@ -112,6 +121,7 @@ body {
 }
 
 .task {
+    background: #FFFFFF;
     cursor: pointer;
 
     &:not(:last-child) {
@@ -123,8 +133,14 @@ body {
     }
 
     .notification {
+        background: #FFFFFF;
+
         &:not(:last-child) {
             margin-bottom: 0;
+        }
+
+        &.is-warning {
+            background-color: #ffdd57;
         }
 
         .title {

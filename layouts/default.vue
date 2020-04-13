@@ -4,7 +4,10 @@
             <div class="container">
                 <nav class="navbar" role="navigation" aria-label="main navigation">
                     <div class="navbar-brand">
-                        <n-link class="navbar-item logo" to="/">BUBBLASK</n-link>
+                        <n-link class="navbar-item logo" to="/">
+                            <span class="primary">BUBBLASK</span>
+                            <span class="second">.com</span>
+                        </n-link>
                         <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
                            @click="burgerActive = !burgerActive">
                             <span aria-hidden="true"></span>

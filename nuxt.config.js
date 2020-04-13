@@ -18,7 +18,11 @@ export default {
             }
         ],
         link: [
-            {rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'}
+            {rel: 'apple-touch-icon', sizes: '57x57', type: 'image/x-icon', href: '/icon/apple-icon-57x57.png'},
+            {rel: 'icon', sizes: '192x192', type: 'image/png', href: '/icon/favicon-192x192.png'},
+            {rel: 'icon', sizes: '96x96', type: 'image/png', href: '/icon/favicon-96x96.png'},
+            {rel: 'icon', sizes: '32x32', type: 'image/png', href: '/icon/favicon-32x32.png'},
+            {rel: 'icon', sizes: '16x16', type: 'image/png', href: '/icon/favicon-16x16.png'}
         ]
     },
     /*

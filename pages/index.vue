@@ -79,96 +79,98 @@
                 </div>
             </div>
         </div>
-        <div class="section">
-            <div class="container">
-                <h2 class="title is-mobile is-4 has-text-centered">Task</h2>
-                <div class="level is-mobile">
-                    <div class="level-left">
-                        <div class="buttons" style="margin-left: -.85rem;">
-                            <div class="button is-text">
-                                <span class="field">Total: </span>
-                                <span class="value">{{tasks.length}}</span>
+        <div class="hero is-light">
+            <div class="hero-body">
+                <div class="container">
+                    <h2 class="title is-mobile is-4 has-text-centered">Task</h2>
+                    <div class="level is-mobile">
+                        <div class="level-left">
+                            <div class="buttons" style="margin-left: -.85rem;">
+                                <div class="button is-text">
+                                    <span class="field">Total: </span>
+                                    <span class="value">{{tasks.length}}</span>
+                                </div>
+                                <div class="button is-text">
+                                    <span class="field">Time: </span>
+                                    <span class="value">{{totalTime}}m</span>
+                                </div>
                             </div>
-                            <div class="button is-text">
-                                <span class="field">Time: </span>
-                                <span class="value">{{totalTime}}m</span>
-                            </div>
+                        </div>
+                        <div class="level-right">
+                            <b-switch :rounded="false" v-model="setting.rigid"></b-switch>
                         </div>
                     </div>
-                    <div class="level-right">
-                        <b-switch :rounded="false" v-model="setting.rigid"></b-switch>
+                    <div v-if="setting.rigid" class="notification content">
+                        <b>Strict mode</b>
+                        <ul>
+                            <li>You can't stop timer when working</li>
+                            <li>You can't update running task</li>
+                        </ul>
                     </div>
-                </div>
-                <div v-if="setting.rigid" class="notification content">
-                    <b>Strict mode</b>
-                    <ul>
-                        <li>You can't stop timer when working</li>
-                        <li>You can't update running task</li>
-                    </ul>
-                </div>
-                <div class="task" v-for="(task, i) in displayTasks" :key="i"
-                     v-bind:class="{'is-editing': editing === i}"
-                     @input="handleInput(i)">
-                    <transition name="fade">
-                        <div @dblclick="editing = i" class="notification media"
-                             v-bind:class="{'is-warning': task.isRunning()}">
-                            <div class="media-left">
-                                <div class="button is-small" @click="done(task)"
-                                     v-bind:class="{'is-static': ['stopped', 'complete'].includes(task.status)}">
-                                    <x-icon name="check"/>
+                    <div class="task" v-for="(task, i) in displayTasks" :key="i"
+                         v-bind:class="{'is-editing': editing === i}"
+                         @input="handleInput(i)">
+                        <transition name="fade">
+                            <div @dblclick="editing = i" class="notification media"
+                                 v-bind:class="{'is-warning': task.isRunning()}">
+                                <div class="media-left">
+                                    <div class="button is-small" @click="done(task)"
+                                         v-bind:class="{'is-static': ['stopped', 'complete'].includes(task.status)}">
+                                        <x-icon name="check"/>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="media-content">
-                                <ce placeholder="Untitled" elm="h4" class="title" :editable="!task.isRunning()"
-                                    v-model="task.title"></ce>
-                                <small class="field">{{task.interval * task.tomato}}m</small>
-                            </div>
-                            <div class="media-right clickable" v-if="!['stopped', 'complete'].includes(task.status)">
-                                <div class="buttons">
-                                    <div class="button is-hidden-mobile is-text">
-                                        {{task.times.length}} / {{task.interval}}
-                                    </div>
-                                    <div v-if="!task.isRunning()" class="button is-text is-hidden-mobile">
-                                        {{fancyTimeFormat(task.timeLeft())}}
-                                    </div>
-                                    <div class="button" @click="run(task)">
-                                        <x-icon class="is-medium"
-                                                :name="task.status ===  'running' ? 'pause' : 'play'"/>
+                                <div class="media-content">
+                                    <ce placeholder="Untitled" elm="h4" class="title" :editable="!task.isRunning()"
+                                        v-model="task.title"></ce>
+                                    <small class="field">{{task.interval * task.tomato}}m</small>
+                                </div>
+                                <div class="media-right clickable" v-if="!['stopped', 'complete'].includes(task.status)">
+                                    <div class="buttons">
+                                        <div class="button is-hidden-mobile is-text">
+                                            {{task.times.length}} / {{task.interval}}
+                                        </div>
+                                        <div v-if="!task.isRunning()" class="button is-text is-hidden-mobile">
+                                            {{fancyTimeFormat(task.timeLeft())}}
+                                        </div>
+                                        <div class="button" @click="run(task)">
+                                            <x-icon class="is-medium"
+                                                    :name="task.status ===  'running' ? 'pause' : 'play'"/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </transition>
-                    <transition name="bounce">
-                        <div v-if="editing === i" class="card">
-                            <div class="card-header" @dblclick="editing = -1">
-                                <div class="card-header-title">
-                                    <ce elm="h4" class="title" placeholder="Untitled" v-model="task.title"></ce>
+                        </transition>
+                        <transition name="bounce">
+                            <div v-if="editing === i" class="card">
+                                <div class="card-header" @dblclick="editing = -1">
+                                    <div class="card-header-title">
+                                        <ce elm="h4" class="title" placeholder="Untitled" v-model="task.title"></ce>
+                                    </div>
+                                </div>
+                                <div class="card-content">
+                                    <ce elm="p" class="note notification" placeholder="Note" v-model="task.note" :editable="!task.isRunning()"></ce>
+                                    <div class="field">
+                                        <label class="label">Estimate</label>
+                                        <b-number-input
+                                            :disabled="!task.isRunning()"
+                                            :min="1"
+                                            :max="10"
+                                            controlsPosition="compact"
+                                            expanded size="is-small" v-model="task.interval" @input="handleInput(i)"/>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="card-footer-item" @click="editing = -1">
+                                        <x-icon name="close"></x-icon>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="card-content">
-                                <ce elm="p" class="note notification" placeholder="Note" v-model="task.note" :editable="!task.isRunning()"></ce>
-                                <div class="field">
-                                    <label class="label">Estimate</label>
-                                    <b-number-input
-                                        :disabled="!task.isRunning()"
-                                        :min="1"
-                                        :max="10"
-                                        controlsPosition="compact"
-                                        expanded size="is-small" v-model="task.interval" @input="handleInput(i)"/>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <div class="card-footer-item" @click="editing = -1">
-                                    <x-icon name="close"></x-icon>
-                                </div>
-                            </div>
-                        </div>
-                    </transition>
-                </div>
-                <div class="notification task has-text-centered" @click="add">
-                    <x-icon name="plus"/>
-                    <span>Add Task</span>
+                        </transition>
+                    </div>
+                    <div class="notification task has-text-centered" @click="add">
+                        <x-icon name="plus"/>
+                        <span>Add Task</span>
+                    </div>
                 </div>
             </div>
         </div>
