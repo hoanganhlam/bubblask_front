@@ -1,0 +1,15 @@
+html {
+    -webkit-font-smoothing: auto;
+}
+
+.container {
+    max-width: 800px;
+}
+
+.logo {
+    font-weight: bold;
+}
+
+.main-content {
+    min-height: calc(100vh - 56px)
+}

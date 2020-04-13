@@ -1,0 +1,329 @@
+@function opposite-position($directions) {
+    $opposite-directions: ();
+    $direction-map: (
+        'top': 'bottom',
+        'right': 'left',
+        'bottom': 'top',
+        'left': 'right',
+        'center': 'center',
+        'ltr': 'rtl',
+        'rtl': 'ltr'
+    );
+
+    @each $direction in $directions {
+        $direction: to-lower-case($direction);
+
+        @if map-has-key($direction-map, $direction) {
+            $opposite-directions: append($opposite-directions, unquote(map-get($direction-map, $direction)));
+        } @else {
+            @warn "No opposite direction can be found for `#{$direction}`. Direction omitted.";
+        }
+    }
+
+    @return $opposite-directions;
+}
+
+@mixin triangle($direction, $color: currentcolor, $size: 1em) {
+    @if not index(top right bottom left, $direction) {
+        @error "Direction must be either `top`, `right`, `bottom` or `left`.";
+    }
+
+    width: 0;
+    height: 0;
+    content: '';
+    z-index: 2;
+    border-#{opposite-position($direction)}: ($size) solid $color;
+
+    $perpendicular-borders: $size solid transparent;
+
+    @if $direction == top or $direction == bottom {
+        border-left: $perpendicular-borders;
+        border-right: $perpendicular-borders;
+    } @else if $direction == right or $direction == left {
+        border-bottom: $perpendicular-borders;
+        border-top: $perpendicular-borders;
+    }
+}
+
+/*-------------------------
+   Reset
+--------------------------*/
+$footer-background-color: #FFF;
+$primary: #333;
+$notification-padding: 1rem;
+$radius: 2px;
+$body-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+$box-radius: 0;
+@import "~bulma/bulma";
+@import "buefy";
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-smooth: auto;
+    -webkit-font-smoothing: auto;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #EEEEEE;
+    opacity: 1;
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #EEEEEE;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+    color: #EEEEEE;
+}
+
+:focus {
+    outline: unset;
+}
+
+.container {
+    max-width: 728px;
+}
+
+.hero.is-small .hero-body {
+    padding: 1.5rem 0;
+}
+
+.logo {
+    font-size: 25px;
+}
+
+.main-content {
+    min-height: calc(100vh - 56px)
+}
+
+.navbar-item {
+    font-weight: bold;
+}
+
+.section {
+    padding: 3rem .75rem;
+}
+
+.footer {
+    padding: 3rem 1.5rem 3rem;
+}
+
+.task {
+    cursor: pointer;
+
+    &:not(:last-child) {
+        margin-bottom: .75rem;
+    }
+
+    &.is-editing {
+        z-index: 999;
+    }
+
+    .notification {
+        &:not(:last-child) {
+            margin-bottom: 0;
+        }
+
+        .title {
+            font-size: 1rem;
+            margin-bottom: .25rem;
+        }
+    }
+
+    .card-header {
+        box-shadow: 0 1px 1px rgba(10, 10, 10, 0.1);
+        display: block;
+    }
+
+    position: relative;
+
+    .card {
+        background: #FFF;
+        height: fit-content;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 2;
+
+        p {
+            margin-bottom: .5rem !important;
+        }
+    }
+
+    .title {
+        width: 100%;
+    }
+}
+
+.button {
+    &.is-text {
+        text-decoration: unset;
+    }
+
+    .field {
+        margin-bottom: 0;
+        color: #7f828b;
+    }
+
+    .value {
+        font-weight: bold;
+    }
+
+    span:not(:last-child) {
+        margin-right: .5rem;
+    }
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+[placeholder]:empty:before {
+    content: attr(placeholder);
+    color: #989898;
+}
+
+.label {
+    color: #989898;
+    display: block;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.dropdown-content {
+    border-radius: 0;
+}
+
+.dropdown-menu {
+    margin-top: 4px;
+}
+
+.pomodoro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.timer {
+    width: 440px;
+    height: 248px;
+    display: block;
+    color: white;
+    margin: 0 auto 1.5rem;
+
+    * {
+        cursor: default;
+    }
+
+    .title {
+        width: 100%;
+        font-size: 26px;
+        letter-spacing: 4px;
+        text-align: center;
+    }
+
+    &--clock {
+        width: 100%;
+        position: relative;
+        margin-top: 22px;;
+        overflow: hidden;
+
+        .clock-display-grp {
+            width: 100%;
+            position: relative;
+
+            .number-grp {
+                width: auto;
+                display: block;
+                height: 140px;
+                float: left;
+                overflow: hidden;
+
+                .number-grp-wrp {
+                    width: 100%;
+                    position: relative;
+                    transition-duration: .3s;
+                    margin: 0 .25rem;
+
+                    .num {
+                        width: 100%;
+                        position: relative;
+                        height: 140px;
+
+                        p {
+                            width: auto;
+                            display: table;
+                            font-size: 140px;
+                            line-height: 135px;
+                            font-weight: bold;
+                        }
+
+                    }
+
+                }
+
+            }
+        }
+
+        .clock-separator {
+            width: auto;
+            float: left;
+            display: block;
+            height: 140px;
+
+            p {
+                width: auto;
+                display: table;
+                font-size: 140px;
+                line-height: 122.5px;
+                font-weight: bold;
+            }
+
+        }
+
+    }
+
+    h4 {
+        width: 100%;
+        font-size: 10px;
+        letter-spacing: 6px;
+        text-align: center;
+        padding-top: 25px;
+        float: left;
+    }
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+@media all and (max-width: 480px) {
+    .timer {
+        width: 376px;
+
+        .timer--clock .clock-display-grp .number-grp {
+            height: 120px;
+
+            .num {
+                height: 120px;
+
+                p {
+                    font-size: 120px;
+                }
+            }
+        }
+
+        .timer--clock .clock-separator {
+            height: 120px;
+
+            p {
+                font-size: 100px;
+                line-height: 126.5px;
+            }
+        }
+    }
+}
