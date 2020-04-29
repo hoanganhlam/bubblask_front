@@ -18,13 +18,12 @@
                     <div class="navbar-menu" v-bind:class="{'is-active' : burgerActive}">
                         <div class="navbar-end">
                             <div class="navbar-item">
-                                <n-link class="button is-text" to="/leaderboard">LeaderBoard</n-link>
+                                <n-link to="/leaderboard">LeaderBoard</n-link>
                             </div>
                             <div class="navbar-item">
                                 <b-dropdown v-if="!Boolean(currentUser)" position="is-bottom-left">
-                                    <button class="button" @click="handleClick(true)" slot="trigger">
-                                        <strong>Report</strong>
-                                    </button>
+                                    <div class="clickable" @click="handleClick(true)" slot="trigger">Report
+                                    </div>
                                     <div class="dropdown-item" style="min-width: 350px">
                                         <div class="notification is-warning">Login to manage and track your work!</div>
                                         <div class="field" v-if="!logging">

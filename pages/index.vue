@@ -73,13 +73,13 @@
                         </div>
                     </div>
                     <div class="buttons timer-control" v-bind:class="{'hidden': runningTask}">
-                        <div class="button is-light" @click="startBreak(5)">Short Break</div>
-                        <div class="button is-light" @click="startBreak(10)">Long Break</div>
+                        <div class="button is-primary" @click="startBreak(5)">Short Break</div>
+                        <div class="button is-primary" @click="startBreak(10)">Long Break</div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="hero is-light">
+        <div class="hero is-small">
             <div class="hero-body">
                 <div class="container">
                     <h2 class="title is-mobile is-4 has-text-centered">Task</h2>
@@ -174,16 +174,14 @@
                 </div>
             </div>
         </div>
-        <div class="hero is-small">
+        <div class="hero is-warning is-small">
             <div class="hero-body">
-                <div class="section">
-                    <div class="container">
-                        <h1 class="title">Bublask</h1>
-                        <q>“You have to completely shift your thinking, it takes you a while to get into it and it takes
-                            you a while to get back and remember where you were…We found about 82 percent of all
-                            interrupted work is resumed on the same day. But here’s the bad news — it takes an average
-                            of 23 minutes and 15 seconds to get back to the task.“</q>
-                    </div>
+                <div class="container">
+                    <h1 class="title">Bublask</h1>
+                    <q>You have to completely shift your thinking, it takes you a while to get into it and it takes
+                        you a while to get back and remember where you were…We found about 82 percent of all
+                        interrupted work is resumed on the same day. But here’s the bad news — it takes an average
+                        of 23 minutes and 15 seconds to get back to the task.</q>
                 </div>
             </div>
         </div>
@@ -283,16 +281,18 @@
                 );
             },
             async pushLate() {
-                let needUpdate = this.tasks.filter(x => x.updating)
-                for (let i = 0; i < needUpdate.length; i++) {
-                    let res = null
-                    if (needUpdate[i].id) {
-                        res = await this.$axios.$put(`/task/tasks/${needUpdate[i].id}/`, needUpdate[i])
-                    } else {
-                        res = await this.$axios.$post("/task/tasks/", needUpdate[i])
-                    }
-                    if (res) {
-                        needUpdate[i].updating = false
+                if (this.currentUser) {
+                    let needUpdate = this.tasks.filter(x => x.updating)
+                    for (let i = 0; i < needUpdate.length; i++) {
+                        let res = null
+                        if (needUpdate[i].id) {
+                            res = await this.$axios.$put(`/task/tasks/${needUpdate[i].id}/`, needUpdate[i])
+                        } else {
+                            res = await this.$axios.$post("/task/tasks/", needUpdate[i])
+                        }
+                        if (res) {
+                            needUpdate[i].updating = false
+                        }
                     }
                 }
             },
@@ -325,7 +325,7 @@
                         this.pushUpdateTask(running_tasks[i])
                     }
                     this.timer = m * 60
-                    this.toTop(56)
+                    this.toTop(48)
                 }
             },
             toTop(range = 0) {
@@ -404,7 +404,7 @@
                     this.timer = this.runningTask.getTimer((task) => {
                         this.pushUpdateTask(task)
                     })
-                    this.toTop(56)
+                    this.toTop(48)
                 } else {
                     this.toTop(0)
                 }

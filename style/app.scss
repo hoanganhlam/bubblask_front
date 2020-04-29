@@ -48,12 +48,19 @@
 /*-------------------------
    Reset
 --------------------------*/
-$footer-background-color: whitesmoke;
-$primary: #333;
+$footer-background-color: #FFF;
+$primary: #cd2653;
+$link: #cd2653;
+$warning: #f5efe0;
 $notification-padding: 1rem;
+$notification-background-color: #FFF;
 $radius: 2px;
 $body-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+$body-font-size: 14px;
 $box-radius: 0;
+$box-shadow: 0 1px 5px -1px rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
+$navbar-height: 3rem;
+
 @import "~bulma/bulma";
 @import "buefy";
 
@@ -91,11 +98,18 @@ body {
     padding: 1.5rem 0;
 }
 
+h2.title,
+h1.title {
+    font-family: serif;
+}
+
 .logo {
-    font-size: 25px;
+    font-size: 20px;
 
     .primary {
-        color: #d8ab34;
+        color: $primary;
+        font-family: serif;
+        font-weight: bold;
     }
 
     .second {
@@ -121,7 +135,7 @@ body {
 }
 
 .task {
-    background: #FFFFFF;
+    box-shadow: 0 1px 5px -1px rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
     cursor: pointer;
 
     &:not(:last-child) {
@@ -137,10 +151,6 @@ body {
 
         &:not(:last-child) {
             margin-bottom: 0;
-        }
-
-        &.is-warning {
-            background-color: #ffdd57;
         }
 
         .title {
@@ -215,7 +225,7 @@ body {
 }
 
 .dropdown-menu {
-    margin-top: 4px;
+    margin-top: 9px;
 }
 
 .pomodoro {
@@ -228,7 +238,6 @@ body {
     width: 440px;
     height: 248px;
     display: block;
-    color: white;
     margin: 0 auto 1.5rem;
 
     * {
@@ -315,6 +324,12 @@ body {
 
 .uppercase {
     text-transform: uppercase;
+}
+
+@media all and (max-width: 728px) {
+    .main-content .container {
+        padding: 0 .75rem;
+    }
 }
 
 @media all and (max-width: 480px) {
