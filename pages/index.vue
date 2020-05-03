@@ -174,7 +174,7 @@
                 </div>
             </div>
         </div>
-        <div class="hero is-warning is-small">
+        <div class="hero">
             <div class="hero-body">
                 <div class="container">
                     <h1 class="title">Bublask</h1>
@@ -200,7 +200,7 @@
             return {
                 title: this.title,
                 meta: [
-                    {hid: 'description', name: 'description', content: 'My custom description'}
+                    {hid: 'description', name: 'description', content: 'Bubblask is small application with many features that help you increase productivity by using pomodoro technique.'}
                 ]
             }
         },
