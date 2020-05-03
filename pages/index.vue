@@ -124,7 +124,8 @@
                                         v-model="task.title"></ce>
                                     <small class="field">{{task.interval * task.tomato}}m</small>
                                 </div>
-                                <div class="media-right clickable" v-if="!['stopped', 'complete'].includes(task.status)">
+                                <div class="media-right clickable"
+                                     v-if="!['stopped', 'complete'].includes(task.status)">
                                     <div class="buttons">
                                         <div class="button is-hidden-mobile is-text">
                                             {{task.times.length}} / {{task.interval}}
@@ -148,7 +149,8 @@
                                     </div>
                                 </div>
                                 <div class="card-content">
-                                    <ce elm="p" class="note notification" placeholder="Note" v-model="task.note" :editable="!task.isRunning()"></ce>
+                                    <ce elm="p" class="note notification" placeholder="Note" v-model="task.note"
+                                        :editable="!task.isRunning()"></ce>
                                     <div class="field">
                                         <label class="label">Estimate</label>
                                         <b-number-input
@@ -176,12 +178,22 @@
         </div>
         <div class="hero">
             <div class="hero-body">
-                <div class="container">
+                <div class="container content">
                     <h1 class="title">Bublask</h1>
-                    <q>You have to completely shift your thinking, it takes you a while to get into it and it takes
-                        you a while to get back and remember where you were…We found about 82 percent of all
-                        interrupted work is resumed on the same day. But here’s the bad news — it takes an average
-                        of 23 minutes and 15 seconds to get back to the task.</q>
+                    <p>Bubblask is small application with many features that help you increase productivity by using pomodoro technique.</p>
+                    <p>Pomodoro technique divides your total working/studying time into sessions of 25 minutes.</p>
+                    <ul>
+                        <li>You have to just set the timer of 25 minutes and start studying. In these 25 minutes, you
+                            should focus only on whatever you have decided to study/work. Take care of that nothing
+                            should interrupt you.
+                        </li>
+                        <li>After 25 minutes you have to take a break of 5 minutes. In these 5 minutes, you can do
+                            anything. You can attend calls you missed in those 25 minutes or you can take a small walk.
+                            You can just relax!
+                        </li>
+                        <li>After 5 minutes you have to again start studying for 25 minutes.</li>
+                        <li>After 4 sessions of 25 minutes, you can take a break of 15–20 minutes.</li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -200,7 +212,11 @@
             return {
                 title: this.title,
                 meta: [
-                    {hid: 'description', name: 'description', content: 'Bubblask is small application with many features that help you increase productivity by using pomodoro technique.'}
+                    {
+                        hid: 'description',
+                        name: 'description',
+                        content: 'Bubblask is small application with many features that help you increase productivity by using pomodoro technique.'
+                    }
                 ]
             }
         },
