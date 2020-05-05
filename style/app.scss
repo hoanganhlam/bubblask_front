@@ -59,6 +59,14 @@ $body-font-size: 14px;
 $box-radius: 0;
 $box-shadow: 0 1px 5px -1px rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
 $navbar-height: 3rem;
+$dropdown-content-offset: 0;
+$modal-card-head-radius: 2px;
+$modal-card-foot-radius: 2px;
+$modal-card-head-background-color: #FFF;
+$modal-card-head-border-bottom: 0;
+$modal-card-foot-border-top: 0;
+$modal-background-background-color: rgba(10, 10, 10, 0.3);
+$hero-body-padding: 3rem 0;
 
 @import "~bulma/bulma";
 @import "buefy";
@@ -72,18 +80,14 @@ body {
     -webkit-font-smoothing: auto;
 }
 
-::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: #EEEEEE;
-    opacity: 1;
+.header.is-dark {
+    background: #363636;
+
+    .navbar-item {
+        color: #FFFFFF;
+    }
 }
 
-:-ms-input-placeholder { /* Internet Explorer 10-11 */
-    color: #EEEEEE;
-}
-
-::-ms-input-placeholder { /* Microsoft Edge */
-    color: #EEEEEE;
-}
 
 :focus {
     outline: unset;
@@ -125,6 +129,14 @@ h1.title {
     font-weight: bold;
 }
 
+.is-dark {
+    .navbar-item {
+        a:hover {
+            color: #EEEEEE;
+        }
+    }
+}
+
 .section {
     padding: 3rem .75rem;
 }
@@ -134,12 +146,8 @@ h1.title {
 }
 
 .task {
-    box-shadow: 0 1px 5px -1px rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
+    box-shadow: 0 0 0 1px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.02);
     cursor: pointer;
-
-    &:not(:last-child) {
-        margin-bottom: .75rem;
-    }
 
     &.is-editing {
         z-index: 999;
@@ -147,6 +155,8 @@ h1.title {
 
     .notification {
         background: #FFFFFF;
+        line-height: 1;
+        padding: .5rem .75rem;
 
         &:not(:last-child) {
             margin-bottom: 0;
@@ -169,14 +179,21 @@ h1.title {
         background: #FFF;
         height: fit-content;
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
+        top: -.5rem;
+        left: -.5rem;
+        right: -.5rem;
         z-index: 2;
+        max-width: unset;
+        box-shadow: 0 5px 8px 0px rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
 
         p {
             margin-bottom: .5rem !important;
         }
+    }
+
+    .is-hidden-mobile {
+        color: #cacaca;
+        font-size: 14px;
     }
 
     .title {
@@ -221,10 +238,6 @@ h1.title {
 
 .dropdown-content {
     border-radius: 0;
-}
-
-.dropdown-menu {
-    margin-top: 9px;
 }
 
 .pomodoro {
@@ -281,7 +294,7 @@ h1.title {
                         p {
                             width: auto;
                             display: table;
-                            font-size: 140px;
+                            font-size: 150px;
                             line-height: 135px;
                             font-weight: bold;
                         }
@@ -325,9 +338,21 @@ h1.title {
     text-transform: uppercase;
 }
 
+.box {
+    padding: .5rem 1.25rem;
+}
+
+.box:not(:last-child) {
+    margin-bottom: .5rem;
+}
+
 @media all and (max-width: 728px) {
     .main-content .container {
         padding: 0 .75rem;
+    }
+
+    .media-content {
+        overflow-x: unset;
     }
 }
 

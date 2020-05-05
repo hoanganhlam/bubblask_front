@@ -88,7 +88,7 @@
                             <div class="buttons" style="margin-left: -.85rem;">
                                 <div class="button is-text">
                                     <span class="field">Total: </span>
-                                    <span class="value">{{tasks.length}}</span>
+                                    <span class="value">{{displayTasks.length}}</span>
                                 </div>
                                 <div class="button is-text">
                                     <span class="field">Time: </span>
@@ -100,7 +100,7 @@
                             <b-switch :rounded="false" v-model="setting.rigid"></b-switch>
                         </div>
                     </div>
-                    <div v-if="setting.rigid" class="notification content">
+                    <div v-if="setting.rigid" class="notification is-warning content">
                         <b>Strict mode</b>
                         <ul>
                             <li>You can't stop timer when working</li>
@@ -145,16 +145,17 @@
                             <div v-if="editing === i" class="card">
                                 <div class="card-header" @dblclick="editing = -1">
                                     <div class="card-header-title">
-                                        <ce elm="h4" class="title" placeholder="Untitled" v-model="task.title"></ce>
+                                        <ce elm="h4" class="title is-4" placeholder="Untitled"
+                                            v-model="task.title"></ce>
                                     </div>
                                 </div>
                                 <div class="card-content">
-                                    <ce elm="p" class="note notification" placeholder="Note" v-model="task.note"
+                                    <ce elm="p" class="note" placeholder="Note" v-model="task.note"
                                         :editable="!task.isRunning()"></ce>
                                     <div class="field">
                                         <label class="label">Estimate</label>
                                         <b-number-input
-                                            :disabled="!task.isRunning()"
+                                            :disabled="task.isRunning()"
                                             :min="1"
                                             :max="10"
                                             controlsPosition="compact"
@@ -169,9 +170,11 @@
                             </div>
                         </transition>
                     </div>
-                    <div class="notification task has-text-centered" @click="add">
-                        <x-icon name="plus"/>
-                        <span>Add Task</span>
+                    <div class="task has-text-centered" @click="add">
+                        <div class="notification">
+                            <x-icon name="plus"/>
+                            <span>Add Task</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -180,7 +183,8 @@
             <div class="hero-body">
                 <div class="container content">
                     <h1 class="title">Bublask</h1>
-                    <p>Bubblask is small application with many features that help you increase productivity by using pomodoro technique.</p>
+                    <p>Bubblask is small application with many features that help you increase productivity by using
+                        pomodoro technique.</p>
                     <p>Pomodoro technique divides your total working/studying time into sessions of 25 minutes.</p>
                     <ul>
                         <li>You have to just set the timer of 25 minutes and start studying. In these 25 minutes, you
@@ -194,6 +198,18 @@
                         <li>After 5 minutes you have to again start studying for 25 minutes.</li>
                         <li>After 4 sessions of 25 minutes, you can take a break of 15–20 minutes.</li>
                     </ul>
+                    <h2 class="title is-4">Features</h2>
+                    <div class="feature" v-for="(f, i) in features" :key="`f-${i}`">
+                        <div class="media">
+                            <div class="media-content">
+                                <strong class="value">{{f.title}}</strong>
+                                <p>{{f.description}}</p>
+                            </div>
+                            <div class="media-right">
+                                <div class="button is-text is-small">Show me</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -201,6 +217,8 @@
 </template>
 
 <script>
+    import Avatar from "../components/Avatar";
+
     const IndexedDB = process.server ? null : require('../plugins/IndexedDB')
     import {Task} from "../plugins/task";
     import moment from "moment";
@@ -208,6 +226,7 @@
     const _ = require("lodash")
 
     export default {
+        components: {Avatar},
         head() {
             return {
                 title: this.title,
@@ -232,13 +251,50 @@
                 editing: -1,
                 timer: 0,
                 indexedDb: null,
-                mode: "POMODORO"
+                mode: "POMODORO",
+                features: [
+                    {
+                        title: 'Podomoro Timer',
+                        description: 'Timer base on Podomoro Technique',
+                        action: ''
+                    },
+                    {
+                        title: 'Strict mode',
+                        description: 'Especially, with strict mode, Bubblask take you work under the framework, while you\'re working you can\'t stop or update the task, you only can break when time out!',
+                        action: ''
+                    },
+                    {
+                        title: 'LeaderBoard',
+                        description: 'That\'s make challenge, you can see how others work and compare your productivity with leader.',
+                        action: ''
+                    },
+                    {
+                        title: 'Report',
+                        description: 'You can see how you work daily, weekly, monthly, even yearly',
+                        action: ''
+                    },
+                    {
+                        title: 'Save your work',
+                        description: 'You can store your task on cloud, ',
+                        action: ''
+                    },
+                    {
+                        title: 'Personalized',
+                        description: 'With Personalized you can custom your settings: color, audio and timer!',
+                        action: ''
+                    },
+                    {
+                        title: 'Group',
+                        description: 'You can join or create any public group and work with your friends together in real time, I think that will make a challenge!',
+                        action: ''
+                    }
+                ]
             }
         },
         computed: {
             totalTime() {
                 let out = 0
-                this.tasks.forEach(task => {
+                this.displayTasks.forEach(task => {
                     out = out + this.setting.tomato * task.interval
                 })
                 return out
@@ -455,5 +511,11 @@
         100% {
             bottom: 0;
         }
+    }
+
+    .feature {
+        border: 1px #EEEEEE solid;
+        padding: .5rem .75rem;
+        margin-bottom: .5rem;
     }
 </style>
