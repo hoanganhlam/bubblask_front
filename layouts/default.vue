@@ -1,8 +1,8 @@
 <template>
     <div>
-        <header v-if="!$route.path.includes('/workspace')" class="header is-dark">
+        <header v-if="!$route.path.includes('/workspace')" class="header is-warning">
             <div class="container">
-                <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+                <nav class="navbar is-warning" role="navigation" aria-label="main navigation">
                     <div class="navbar-brand">
                         <n-link class="navbar-item logo" to="/">
                             <span class="primary">BUBBLASK</span>
@@ -14,7 +14,8 @@
                                 <div class="group-selector">
                                     <div class="header">
                                         <div class="media">
-                                            <input @input="searchWS()" v-model="wsSearch" class="input" placeholder="Search Workspace"/>
+                                            <input @input="searchWS()" v-model="wsSearch" class="input"
+                                                   placeholder="Search Workspace"/>
                                         </div>
                                         <div class="media">
                                             <div class="media-left">
@@ -111,7 +112,9 @@
                 <div class="level is-mobile">
                     <div class="level-left">
                         <div class="buttons">
-                            <div class="button is-primary">About</div>
+                            <div @click="showAbout = !showAbout" class="button" v-bind:class="{'is-primary': showAbout}">
+                                About
+                            </div>
                             <n-link to="/privacy" class="button is-text">Privacy</n-link>
                         </div>
                     </div>
@@ -156,7 +159,7 @@
             <div class="modal-card" style="width: auto">
                 <header class="modal-card-head">
                     <div class="level is-mobile" style="width: 100%">
-                        <h1 class="level-left widget_title">Create new workspace</h1>
+                        <h4 class="level-left">Create new workspace</h4>
                         <div class="level-right">
                             <button class="button is-small" type="button" @click="isActive = false">Back</button>
                         </div>
@@ -223,6 +226,7 @@
                 },
                 wsSearch: '',
                 wsLoading: true,
+                showAbout: true
             }
         },
         methods: {
@@ -281,6 +285,16 @@
                 if (stt) {
                     this.fetchWS()
                 }
+            }
+        },
+        created() {
+            if (this.currentUser !== null) {
+                this.showAbout = false
+            }
+        },
+        watch: {
+            showAbout() {
+                this.$store.commit('config/SET_SHOW_ABOUT', this.showAbout)
             }
         }
     }

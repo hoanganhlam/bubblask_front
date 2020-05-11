@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="hero is-dark" v-bind:class="{'is-fullheight': timer > 0}">
+        <div class="hero is-warning" v-bind:class="{'is-fullheight': timer > 0}">
             <div class="hero-body">
                 <div class="container pomodoro">
                     <div class="wrap">
@@ -79,7 +79,7 @@
                 </div>
             </div>
         </div>
-        <div class="hero is-small">
+        <div class="hero is-small is-light" style="min-height: calc(50vh + 48px)">
             <div class="hero-body">
                 <div class="container">
                     <h2 class="title is-mobile is-4 has-text-centered">Task</h2>
@@ -179,40 +179,42 @@
                 </div>
             </div>
         </div>
-        <div class="hero">
-            <div class="hero-body">
-                <div class="container content">
-                    <h1 class="title">Bublask</h1>
-                    <p>Bubblask is small application with many features that help you increase productivity by using
-                        pomodoro technique.</p>
-                    <p>Pomodoro technique divides your total working/studying time into sessions of 25 minutes.</p>
-                    <ul>
-                        <li>You have to just set the timer of 25 minutes and start studying. In these 25 minutes, you
-                            should focus only on whatever you have decided to study/work. Take care of that nothing
-                            should interrupt you.
-                        </li>
-                        <li>After 25 minutes you have to take a break of 5 minutes. In these 5 minutes, you can do
-                            anything. You can attend calls you missed in those 25 minutes or you can take a small walk.
-                            You can just relax!
-                        </li>
-                        <li>After 5 minutes you have to again start studying for 25 minutes.</li>
-                        <li>After 4 sessions of 25 minutes, you can take a break of 15–20 minutes.</li>
-                    </ul>
-                    <h2 class="title is-4">Features</h2>
-                    <div class="feature" v-for="(f, i) in features" :key="`f-${i}`">
-                        <div class="media">
-                            <div class="media-content">
-                                <strong class="value">{{f.title}}</strong>
-                                <p>{{f.description}}</p>
-                            </div>
-                            <div class="media-right">
-                                <div class="button is-text is-small">Show me</div>
+        <transition name="fade">
+            <div v-if="showAbout" class="hero">
+                <div class="hero-body">
+                    <div class="container content">
+                        <h1 class="title">Bublask</h1>
+                        <p>Bubblask is small application with many features that help you increase productivity by using
+                            pomodoro technique.</p>
+                        <p>Pomodoro technique divides your total working/studying time into sessions of 25 minutes.</p>
+                        <ul>
+                            <li>You have to just set the timer of 25 minutes and start studying. In these 25 minutes, you
+                                should focus only on whatever you have decided to study/work. Take care of that nothing
+                                should interrupt you.
+                            </li>
+                            <li>After 25 minutes you have to take a break of 5 minutes. In these 5 minutes, you can do
+                                anything. You can attend calls you missed in those 25 minutes or you can take a small walk.
+                                You can just relax!
+                            </li>
+                            <li>After 5 minutes you have to again start studying for 25 minutes.</li>
+                            <li>After 4 sessions of 25 minutes, you can take a break of 15–20 minutes.</li>
+                        </ul>
+                        <h2 class="title is-4">Features</h2>
+                        <div class="feature" v-for="(f, i) in features" :key="`f-${i}`">
+                            <div class="media">
+                                <div class="media-content">
+                                    <strong class="value">{{f.title}}</strong>
+                                    <p>{{f.description}}</p>
+                                </div>
+                                <div class="media-right">
+                                    <div class="button is-text is-small">Show me</div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </transition>
     </div>
 </template>
 
@@ -311,6 +313,9 @@
             },
             displayTasks() {
                 return this.tasks.filter(x => !['stopped', 'complete'].includes(x.status))
+            },
+            showAbout() {
+                return this.$store.state.config.showAbout
             }
         },
         methods: {
@@ -517,5 +522,6 @@
         border: 1px #EEEEEE solid;
         padding: .5rem .75rem;
         margin-bottom: .5rem;
+        background: #FFFFFF;
     }
 </style>

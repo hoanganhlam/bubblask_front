@@ -1,33 +1,33 @@
 {
-  "name": "bubblask",
-  "version": "1.0.0",
-  "description": "Bubble Task",
-  "author": "lam",
-  "private": true,
-  "scripts": {
-    "dev": "nuxt",
-    "build": "nuxt build",
-    "start": "nuxt start",
-    "generate": "nuxt generate"
-  },
-  "dependencies": {
-    "@nuxtjs/axios": "^5.3.6",
-    "@nuxtjs/bulma": "^1.2.1",
-    "@nuxtjs/dotenv": "^1.4.0",
-    "@nuxtjs/pwa": "^3.0.0-0",
-    "cookie-universal-nuxt": "^2.1.3",
-    "dotenv": "latest",
-    "moment": "^2.24.0",
-    "moment-timezone": "^0.5.28",
-    "node-sass": "^4.13.1",
-    "nuxt": "^2.0.0",
-    "pug": "^2.0.4",
-    "pug-plain-loader": "^1.0.0",
-    "sass-loader": "^8.0.2",
-    "vue": "latest",
-      "lodash": "latest"
-  },
-  "devDependencies": {
-    "cookieparser": "^0.1.0"
-  }
+    "name": "bubblask",
+    "version": "1.0.0",
+    "description": "Bubble Task",
+    "author": "lam",
+    "private": true,
+    "scripts": {
+        "dev": "nuxt",
+        "build": "nuxt build",
+        "start": "nuxt start",
+        "generate": "nuxt generate"
+    },
+    "dependencies": {
+        "@nuxtjs/axios": "^5.3.6",
+        "@nuxtjs/bulma": "^1.2.1",
+        "@nuxtjs/dotenv": "^1.4.0",
+        "@nuxtjs/pwa": "^3.0.0-0",
+        "cookie-universal-nuxt": "^2.1.3",
+        "dotenv": "latest",
+        "moment": "^2.24.0",
+        "moment-timezone": "^0.5.28",
+        "node-sass": "^4.13.1",
+        "nuxt": "^2.0.0",
+        "pug": "^2.0.4",
+        "pug-plain-loader": "^1.0.0",
+        "sass-loader": "^8.0.2",
+        "vue": "latest",
+        "lodash": "latest"
+    },
+    "devDependencies": {
+        "cookieparser": "^0.1.0"
+    }
 }

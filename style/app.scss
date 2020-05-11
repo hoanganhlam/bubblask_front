@@ -50,7 +50,8 @@
 --------------------------*/
 $primary: #cd2653;
 $link: #cd2653;
-$warning: #f5efe0;
+$warning: #fae0ca;
+$light: #fafafa;
 $notification-padding: 1rem;
 $notification-background-color: #FFF;
 $radius: 2px;
@@ -67,7 +68,7 @@ $modal-card-head-border-bottom: 0;
 $modal-card-foot-border-top: 0;
 $modal-background-background-color: rgba(10, 10, 10, 0.3);
 $hero-body-padding: 3rem 0;
-
+$card-shadow: $box-shadow;
 @import "~bulma/bulma";
 @import "buefy";
 
@@ -80,12 +81,8 @@ body {
     -webkit-font-smoothing: auto;
 }
 
-.header.is-dark {
-    background: #363636;
-
-    .navbar-item {
-        color: #FFFFFF;
-    }
+.header.is-warning {
+    background: $warning;
 }
 
 
@@ -143,6 +140,7 @@ h1.title {
 
 .footer {
     padding: 3rem 1.5rem 3rem;
+    background: #FFFFFF;
 }
 
 .task {
