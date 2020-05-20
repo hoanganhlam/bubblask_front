@@ -1,8 +1,9 @@
 const cookieparser = process['server'] ? require('cookieparser') : undefined
+const IndexedDB = process['server'] ? null : require('../plugins/IndexedDB')
 
 export default async function (context, inject) {
-    const $auth = {}
 
+    const $auth = {}
     const logout = async () => {
         await setToken(null)
         await setUser(null)
@@ -21,9 +22,7 @@ export default async function (context, inject) {
         try {
             return await context.$axios.$get('/auth/users/me/')
         } catch (e) {
-            if (e.response && e.response.status === 401) {
-                await logout()
-            }
+            await logout()
             return null
         }
     }
@@ -52,6 +51,9 @@ export default async function (context, inject) {
     }
     const setUser = async (user) => {
         await context.store.commit('auth/SET_USER', user)
+        if (user) {
+            await context.store.commit('config/SET_SETTING', user.profile.setting)
+        }
     }
     const init = async () => {
         let token = await getToken()
@@ -61,11 +63,16 @@ export default async function (context, inject) {
             await setUser(user)
         }
     }
-
     await init()
-
     $auth.login = login
     $auth.logout = logout
     context.$auth = $auth
     inject('auth', $auth)
+
+    if (IndexedDB) {
+        const SimpleIndexedDB = IndexedDB.default.IndexedDB
+        const indexedDB = new SimpleIndexedDB('bubblask');
+        context.$indexedDB = indexedDB
+        inject('indexedDB', indexedDB)
+    }
 }

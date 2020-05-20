@@ -13,10 +13,10 @@ function formatMomentTime(m) {
 }
 
 export class Task {
-    constructor({updating, uid, title, note, interval, tomato, times, status, id}) {
+    constructor({updating, uid, title, description, interval, tomato, times, status, id}) {
         this.uid = typeof uid === 'undefined' ? generateId() : uid;
         this.title = title || null;
-        this.note = note || null;
+        this.description = description || null;
         this.times = times || [];
         this.interval = interval || 1;
         this.status = status || "pending"
@@ -51,12 +51,13 @@ export class Task {
                         this.status = "stopped"
                     }
                     return
-                } else if (this.status === 'stopping') {
+                } else if (this.status === 'stopping' && lastTime) {
                     // thay đổi giờ sẽ hết bằng giờ hiện tại + thời gian còn lại
                     lastTime.time_done_est = formatMomentTime(moment(Date.now()).utc().add(lastTime.remainder, 's').utc())
                 }
                 break;
             case "stopping":
+                console.log(lastTime);
                 lastTime.stop_times.push(formatMomentTime(now))
                 lastTime.remainder = timer
                 lastTime.time_done_est = null
@@ -76,6 +77,17 @@ export class Task {
     }
 
     lastTime() {
+        if (this.times.length === 0) {
+            let now = moment().utc()
+            this.times.push({
+                time_start: formatMomentTime(now),
+                time_done_est: formatMomentTime(now.add(this.tomato * 60, 's').utc()),
+                time_done: null,
+                stop_times: [],
+                remainder: this.tomato * 60
+            })
+        }
+        this.updating = true
         return this.times.length ? this.times[this.times.length - 1] : null
     }
 

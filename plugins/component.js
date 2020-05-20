@@ -5,6 +5,7 @@ import Modal from "../components/modal/Modal";
 import Dropdown from "../components/dropdown/Dropdown";
 import NumberInput from "../components/numberinput/Numberinput";
 import Switch from "../components/switch/Switch";
+
 Vue.component('x-icon', Icon)
 Vue.component('ce', ContentEditable)
 Vue.component('b-modal', Modal)

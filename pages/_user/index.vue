@@ -1,12 +1,12 @@
 <template>
     <div>
-        <div class="hero is-light">
+        <div class="hero is-primary is-small">
             <div class="hero-body">
                 <div class="container pomodoro content">
                     <div class="image avatar is-96x96">
                         <img src="https://cdn.shopify.com/s/files/1/0257/1675/t/152/assets/merialdo-95x95_900x465_crop_center.png?v=7923425964918557276" alt="">
                     </div>
-                    <h1 class="title is-4">PIERGIORGIO GROSSI</h1>
+                    <h1 class="title is-4">{{convertName(user)}}</h1>
                 </div>
             </div>
         </div>
@@ -89,6 +89,11 @@
         name: "index",
         components: {
             CalendarHeatMap
+        },
+        async asyncData({$axios, params}) {
+            return {
+                user: await $axios.$get(`/auth/users/${params.user}/`)
+            }
         }
     }
 </script>

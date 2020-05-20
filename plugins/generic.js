@@ -138,6 +138,17 @@ Vue.mixin({
                 return matches.join('').substr(0, length)
             }
             return matches.join('')
+        },
+        toTop(range = 0) {
+            const myDiv = document.getElementById('__layout');
+            myDiv.scrollTop = range;
+            document.body.scrollTop = range;
+            document.documentElement.scrollTop = range;
+        },
+        playSource(flag) {
+            if (this[flag]) {
+                this[flag].play()
+            }
         }
     },
     computed: {
@@ -148,6 +159,13 @@ Vue.mixin({
             set() {
 
             }
+        },
+        audioRang() {
+            return new Audio("/sound/001.wav");
+
+        },
+        audioPress() {
+            return new Audio("/sound/002.mp3")
         }
     }
 })

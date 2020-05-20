@@ -65,7 +65,7 @@ export default {
         canCancel: {
             type: [Array, Boolean],
             default: () => {
-                return false
+                return ['escape', 'x', 'outside', 'button']
             }
         },
         onCancel: {

@@ -1,46 +1,16 @@
 <template>
-    <div>
-        <header v-if="!$route.path.includes('/workspace')" class="header is-warning">
-            <div class="container">
-                <nav class="navbar is-warning" role="navigation" aria-label="main navigation">
+    <div v-bind:class="{'has-custom': $route.path === '/'}" v-bind:style="settings.color">
+        <header v-if="!$route.path.includes('/workspace')" class="header">
+            <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
+                <div class="container is-fullwidth">
                     <div class="navbar-brand">
                         <n-link class="navbar-item logo" to="/">
                             <span class="primary">BUBBLASK</span>
                             <span class="second">.com</span>
                         </n-link>
-                        <b-dropdown @active-change="onOpenSelect">
-                            <div class="navbar-item clickable" slot="trigger">Workspace</div>
-                            <b-dropdown-item paddingless custom aria-role="menuitem">
-                                <div class="group-selector">
-                                    <div class="header">
-                                        <div class="media">
-                                            <input @input="searchWS()" v-model="wsSearch" class="input"
-                                                   placeholder="Search Workspace"/>
-                                        </div>
-                                        <div class="media">
-                                            <div class="media-left">
-                                                <div class="button is-static">OR</div>
-                                            </div>
-                                            <div class="media-content">
-                                                <div class="button is-fullwidth" @click="openGroupForm(true)">Create
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="list">
-                                        <div class="media" v-for="i in 5" :key="i" v-if="wsResponse.results[i - 1]">
-                                            <div class="media-content">
-                                                <div><b>{{wsResponse.results[i - 1].name}}</b></div>
-                                                <small>By {{convertName(wsResponse.results[i - 1].user)}}</small>
-                                            </div>
-                                            <div class="media-left">
-                                                120
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </b-dropdown-item>
-                        </b-dropdown>
+                        <div class="navbar-item">
+                            <n-link to="/leaderboard">LeaderBoard</n-link>
+                        </div>
                         <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
                            @click="burgerActive = !burgerActive">
                             <span aria-hidden="true"></span>
@@ -51,12 +21,34 @@
                     <div class="navbar-menu" v-bind:class="{'is-active' : burgerActive}">
                         <div class="navbar-end">
                             <div class="navbar-item">
-                                <n-link to="/leaderboard">LeaderBoard</n-link>
+                                <div>
+                                    <span class="field">Total: </span>
+                                    <span class="value">{{displayTasks.length}}</span>
+                                </div>
                             </div>
                             <div class="navbar-item">
-                                <b-dropdown v-if="!Boolean(currentUser)" position="is-bottom-left">
-                                    <div class="clickable" @click="handleClick(true)" slot="trigger">Report
+                                <div>
+                                    <span class="field">Time: </span>
+                                    <span class="value">{{totalTime}}m</span>
+                                </div>
+                            </div>
+                            <div class="navbar-item">
+                                <b-switch :rounded="false" :value="settings ? settings.timer.is_strict : false"
+                                          @input="setStrict"></b-switch>
+                            </div>
+                            <client-only v-if="currentUser">
+                                <b-dropdown position="is-bottom-left" :trap-focus="true">
+                                    <div slot="trigger" class="navbar-item clickable">
+                                        <x-icon name="cogs"></x-icon>
                                     </div>
+                                    <b-dropdown-item custom>
+                                        <Options v-model="settings"></Options>
+                                    </b-dropdown-item>
+                                </b-dropdown>
+                            </client-only>
+                            <div class="navbar-item">
+                                <b-dropdown v-if="!Boolean(currentUser)" position="is-bottom-left">
+                                    <div class="clickable" slot="trigger">Report</div>
                                     <div class="dropdown-item" style="min-width: 350px">
                                         <div class="notification is-warning">Login to manage and track your work!</div>
                                         <div class="field" v-if="!logging">
@@ -81,7 +73,7 @@
                                             </div>
                                         </div>
                                         <div class="field">
-                                            <div class="level">
+                                            <div class="level is-mobile">
                                                 <div class="level-left">
                                                     <b-switch size="is-medium" :rounded="false" v-model="logging">Login
                                                     </b-switch>
@@ -96,23 +88,28 @@
                                     </div>
                                 </b-dropdown>
                                 <div class="grouped" v-else>
-                                    <n-link to="/profile">Report</n-link>
+                                    <n-link to="/me">Report</n-link>
                                 </div>
+                            </div>
+                            <div class="navbar-item clickable" v-if="currentUser && $route.path === '/me'"
+                                 @click="logout()">
+                                <x-icon name="logout"></x-icon>
                             </div>
                         </div>
                     </div>
-                </nav>
-            </div>
+                </div>
+            </nav>
         </header>
         <main class="main-content">
             <nuxt/>
         </main>
         <footer class="footer">
-            <div class="container">
+            <div class="container small">
                 <div class="level is-mobile">
                     <div class="level-left">
                         <div class="buttons">
-                            <div @click="showAbout = !showAbout" class="button" v-bind:class="{'is-primary': showAbout}">
+                            <div @click="showAbout = !showAbout" class="button"
+                                 v-bind:class="{'is-primary': showAbout}">
                                 About
                             </div>
                             <n-link to="/privacy" class="button is-text">Privacy</n-link>
@@ -124,37 +121,78 @@
                 </div>
             </div>
         </footer>
-        <div class="ws-members">
+        <div class="ws-members" v-bind:style="{height: wsMinimize ? undefined : '300px'}">
             <div class="header">
                 <div class="level is-mobile">
                     <div class="level-left">
-                        <b>Yearhone</b>
+                        <div @click="onOpenSelect" class="clickable">Workspace</div>
                     </div>
-                    <div class="level-right clickable" @click="openGroupForm(false)">
-                        <x-icon name="cogs"></x-icon>
+                    <div class="level-right clickable">
+                        <div class="buttons">
+                            <div class="button" @click="openGroupForm(false)">
+                                <x-icon name="cogs"></x-icon>
+                            </div>
+                            <div class="button" @click="wsMinimize = !wsMinimize">
+                                <x-icon :name="wsMinimize ? 'maximize': 'minimize'"></x-icon>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="members">
-                <div class="wrapper">
-                    <div class="level is-mobile" v-for="i in 15" :key="i">
-                        <div class="level-left">
-                            <div class="media">
-                                <div class="media-left">
-                                    <avatar class="is-24x24"></avatar>
+            <transition name="fade">
+                <div v-if="!wsMinimize" class="members">
+                    <div class="wrapper">
+                        <div class="level is-mobile" v-for="i in 15" :key="i">
+                            <div class="level-left">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <avatar class="is-24x24"></avatar>
+                                    </div>
+                                    <div class="media-content">
+                                        <b>Lam Hoang</b>
+                                    </div>
                                 </div>
-                                <div class="media-content">
-                                    <b>Lam Hoang</b>
+                            </div>
+                            <div class="level-right">
+                                <small>200m</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </transition>
+        </div>
+        <b-modal :active.sync="wsActive" scroll="keep">
+            <div class="container small">
+                <div class="group-selector has-background-white">
+                    <div class="header">
+                        <div class="media">
+                            <input @input="searchWS()" v-model="wsSearch" class="input"
+                                   placeholder="Search Workspace"/>
+                        </div>
+                        <div class="media">
+                            <div class="media-left">
+                                <div class="button is-static">OR</div>
+                            </div>
+                            <div class="media-content">
+                                <div class="button is-fullwidth" @click="openGroupForm(true)">Create
                                 </div>
                             </div>
                         </div>
-                        <div class="level-right">
-                            <small>200m</small>
+                    </div>
+                    <div class="list">
+                        <div class="media" v-for="i in 5" :key="i" v-if="wsResponse.results[i - 1]">
+                            <div class="media-content">
+                                <div><b>{{wsResponse.results[i - 1].name}}</b></div>
+                                <small>By {{convertName(wsResponse.results[i - 1].user)}}</small>
+                            </div>
+                            <div class="media-left">
+                                120
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </b-modal>
         <b-modal :active.sync="isActive" scroll="keep">
             <div class="modal-card" style="width: auto">
                 <header class="modal-card-head">
@@ -194,17 +232,21 @@
         </b-modal>
     </div>
 </template>
+
 <script>
     import BDropdownItem from "../components/dropdown/DropdownItem";
     import Avatar from "../components/Avatar";
     import BInput from "../components/input/Input";
     import BTaginput from "../components/taginput/Taginput";
-    import debounce from "lodash/debounce"
+    import Options from "../components/options";
+    import {debounce, cloneDeep} from "lodash"
+    import {Task} from "../plugins/task";
 
     export default {
-        components: {BTaginput, BInput, BDropdownItem, Avatar},
+        components: {BTaginput, BInput, BDropdownItem, Avatar, Options},
         data() {
             return {
+                colors: [],
                 burgerActive: false,
                 logging: true,
                 form: {
@@ -226,7 +268,10 @@
                 },
                 wsSearch: '',
                 wsLoading: true,
-                showAbout: true
+                wsActive: false,
+                wsMinimize: false,
+                showAbout: true,
+                settings: null
             }
         },
         methods: {
@@ -238,8 +283,10 @@
                     isDone: false
                 }
             },
-            handleClick(flag) {
-
+            async logout() {
+                await this.$auth.logout()
+                this.$router.replace({path: '/'})
+                this.fetchTasks()
             },
             async handleSubmit() {
                 if (this.logging) {
@@ -247,6 +294,8 @@
                         email: this.form.email,
                         password: this.form.password
                     }).then(res => {
+                        this.showAbout = false
+                        this.fetchTasks()
                     }).catch(err => {
                         console.log(err);
                     })
@@ -281,20 +330,76 @@
             searchWS: debounce(function () {
                 this.fetchWS()
             }, 500),
-            onOpenSelect(stt) {
-                if (stt) {
+            onOpenSelect() {
+                if (!this.wsActive) {
                     this.fetchWS()
+                }
+                this.wsActive = true
+
+            },
+            async setStrict(val) {
+                if (this.currentUser) {
+                    await this.$axios.$put(`/auth/users/${this.currentUser.username}/`, {
+                        is_strict: val
+                    })
+                }
+                this.$store.commit('config/SET_STRICT', val)
+                this.settings.timer.is_strict = val
+            },
+            fetchTasks() {
+                this.$store.commit('task/SET_TASKS', [])
+                if (this.currentUser) {
+                    this.$axios.$get('/task/tasks/').then(res => {
+                        for (let i = 0; i < res.length; i++) {
+                            this.$store.commit('task/ADD_TASK', new Task(res[i]))
+                        }
+                    })
+                } else {
+                    const _this = this
+                    const syncDB = async function () {
+                        _this.$indexedDB.readAll(function (cursor) {
+                            if (!['complete', 'stopped'].includes(cursor.value.status)) {
+                                _this.$store.commit('task/ADD_TASK', new Task(cursor.value))
+                            }
+                        });
+                    }
+                    _this.$indexedDB.open(
+                        syncDB,
+                        () => {
+                        },
+                        () => {
+                        }, "title", "uid", [])
                 }
             }
         },
         created() {
+            this.settings = cloneDeep(this.$store.state.config.settings)
             if (this.currentUser !== null) {
                 this.showAbout = false
             }
         },
+        computed: {
+            displayTasks() {
+                return this.$store.state.task.tasks.filter(x => !['stopped', 'complete'].includes(x.status))
+            },
+            totalTime() {
+                let out = 0
+                if (this.settings) {
+                    this.displayTasks.forEach(task => {
+                        out = out + this.settings.timer.tomato * task.interval
+                    })
+                }
+                return out
+            },
+        },
         watch: {
             showAbout() {
                 this.$store.commit('config/SET_SHOW_ABOUT', this.showAbout)
+            }
+        },
+        mounted() {
+            if (process.client) {
+                this.fetchTasks()
             }
         }
     }
@@ -339,23 +444,34 @@
     .ws-members {
         position: fixed;
         right: 1.5rem;
-        height: 400px;
         bottom: 1.5rem;
         width: 280px;
         background: #FFFFFF;
-        padding: 1rem;
+        padding: .75rem;
         box-shadow: 0 1px 5px 0 rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.02);
-        overflow: hidden;
         display: flex;
         flex-direction: column;
 
         .header {
-            padding-bottom: 1rem;
+            font-size: 12px;
+
+            svg {
+                width: 12px;
+            }
+
+            .button {
+                height: 1rem;
+                border: 0;
+                margin-bottom: 0;
+
+                padding: 0 .25rem;
+            }
         }
 
         .members {
             flex: 1;
             position: relative;
+            margin-top: .75rem;
 
             .wrapper {
                 position: absolute;
@@ -396,5 +512,71 @@
         font-weight: bold;
         font-size: 16px;
         font-family: serif;
+    }
+
+    .has-custom {
+        .button.is-primary {
+            background: var(--btn-color);
+            color: var(--btn-text-color);
+        }
+
+        .navbar.is-primary {
+            background: unset;
+
+            .navbar-item,
+            a {
+                color: var(--bg-color-primary-text);
+            }
+
+            .icon svg {
+                fill: var(--bg-color-primary-text);
+            }
+        }
+
+        .hero.is-primary {
+            background-size: cover;
+            background: var(--bg-color-primary);
+            color: var(--bg-color-primary-text);
+
+            .subtitle,
+            .title {
+                color: var(--bg-color-primary-text);
+            }
+
+            .timer {
+                color: var(--bg-color-primary-text);
+
+                .title {
+                    color: var(--bg-color-primary-text) !important;
+                }
+            }
+        }
+
+        .hero.is-secondary {
+            background: var(--bg-color-secondary);
+
+            a {
+                color: var(--link-color);
+            }
+
+            .task {
+                margin-bottom: .5rem;
+
+                .notification {
+                    background: var(--task-color);
+                }
+
+                color: var(--task-text-color);
+            }
+        }
+    }
+
+    @media screen and (max-width: 1023px) {
+        .has-custom {
+            .navbar-menu {
+                background-color: var(--bg-color-primary);
+                box-shadow: unset;
+            }
+        }
     }
 </style>
