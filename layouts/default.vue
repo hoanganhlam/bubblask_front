@@ -269,7 +269,7 @@
                 wsSearch: '',
                 wsLoading: true,
                 wsActive: false,
-                wsMinimize: false,
+                wsMinimize: true,
                 showAbout: true,
                 settings: null
             }

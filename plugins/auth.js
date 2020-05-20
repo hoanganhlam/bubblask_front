@@ -55,7 +55,9 @@ export default async function (context, inject) {
             await context.store.commit('config/SET_SETTING', user.profile.setting)
         } else {
             let x = localStorage.getItem("task_order");
-            await context.store.commit('config/SET_SETTING_ORDER', x.split(','))
+            if (x) {
+                await context.store.commit('config/SET_SETTING_ORDER', x.split(','))
+            }
         }
     }
     const init = async () => {
@@ -67,7 +69,9 @@ export default async function (context, inject) {
         } else {
             if (process.client) {
                 let x = localStorage.getItem("task_order");
-                await context.store.commit('config/SET_SETTING_ORDER', x.split(','))
+                if (x) {
+                    await context.store.commit('config/SET_SETTING_ORDER', x.split(','))
+                }
             }
         }
     }
