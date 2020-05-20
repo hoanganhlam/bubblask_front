@@ -158,9 +158,10 @@ h1.title {
 }
 
 header.header {
-    position: fixed;
+    position: absolute;
     right: 0;
     left: 0;
+    background-image: linear-gradient(to bottom, rgba(250, 224, 202, 0.3), transparent);
 }
 
 .navbar-item {
@@ -390,6 +391,39 @@ header.header {
     }
 }
 
+.unsplash {
+    min-width: 300px;
+    padding: 1rem 0 0;
+
+    .image img {
+        object-fit: cover;
+    }
+
+    .image.selected {
+        position: relative;
+
+        &:after {
+            z-index: 1;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            content: "";
+        }
+    }
+
+    .field:not(:last-child) {
+        margin-bottom: 1.5rem;
+    }
+
+    .column {
+        padding-top: var(--columnGap);
+        padding-bottom: var(--columnGap);
+    }
+}
+
 .uppercase {
     text-transform: uppercase;
 }
@@ -418,13 +452,31 @@ header.header {
     }
 
     .board {
-        min-width: calc(100% - 1.5rem)!important;
+        min-width: calc(100% - 1.5rem) !important;
     }
 }
 
+.hero.is-primary {
+    padding-top: 2rem;
+}
+
 @media all and (max-width: 480px) {
+    .unsplash,
+    .container.is-fullwidth {
+        max-width: unset;
+        min-width: unset;
+    }
+
+    .footer {
+        padding: .75rem;
+    }
+
+    .vc-chrome {
+        width: 100% !important;
+    }
+
     .timer {
-        width: 376px;
+        width: 100%;
 
         .timer--clock .clock-display-grp .number-grp {
             height: 120px;
@@ -450,7 +502,7 @@ header.header {
 
     .board {
         min-width: unset;
-        width: calc(100% - 2rem)!important;
+        width: calc(100% - 2rem) !important;
     }
 }
 

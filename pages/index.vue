@@ -72,9 +72,10 @@
                             <h4>A SIMPLE HACK FOR DEEP WORK</h4>
                         </div>
                     </div>
-                    <div class="buttons timer-control" v-bind:class="{'hidden': runningTask}">
-                        <div class="button is-primary" @click="startBreak(5)">Short Break</div>
-                        <div class="button is-primary" @click="startBreak(10)">Long Break</div>
+                    <div class="buttons timer-control"
+                         v-bind:class="{'hidden': !(runningTask === null || !setting.is_strict)}">
+                        <div class="button is-primary" @click="task_break(5)">Short Break</div>
+                        <div class="button is-primary" @click="task_break(10)">Long Break</div>
                     </div>
                 </div>
             </div>
@@ -92,22 +93,22 @@
                 </div>
                 <div class="boards">
                     <div class="board">
-                        <div class="task has-text-centered" @click="add">
+                        <div class="task has-text-centered" @click="task_add">
                             <div class="notification">
                                 <x-icon name="plus"/>
                             </div>
                         </div>
-                        <draggable v-model="activeTasks" v-bind="dragOptions" :move="onMove"
-                                   @change="reOrder"
+                        <draggable v-model="activeTasks" v-bind="dragOptions" :move="on_move"
+                                   @change="re_order"
                                    @start="isDragging=true" @end="isDragging = false">
                             <div class="task" v-for="(task, i) in activeTasks" :key="i"
                                  v-bind:class="{'is-editing': editing === i}"
-                                 @input="handleInput(i)">
+                                 @input="on_input(i)">
                                 <transition name="fade">
                                     <div @dblclick="editing = i" class="notification media"
                                          v-bind:class="{'is-warning': task.isRunning()}">
                                         <div class="media-left">
-                                            <div class="button is-small" @click="done(task)"
+                                            <div class="button is-small" @click="task_done(task)"
                                                  v-bind:class="{'is-static': ['stopped', 'complete'].includes(task.status)}">
                                                 <x-icon name="check"/>
                                             </div>
@@ -127,7 +128,7 @@
                                                 <div v-if="!task.isRunning()" class="button is-text is-hidden-mobile">
                                                     {{fancyTimeFormat(task.timeLeft())}}
                                                 </div>
-                                                <div class="button" @click="run(task)">
+                                                <div class="button" @click="task_run(task)">
                                                     <x-icon class="is-medium"
                                                             :name="task.status ===  'running' ? 'pause' : 'play'"/>
                                                 </div>
@@ -148,7 +149,8 @@
                                                     :max="10"
                                                     controlsPosition="compact"
                                                     expanded size="is-small" v-model="task.interval"
-                                                    @input="handleInput(i)"/>
+                                                    @input="on_input(i)"
+                                                />
                                             </div>
                                         </div>
                                         <div class="card-footer">
@@ -303,7 +305,7 @@
                 return this.$store.state.config.showAbout
             },
             customStyle() {
-                let img = this.$store.state.config.settings.color.background
+                let img = this.$store.state.config.settings.color.background;
                 if (img) {
                     return {
                         backgroundImage: `url(${img.urls.full})`,
@@ -314,176 +316,165 @@
             }
         },
         methods: {
-            initTask(val) {
-                this.activeTasks = []
-                this.activeTasks = _.cloneDeep(val.filter(x => !['stopped', 'complete'].includes(x.status)))
+            init_task(val) {
+                this.activeTasks = [];
+                this.activeTasks = _.cloneDeep(val.filter(x => !['stopped', 'complete'].includes(x.status)));
                 this.activeTasks.forEach(x => {
                     x.order = x.id ? this.taskOrder.indexOf(x.id) : 0
-                })
+                });
                 this.activeTasks.sort((a, b) => a.order - b.order)
             },
-            async add() {
-                const task = new Task({tomato: this.setting.tomato, updating: true})
-                this.$store.commit('task/ADD_TASK', task)
-                this.reOrder()
-            },
-            async run(task) {
-                let running = this.runningTask ? _.cloneDeep(this.runningTask) : null
-                if (running && running.uid !== task.uid) {
-                    running.changeStatus('stopping', this.timer)
-                    running.updating = true
-                    this.pushUpdateTask(running)
-                    running = null
+            async task_break(m) {
+                this.mode = m === 5 ? "Short Break" : "Long Break";
+                if (!this.setting.is_strict) {
+                    let running = _.cloneDeep(this.runningTask);
+                    if (running) {
+                        running.changeStatus('stopping', this.timer);
+                        await this.push_update_task(running);
+                    }
+                    this.timer = m * 60;
+                    this.toTop(0);
                 }
-                if (task.status === 'pending') {
-                    task.changeStatus('running')
-                } else if (task.status === 'running') {
-                    if (this.setting.is_strict) {
+            },
+            async task_add() {
+                this.push_post_task(new Task({tomato: this.setting.tomato, updating: true}));
+            },
+            async task_run(task) {
+                if (this.runningTask) {
+                    let running = _.cloneDeep(this.runningTask);
+                    if (running.uid !== task.uid) {
+                        running.changeStatus('stopping', this.timer);
+                        this.push_update_task(running)
+                    } else {
+                        if (!this.setting.is_strict) {
+                            running.changeStatus('stopping', this.timer);
+                            this.push_update_task(running)
+                        }
                         return
                     }
-                    task.changeStatus('stopping', this.timer)
-                    running = null
-                } else if (task.status === 'stopping') {
-                    task.changeStatus('running')
                 }
-                if (task.status === 'running') {
-                    running = task
+                task.changeStatus('running');
+                this.push_update_task(task)
+            },
+            async task_done(task) {
+                task.changeStatus('complete');
+                this.push_update_task(task)
+            },
+            async push_update_task(task) {
+                await this.$store.commit('task/UPDATE_TASK', task)
+            },
+            async push_post_task(task) {
+                await this.$store.commit('task/ADD_TASK', task);
+                if (this.currentUser === null) {
+                    await this.$indexedDB.add(task);
                 }
-                this.$store.commit('task/SET_RUNNING', running)
-                task.updating = true
-                this.pushUpdateTask(task)
-                this.mode = "POMODORO"
+                this.re_order();
             },
-            async done(task) {
-                this.pushUpdateTask(task, 'complete')
-                this.playSource('audioPress')
-            },
-            async pushUpdateTask(task, flag) {
-                if (flag || ['stopped', 'complete'].includes(task.status)) {
-                    if (flag) task.changeStatus(flag)
-                }
-                this.$store.commit('task/UPDATE_TASK', task)
-            },
-            async pushLate() {
-                let needUpdate = this.tasks.filter(x => x.updating)
+            async push_late() {
+                let needUpdate = this.tasks.filter(x => x.updating);
                 for (let i = 0; i < needUpdate.length; i++) {
-                    let res = null
-                    let task = _.cloneDeep(needUpdate[i])
-                    if (task.id) {
-                        if (this.currentUser) {
+                    let res = null;
+                    let task = _.cloneDeep(needUpdate[i]);
+                    if (this.currentUser) {
+                        if (task.id) {
                             res = await this.$axios.$put(`/task/tasks/${task.id}/`, task)
                         } else {
-                            this.$indexedDB.add(task)
-                        }
-                    } else {
-                        if (this.currentUser) {
                             res = await this.$axios.$post("/task/tasks/", task)
-                        } else {
-                            this.$indexedDB.put(task)
+                        }
+                    }
+                    else {
+                        await this.$indexedDB.put(task);
+                        res = {
+                            id: task.uid
                         }
                     }
                     if (res) {
-                        task.id = res.id
-                        task.updating = false
-                        this.pushUpdateTask(task)
+                        task.id = res.id;
+                        task.updating = false;
+                        this.push_update_task(task)
                     }
                 }
             },
-            // Timer Job
-            moveTXT(flag, index, time) {
-                let elm = this.$refs[flag]
-                if (!elm) return
+            move_text(flag, index, time) {
+                let elm = this.$refs[flag];
+                if (!elm) return;
                 for (let i = 0; i < elm.children.length; i++) {
-                    let display = elm.children[i].querySelector(`.number-grp-wrp`)
-                    let child = elm.children[i].querySelector(`.num-${time[index + i]}`)
-                    display.style.transform = `translate3d(0px, -${child.offsetTop}px, 0px)`
+                    let display = elm.children[i].querySelector(`.number-grp-wrp`);
+                    let child = elm.children[i].querySelector(`.num-${time[index + i]}`);
+                    display.style.transform = `translate3d(0px, -${child.offsetTop}px, 0px)`;
                 }
             },
-            runTimer() {
+            run_timer() {
                 if (this.timer > 0) {
-                    let fTime = this.fancyTimeFormat(this.timer)
-                    this.moveTXT('seconds', 6, fTime)
-                    this.moveTXT('minutes', 3, fTime)
-                    this.timer = this.timer - 1
+                    let fTime = this.fancyTimeFormat(this.timer);
+                    this.move_text('seconds', 6, fTime);
+                    this.move_text('minutes', 3, fTime);
+                    this.timer = this.timer - 1;
                 } else {
-                    this.moveTXT('seconds', 3, "00:00:00")
-                    this.moveTXT('minutes', 6, "00:00:00")
+                    this.move_text('seconds', 3, "00:00:00");
+                    this.move_text('minutes', 6, "00:00:00");
                 }
             },
-            startBreak(m) {
-                this.mode = m === 5 ? "Short Break" : "Long Break"
-                if (!this.setting.rigid) {
-                    let running = _.cloneDeep(this.runningTask)
-                    if (running) {
-                        running.changeStatus('stopping', this.timer)
-                        this.pushUpdateTask(running)
-                    }
-                    this.timer = m * 60
-                    this.toTop(0)
-                }
-            },
-            // Handler
-            handleInput: _.debounce(function (index) {
-                this.activeTasks[index].updating = true
-                this.pushUpdateTask(this.activeTasks[index])
+            on_input: _.debounce(function (index) {
+                this.activeTasks[index].updating = true;
+                this.push_update_task(this.activeTasks[index]);
             }, 500),
-            onMove({relatedContext, draggedContext}) {
+            on_move({relatedContext, draggedContext}) {
                 const relatedElement = relatedContext.element;
                 const draggedElement = draggedContext.element;
                 return (
                     (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
                 );
             },
-            reOrder() {
-                let order = this.activeTasks.map(x => x.id)
-                this.$axios.$put(`/auth/users/${this.currentUser.username}/`, {
-                    task_order: order
-                }).then(res => {
-                    this.$store.commit('config/SET_SETTING_ORDER', order)
-                })
+            re_order() {
+                let order = this.activeTasks.map(x => x.id);
+                if (this.currentUser) {
+                    this.$axios.$put(`/auth/users/${this.currentUser.username}/`, {
+                        task_order: order
+                    }).then(res => {
+                        this.$store.commit('config/SET_SETTING_ORDER', order);
+                    })
+                } else {
+                    localStorage.setItem("task_order", order.toString());
+                }
             }
         },
         async mounted() {
-            const _this = this
+            const _this = this;
             setInterval(function () {
-                _this.runTimer()
-            }, 1000)
+                _this.run_timer();
+            }, 1000);
             setInterval(function () {
-                _this.pushLate()
-            }, 800)
+                _this.push_late();
+            }, 800);
         },
         watch: {
             timer() {
-                let running = _.cloneDeep(this.runningTask)
-                if (this.timer === 0 && running) {
-                    if (running.times.length < running.interval) {
-                        this.timer = running.changeStatus('running', this.timer)
-                    } else {
-                        this.done(running)
-                        this.timer = 0
-                    }
-                    this.playSource('audioRang')
+                if (this.timer <= 0 && this.runningTask) {
+                    let running = this.runningTask;
+                    running.changeStatus('stopping', 0);
+                    this.push_update_task(running)
                 }
             },
             runningTask() {
-                this.timer = 0
-                let running = _.cloneDeep(this.runningTask)
-                if (running) {
-                    this.timer = running.getTimer((task) => {
-                        this.pushUpdateTask(task)
-                    })
+                // Lay timer cua running task
+                if (this.runningTask) {
+                    this.mode = 'Pomodoro';
+                    this.timer = this.runningTask.timer();
+                    this.toTop();
+                } else {
+                    this.timer = 0;
                 }
-                this.toTop(0)
             },
             tasks: {
                 deep: true,
                 handler: function (val, oldVal) {
-                    this.initTask(val)
+                    this.init_task(val);
                 }
             }
         },
         created() {
-            this.initTask(this.tasks)
+            this.init_task(this.tasks)
         }
     }
 </script>

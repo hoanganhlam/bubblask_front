@@ -53,6 +53,9 @@ export default async function (context, inject) {
         await context.store.commit('auth/SET_USER', user)
         if (user) {
             await context.store.commit('config/SET_SETTING', user.profile.setting)
+        } else {
+            let x = localStorage.getItem("task_order");
+            await context.store.commit('config/SET_SETTING_ORDER', x.split(','))
         }
     }
     const init = async () => {
@@ -61,6 +64,11 @@ export default async function (context, inject) {
         if (token) {
             let user = await getUser()
             await setUser(user)
+        } else {
+            if (process.client) {
+                let x = localStorage.getItem("task_order");
+                await context.store.commit('config/SET_SETTING_ORDER', x.split(','))
+            }
         }
     }
     await init()

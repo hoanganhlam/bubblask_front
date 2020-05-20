@@ -49,7 +49,7 @@
                             <div class="navbar-item">
                                 <b-dropdown v-if="!Boolean(currentUser)" position="is-bottom-left">
                                     <div class="clickable" slot="trigger">Report</div>
-                                    <div class="dropdown-item" style="min-width: 350px">
+                                    <div class="dropdown-item" style="min-width: 335px">
                                         <div class="notification is-warning">Login to manage and track your work!</div>
                                         <div class="field" v-if="!logging">
                                             <label class="label">Username</label>
@@ -574,7 +574,7 @@
     @media screen and (max-width: 1023px) {
         .has-custom {
             .navbar-menu {
-                background-color: var(--bg-color-primary);
+                background-color: transparent;
                 box-shadow: unset;
             }
         }

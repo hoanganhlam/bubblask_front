@@ -42,14 +42,11 @@
         </div>
         <div v-if="activeTab === 'n'">
             <div class="columns is-mobile">
-                <div class="column">Wake me in</div>
+                <div class="column">Wake me in(m)</div>
                 <div class="column">
                     <div class="field is-grouped">
                         <b-number-input size="is-small" v-model="data.notification.wake_me" :min="25" type="is-primary"
-                                        controls-position="compact"></b-number-input>
-                        <p class="control">
-                            <button class="button is-small is-static">m</button>
-                        </p>
+                                        controls-position="compact"/>
                     </div>
                 </div>
             </div>
@@ -156,6 +153,7 @@
             },
             reset() {
                 this.data = Object.assign({}, config.settings)
+                this.$store.commit('config/SET_SETTING_BACKGROUND', null)
             }
         },
         watch: {
@@ -185,8 +183,6 @@
 
 <style lang="scss">
     .options {
-        min-width: 300px;
-
         .color-picker .dropdown-content {
             padding-bottom: 0;
             padding-top: 0;
