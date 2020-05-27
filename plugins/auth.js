@@ -35,7 +35,7 @@ export default async function (context, inject) {
             token = context.store.$ck.get('auth.token')
         }
         return token
-    }
+    };
     const setToken = async (token) => {
         if (token) {
             context.$axios.setHeader('Authorization', 'JWT ' + token)
@@ -48,18 +48,18 @@ export default async function (context, inject) {
             context.store.$ck.remove('auth.token')
         }
         await context.store.commit('auth/SET_TOKEN', token)
-    }
+    };
     const setUser = async (user) => {
         await context.store.commit('auth/SET_USER', user)
         if (user) {
             await context.store.commit('config/SET_SETTING', user.profile.setting)
-        } else {
+        } else if(process.client) {
             let x = localStorage.getItem("task_order");
             if (x) {
                 await context.store.commit('config/SET_SETTING_ORDER', x.split(','))
             }
         }
-    }
+    };
     const init = async () => {
         let token = await getToken()
         await setToken(token)

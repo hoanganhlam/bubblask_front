@@ -1,47 +1,57 @@
-import moment from "moment";
-
 function generateId() {
     return '_' + Math.random().toString(36).substr(2, 9);
 };
 
-function momentTime(date) {
-    return moment(date, 'YYYY-MM-DDTHH:mm').utc();
-}
+function fmDate(date) {
+    function pad(num) {
+        num = num + '';
+        return num.length < 2 ? '0' + num : num;
+    }
 
-function formatMomentTime(m) {
-    return m.format('YYYY-MM-DD HH:mm:ss');
+    return date.getFullYear() + '/' +
+        pad(date.getMonth() + 1) + '/' +
+        pad(date.getDate()) + ' ' +
+        pad(date.getHours()) + ':' +
+        pad(date.getMinutes()) + ':' +
+        pad(date.getSeconds());
 }
 
 export class Task {
-    constructor({updating, uid, title, description, interval, tomato, times, status, id}) {
+    constructor({updating, uid, title = null, description = null, interval = 1, tomato, times, status, id, parent, board = null, temp_setting, settings = {}}) {
         this.uid = typeof uid === 'undefined' ? generateId() : uid;
-        this.title = title || null;
-        this.description = description || null;
+        this.title = title;
+        this.description = description;
         this.times = times || [];
-        this.interval = interval || 1;
+        this.interval = interval;
         this.status = status || "pending";
         this.tomato = tomato || 25;
-        this.id = id || null;
+        this.id = typeof id === "number" ? id : null;
         this.updating = typeof updating === 'undefined' ? false : updating;
+        this.parent = parent;
+        this.board = board;
+        this.temp_setting = temp_setting;
+        this.settings = settings;
     }
 
     changeStatus(status, timer) {
         // pending -> running <-> stopping -> complete, stopped
         this.updating = true;
         let lastTime = this.lastTime();
-        let now = moment().utc();
+        let now = new Date();
         let newTime = {
-            time_start: formatMomentTime(now),
-            time_done_est: formatMomentTime(now.add(this.tomato * 60, 's').utc()),
-            time_done: null,
-            stop_times: [],
-            remainder: this.tomato * 60
-        }
+            start: fmDate(now),
+            stop_times: [fmDate(now)],
+            due_estimate: fmDate(new Date(now.setSeconds(now.getSeconds() + this.tomato * 60)))
+        };
         if (status === 'running') {
             if (this.status === 'pending') {// Chay tu pending
                 this.times.push(newTime);
-            } else { // Chay tu stopping
-                lastTime.time_done_est = formatMomentTime(moment(Date.now()).utc().add(lastTime.remainder, 's').utc())
+            } else {
+                now = new Date();
+                let recent_stop_point = new Date(lastTime.stop_times[lastTime.stop_times.length - 1]);
+                let due_date = new Date(lastTime.due_estimate)
+                let reminder = (due_date.getTime() - recent_stop_point.getTime()) / 1000
+                lastTime.due_estimate = fmDate(new Date(now.setSeconds(now.getSeconds() + reminder)))
             }
         } else if (status === 'stopping') {
             if (timer === 0) { // running
@@ -51,10 +61,8 @@ export class Task {
                     this.status = 'complete';
                     return;
                 }
-            } else if (timer > 0) { // running -> stopping
-                lastTime.stop_times.push(formatMomentTime(now));
-                lastTime.remainder = timer;
-                lastTime.time_done_est = null;
+            } else {
+                lastTime.stop_times.push(fmDate(new Date()));
             }
         }
         this.status = status
@@ -69,10 +77,12 @@ export class Task {
     }
 
     timeLeft() {
-        // Tổng time - time đã chạy được
         let total = this.tomato * this.interval * 60
         for (let i = 0; i < this.times.length; i++) {
-            total = total - (60 * this.tomato - this.times[i].remainder)
+            let recent_stop_point = new Date(this.times[i].stop_times[this.times[i].stop_times.length - 1]);
+            let due_date = new Date(this.times[i].due_estimate)
+            let reminder = (due_date.getTime() - recent_stop_point.getTime()) / 1000
+            total = total - (60 * this.tomato - reminder)
         }
         return total <= 0 ? 0 : total
     }
@@ -81,29 +91,22 @@ export class Task {
         return this.interval * this.tomato * 60
     }
 
-    timer(cb) {
+    timer() {
         let lastTime = this.lastTime()
-        /** Trường hợp 1: Đang dừng thì tắt tab
-         * done_time_est != null
-         * Trả về remainder
-         *
-         */
+        return lastTime ? lastTime.remainder : 0
+    }
 
-        /** Trường hợp 2: Ấn nút tạm dừng
-         * done_time_est = null
-         * trả về done_time_estimate - now
-         * Nếu nhỏ hơn 1 thì chuyển sang time khác hoặc dừng task
-         */
-        let out = lastTime.remainder
-        if (lastTime.time_done_est) {
-            let due_date = moment(new Date(lastTime.time_done_est + ' UTC')).utc()
-            out = due_date.clone().diff(moment(Date.now()).utc(), "s")
+    dueDate() {
+        return this.lastTime().due_estimate
+    }
+
+    check() {
+        if (this.lastTime() && this.isRunning()) {
+            let now = new Date();
+            let due_date = new Date(this.lastTime().due_estimate)
+            if (now.getTime() >= due_date.getTime()) {
+                this.changeStatus('stopped')
+            }
         }
-        if (out <= 0) {
-            this.changeStatus('running')
-            cb(this)
-            out = 0
-        }
-        return out
     }
 }

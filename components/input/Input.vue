@@ -13,7 +13,6 @@
             @input="onInput"
             @blur="onBlur"
             @focus="onFocus">
-
         <textarea
             v-else
             ref="textarea"
@@ -25,27 +24,19 @@
             @input="onInput"
             @blur="onBlur"
             @focus="onFocus"></textarea>
-
-        <b-icon
+        <x-icon
             v-if="icon"
             class="is-left"
             :class="{'is-clickable': iconClickable}"
-            :icon="icon"
-            :pack="iconPack"
+            :name="icon"
             :size="iconSize"
             @click.native="iconClick"/>
-
-        <b-icon
+        <x-icon
             v-if="!loading && (passwordReveal || statusTypeIcon)"
             class="is-right"
             :class="{ 'is-clickable': passwordReveal }"
-            :icon="passwordReveal ? passwordVisibleIcon : statusTypeIcon"
-            :pack="iconPack"
-            :size="iconSize"
-            :type="!passwordReveal ? statusType : 'is-primary'"
-            both
+            name="eye"
             @click.native="togglePasswordVisibility"/>
-
         <small
             v-if="maxlength && hasCounter && type !== 'number'"
             class="help counter"
@@ -197,9 +188,9 @@
              * by changing the type and focus the input right away.
              */
             togglePasswordVisibility() {
-                this.isPasswordVisible = !this.isPasswordVisible
-                this.newType = this.isPasswordVisible ? 'text' : 'password'
-
+                this.isPasswordVisible = !this.isPasswordVisible;
+                console.log(this.newType);
+                this.newType = this.isPasswordVisible ? 'text' : 'password';
                 this.$nextTick(() => {
                     this.$refs.input.focus()
                 })

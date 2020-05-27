@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="hero is-primary" v-bind:class="{'is-fullheight': timer > 0}" v-bind:style="customStyle">
+        <div class="hero is-primary" v-bind:class="{'is-fullheight': timer > 0}" v-bind:style="style">
             <div class="hero-body">
                 <div class="container pomodoro">
                     <div class="wrap">
@@ -98,69 +98,9 @@
                                 <x-icon name="plus"/>
                             </div>
                         </div>
-                        <draggable v-model="activeTasks" v-bind="dragOptions" :move="on_move"
-                                   @change="re_order"
-                                   @start="isDragging=true" @end="isDragging = false">
-                            <div class="task" v-for="(task, i) in activeTasks" :key="i"
-                                 v-bind:class="{'is-editing': editing === i}"
-                                 @input="on_input(i)">
-                                <transition name="fade">
-                                    <div @dblclick="editing = i" class="notification media"
-                                         v-bind:class="{'is-warning': task.isRunning()}">
-                                        <div class="media-left">
-                                            <div class="button is-small" @click="task_done(task)"
-                                                 v-bind:class="{'is-static': ['stopped', 'complete'].includes(task.status)}">
-                                                <x-icon name="check"/>
-                                            </div>
-                                        </div>
-                                        <div class="media-content">
-                                            <ce placeholder="Untitled" elm="h4" class="title"
-                                                :editable="!task.isRunning()"
-                                                v-model="task.title"></ce>
-                                            <small class="field">{{task.interval * task.tomato}}m</small>
-                                        </div>
-                                        <div class="media-right clickable"
-                                             v-if="!['stopped', 'complete'].includes(task.status)">
-                                            <div class="buttons">
-                                                <div class="button is-hidden-mobile is-text">
-                                                    {{task.times.length}} / {{task.interval}}
-                                                </div>
-                                                <div v-if="!task.isRunning()" class="button is-text is-hidden-mobile">
-                                                    {{fancyTimeFormat(task.timeLeft())}}
-                                                </div>
-                                                <div class="button" @click="task_run(task)">
-                                                    <x-icon class="is-medium"
-                                                            :name="task.status ===  'running' ? 'pause' : 'play'"/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </transition>
-                                <transition name="bounce">
-                                    <div v-if="editing === i" class="card">
-                                        <div class="card-content">
-                                            <ce elm="p" class="note" placeholder="Note" v-model="task.description"
-                                                :editable="!task.isRunning()"></ce>
-                                            <div class="field">
-                                                <label class="label">Estimate</label>
-                                                <b-number-input
-                                                    :disabled="task.isRunning()"
-                                                    :min="1"
-                                                    :max="10"
-                                                    controlsPosition="compact"
-                                                    expanded size="is-small" v-model="task.interval"
-                                                    @input="on_input(i)"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div class="card-footer">
-                                            <div class="card-footer-item" @click="editing = -1">
-                                                <x-icon name="close"></x-icon>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </transition>
-                            </div>
+                        <draggable v-model="activeTasks" v-bind="dragOptions" @change="re_order">
+                            <task class="master" v-for="(task, i) in activeTasks" :key="i" :value="task"
+                                  @add="handle_add_child"/>
                         </draggable>
                     </div>
                 </div>
@@ -213,7 +153,6 @@
     import draggable from 'vuedraggable'
 
     const _ = require("lodash")
-
     export default {
         components: {Avatar, draggable},
         head() {
@@ -230,7 +169,6 @@
         },
         data() {
             return {
-                editing: -1,
                 timer: 0,
                 mode: "POMODORO",
                 features: [
@@ -271,20 +209,25 @@
                     }
                 ],
                 activeTasks: [],
-                isDragging: false
-            }
-        },
-        computed: {
-            dragOptions() {
-                return {
+                dragOptions: {
                     animation: 0,
                     group: "description",
                     disabled: false,
                     ghostClass: "ghost"
-                };
+                },
+                board: null,
+            }
+        },
+        computed: {
+            title() {
+                if (this.timer) {
+                    return this.fancyTimeFormat(this.timer) + " - Bubblask"
+                }
+                return "Bubblask - Online Pomodoro Timer - Best pomodoro tool!"
             },
             tasks() {
-                return this.$store.state.task.tasks
+                let board = this.board && this.board.id ? this.board.id : null;
+                return this.$store.state.task.tasks.filter(task => task.board === board);
             },
             runningTask() {
                 return this.$store.state.task.running
@@ -295,17 +238,12 @@
             taskOrder() {
                 return this.$store.state.config.settings.task_order || []
             },
-            title() {
-                if (this.timer) {
-                    return this.fancyTimeFormat(this.timer) + " - Bubblask"
-                }
-                return "Bubblask - Online Pomodoro Timer - Best pomodoro tool!"
-            },
             showAbout() {
                 return this.$store.state.config.showAbout
             },
-            customStyle() {
-                let img = this.$store.state.config.settings.color.background;
+            style() {
+                let gSeting = this.$store.state.config.settings
+                let img = gSeting.color ? gSeting.color.background : null;
                 if (img) {
                     return {
                         backgroundImage: `url(${img.urls.full})`,
@@ -318,7 +256,8 @@
         methods: {
             init_task(val) {
                 this.activeTasks = [];
-                this.activeTasks = _.cloneDeep(val.filter(x => !['stopped', 'complete'].includes(x.status)));
+                let temp = _.cloneDeep(val.filter(x => !['stopped', 'complete'].includes(x.status)));
+                this.activeTasks = this.hierarchy(temp, {idKey: 'id', parentKey: 'parent'})
                 this.activeTasks.forEach(x => {
                     x.order = x.id ? this.taskOrder.indexOf(x.id) : 0
                 });
@@ -326,74 +265,19 @@
             },
             async task_break(m) {
                 this.mode = m === 5 ? "Short Break" : "Long Break";
+                await this.$store.commit('task/SET_RUNNING', null);
                 if (!this.setting.is_strict) {
-                    let running = _.cloneDeep(this.runningTask);
-                    if (running) {
-                        running.changeStatus('stopping', this.timer);
-                        await this.push_update_task(running);
-                    }
                     this.timer = m * 60;
-                    this.toTop(0);
+                    this.toTop(41);
                 }
             },
             async task_add() {
-                this.push_post_task(new Task({tomato: this.setting.tomato, updating: true}));
-            },
-            async task_run(task) {
-                if (this.runningTask) {
-                    let running = _.cloneDeep(this.runningTask);
-                    if (running.uid !== task.uid) {
-                        running.changeStatus('stopping', this.timer);
-                        this.push_update_task(running)
-                    } else {
-                        if (!this.setting.is_strict) {
-                            running.changeStatus('stopping', this.timer);
-                            this.push_update_task(running)
-                        }
-                        return
-                    }
-                }
-                task.changeStatus('running');
-                this.push_update_task(task)
-            },
-            async task_done(task) {
-                task.changeStatus('complete');
-                this.push_update_task(task)
-            },
-            async push_update_task(task) {
-                await this.$store.commit('task/UPDATE_TASK', task)
-            },
-            async push_post_task(task) {
+                let task = new Task({tomato: this.setting.tomato, updating: true})
                 await this.$store.commit('task/ADD_TASK', task);
                 if (this.currentUser === null) {
                     await this.$indexedDB.add(task);
                 }
                 this.re_order();
-            },
-            async push_late() {
-                let needUpdate = this.tasks.filter(x => x.updating);
-                for (let i = 0; i < needUpdate.length; i++) {
-                    let res = null;
-                    let task = _.cloneDeep(needUpdate[i]);
-                    if (this.currentUser) {
-                        if (task.id) {
-                            res = await this.$axios.$put(`/task/tasks/${task.id}/`, task)
-                        } else {
-                            res = await this.$axios.$post("/task/tasks/", task)
-                        }
-                    }
-                    else {
-                        await this.$indexedDB.put(task);
-                        res = {
-                            id: task.uid
-                        }
-                    }
-                    if (res) {
-                        task.id = res.id;
-                        task.updating = false;
-                        this.push_update_task(task)
-                    }
-                }
             },
             move_text(flag, index, time) {
                 let elm = this.$refs[flag];
@@ -415,17 +299,6 @@
                     this.move_text('minutes', 6, "00:00:00");
                 }
             },
-            on_input: _.debounce(function (index) {
-                this.activeTasks[index].updating = true;
-                this.push_update_task(this.activeTasks[index]);
-            }, 500),
-            on_move({relatedContext, draggedContext}) {
-                const relatedElement = relatedContext.element;
-                const draggedElement = draggedContext.element;
-                return (
-                    (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
-                );
-            },
             re_order() {
                 let order = this.activeTasks.map(x => x.id);
                 if (this.currentUser) {
@@ -437,6 +310,12 @@
                 } else {
                     localStorage.setItem("task_order", order.toString());
                 }
+            },
+            handle_add_child(task) {
+                this.$store.commit('task/ADD_TASK', task);
+                if (this.currentUser === null) {
+                    this.$indexedDB.add(task);
+                }
             }
         },
         async mounted() {
@@ -444,24 +323,28 @@
             setInterval(function () {
                 _this.run_timer();
             }, 1000);
-            setInterval(function () {
-                _this.push_late();
-            }, 800);
+            if (this.runningTask) {
+                this.mode = 'Pomodoro';
+                let now = new Date();
+                let due_date = new Date(this.runningTask.dueDate());
+                this.timer = (due_date.getTime() - now.getTime()) / 1000;
+                this.toTop(41);
+            }
         },
         watch: {
             timer() {
                 if (this.timer <= 0 && this.runningTask) {
-                    let running = this.runningTask;
-                    running.changeStatus('stopping', 0);
-                    this.push_update_task(running)
+                    this.runningTask.changeStatus('stopping', 0);
                 }
             },
             runningTask() {
                 // Lay timer cua running task
                 if (this.runningTask) {
                     this.mode = 'Pomodoro';
-                    this.timer = this.runningTask.timer();
-                    this.toTop();
+                    let now = new Date();
+                    let due_date = new Date(this.runningTask.dueDate());
+                    this.timer = (due_date.getTime() - now.getTime()) / 1000;
+                    this.toTop(41);
                 } else {
                     this.timer = 0;
                 }
@@ -525,6 +408,18 @@
             min-width: 500px;
             max-width: 500px;
             margin: 0 .5rem;
+        }
+    }
+
+    .task.master {
+        position: relative;
+
+        .task {
+            position: unset;
+
+            .card {
+                top: 5%;
+            }
         }
     }
 </style>

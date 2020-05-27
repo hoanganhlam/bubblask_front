@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import moment from "moment";
+import {Task} from "./task";
 
 Vue.mixin({
     data() {
@@ -149,7 +150,84 @@ Vue.mixin({
             if (this[flag]) {
                 this[flag].play()
             }
-        }
+        },
+        getAngle(p1, p2, p3) {
+            let p12 = Math.sqrt(Math.pow((p1.x - p2.x), 2) + Math.pow((p1.y - p2.y), 2));
+            let p13 = Math.sqrt(Math.pow((p1.x - p3.x), 2) + Math.pow((p1.y - p3.y), 2));
+            let p23 = Math.sqrt(Math.pow((p2.x - p3.x), 2) + Math.pow((p2.y - p3.y), 2));
+            let de = Math.acos(((Math.pow(p12, 2)) + (Math.pow(p13, 2)) - (Math.pow(p23, 2))) / (2 * p12 * p13)) * 180 / Math.PI;
+            if (p3.x < p1.x) {
+                de = 360 - de
+            }
+            return de
+        },
+        hierarchy(data = [], {idKey = 'id', parentKey = 'parentId', childrenKey = 'children'} = {}) {
+            const tree = [];
+            const childrenOf = {};
+            data.forEach((item) => {
+                item = new Task(item)
+                if (typeof item.id === 'undefined') item.id = 0;
+                const {[idKey]: id, [parentKey]: parentId = 0} = item;
+                childrenOf[id] = childrenOf[id] || [];
+                item[childrenKey] = childrenOf[id];
+                parentId
+                    ? (
+                        childrenOf[parentId] = childrenOf[parentId] || []
+                    ).push(item)
+                    : tree.push(item);
+            });
+            return tree;
+        },
+        getOffset(el) {
+            let rect = el.getBoundingClientRect(),
+                scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+                scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            let point = {
+                y: rect.top + scrollTop - 40,
+                x: rect.left + scrollLeft
+            }
+            let points = [
+                point,
+                {
+                    x: point.x + rect.width / 2,
+                    y: point.y
+                },
+                {
+                    x: point.x + rect.width,
+                    y: point.y
+                },
+                {
+                    x: point.x + rect.width,
+                    y: point.y + rect.height / 2
+                },
+                {
+                    x: point.x + rect.width,
+                    y: point.y + rect.height
+                },
+                {
+                    x: point.x + rect.width / 2,
+                    y: point.y + rect.height
+                },
+                {
+                    x: point.x,
+                    y: point.y + rect.height
+                },
+                {
+                    x: point.x,
+                    y: point.y + rect.height / 2
+                }
+            ];
+            return {
+                width: rect.width,
+                height: rect.height,
+                ...point,
+                points,
+                center: {
+                    x: point.x + rect.width / 2,
+                    y: point.y + rect.height / 2
+                }
+            }
+        },
     },
     computed: {
         currentUser: {

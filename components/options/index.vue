@@ -45,7 +45,7 @@
                 <div class="column">Wake me in(m)</div>
                 <div class="column">
                     <div class="field is-grouped">
-                        <b-number-input size="is-small" v-model="data.notification.wake_me" :min="25" type="is-primary"
+                        <b-number-input size="is-small" v-model="data.notification.wake_me" :min="5" type="is-primary"
                                         controls-position="compact"/>
                     </div>
                 </div>

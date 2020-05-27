@@ -11,17 +11,14 @@
         <div class="hero">
             <div class="hero-body">
                 <div class="container small">
-
-                    <div class="box" v-for="(u, i) in response.results" :key="i">
+                    <div class="box user" v-for="(u, i) in response.results" :key="i">
                         <div class="media">
+                            <div class="media-left">{{i + 1}}</div>
                             <div class="media-left">
-                                {{i + 1}}
-                            </div>
-                            <div class="media-left">
-                                <Avatar class="is-48x48"/>
+                                <Avatar class="is-32x32"/>
                             </div>
                             <div class="media-content">
-                                <div class="title is-6">
+                                <div class="">
                                     <n-link :to="`/${u.username}`">{{convertName(u)}}</n-link>
                                 </div>
                             </div>
@@ -49,6 +46,11 @@
     }
 </script>
 
-<style scoped>
-
+<style lang="scss">
+    .user {
+        .media-content a {
+            color: #333333;
+            font-weight: bold;
+        }
+    }
 </style>
