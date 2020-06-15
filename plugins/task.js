@@ -16,8 +16,21 @@ function fmDate(date) {
         pad(date.getSeconds());
 }
 
+function totalTimeLeft(task) {
+    let total = 0;
+    if (!task.children || task.children.length === 0) {
+        total = total + task.timeLeft();
+    }
+    if (task.children) {
+        for (let i = 0; i < task.children.length; i++) {
+            total = total + totalTimeLeft(task.children[i]);
+        }
+    }
+    return total;
+}
+
 export class Task {
-    constructor({updating, uid, title = null, description = null, interval = 1, tomato, times, status, id, parent, board = null, temp_setting, settings = {}}) {
+    constructor({updating, uid, title = null, description = null, interval = 1, tomato, times, status, id, parent, board = null, temp_setting, settings = {}, order = 0, user = 0}) {
         this.uid = typeof uid === 'undefined' ? generateId() : uid;
         this.title = title;
         this.description = description;
@@ -31,6 +44,8 @@ export class Task {
         this.board = board;
         this.temp_setting = temp_setting;
         this.settings = settings;
+        this.order = order;
+        this.user = user;
     }
 
     changeStatus(status, timer) {
@@ -85,6 +100,10 @@ export class Task {
             total = total - (60 * this.tomato - reminder)
         }
         return total <= 0 ? 0 : total
+    }
+
+    totalTimeLeft() {
+        return totalTimeLeft(this);
     }
 
     total() {

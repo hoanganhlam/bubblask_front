@@ -165,7 +165,7 @@ Vue.mixin({
             const tree = [];
             const childrenOf = {};
             data.forEach((item) => {
-                item = new Task(item)
+                item = new Task(item);
                 if (typeof item.id === 'undefined') item.id = 0;
                 const {[idKey]: id, [parentKey]: parentId = 0} = item;
                 childrenOf[id] = childrenOf[id] || [];
@@ -238,11 +238,11 @@ Vue.mixin({
 
             }
         },
-        audioRang() {
+        audio_rang() {
             return new Audio("/sound/001.wav");
 
         },
-        audioPress() {
+        audio_press() {
             return new Audio("/sound/002.mp3")
         }
     }

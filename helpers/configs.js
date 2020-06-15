@@ -19,5 +19,6 @@ export const settings = {
     task_order: [],
     notification: {
         wake_me: 5
-    }
-}
+    },
+    ws: null
+};

@@ -76,11 +76,16 @@
                          v-bind:class="{'hidden': !(runningTask === null || !setting.is_strict)}">
                         <div class="button is-primary" @click="task_break(5)">Short Break</div>
                         <div class="button is-primary" @click="task_break(10)">Long Break</div>
+                        <div v-if="runningTask" class="button is-primary"
+                             @click="$store.commit('task/SET_RUNNING', runningTask)">
+                            <x-icon name="pause"/>
+                        </div>
                     </div>
+                    <div v-if="runningTask && !showNote" class="button is-text" @click="showNote = true">Show Note</div>
                 </div>
             </div>
         </div>
-        <div class="hero is-secondary is-small" style="min-height: calc(50vh - 20px)">
+        <div v-if="!runningTask" class="hero is-secondary is-small" style="min-height: calc(50vh - 20px)">
             <div class="hero-body">
                 <div class="container small">
                     <div v-if="setting.is_strict" class="notification is-warning content">
@@ -92,22 +97,12 @@
                     </div>
                 </div>
                 <div class="boards">
-                    <div class="board">
-                        <div class="task has-text-centered" @click="task_add">
-                            <div class="notification">
-                                <x-icon name="plus"/>
-                            </div>
-                        </div>
-                        <draggable v-model="activeTasks" v-bind="dragOptions" @change="re_order">
-                            <task class="master" v-for="(task, i) in activeTasks" :key="i" :value="task"
-                                  @add="handle_add_child"/>
-                        </draggable>
-                    </div>
+                    <task-board :tasks="tasks" :board="ws ? ws.board : null"/>
                 </div>
             </div>
         </div>
         <transition name="fade">
-            <div v-if="showAbout" class="hero">
+            <div v-if="!runningTask && showAbout" class="hero">
                 <div class="hero-body">
                     <div class="container small content">
                         <h1 class="title">Bublask</h1>
@@ -144,17 +139,38 @@
                 </div>
             </div>
         </transition>
+        <b-modal :active.sync="showNote" scroll="keep">
+            <div class="container small" v-if="runningTask">
+                <div class="notification is-warning">
+                    <div v-html="runningTask.description"></div>
+                </div>
+            </div>
+        </b-modal>
+        <b-modal :active.sync="askPassword" scroll="keep">
+            <div class="container small" v-if="wsTemp">
+                <div class="notification is-warning">
+                    <div class="field">
+                        Join {{wsTemp.name}}
+                    </div>
+                    <label class="field has-addons">
+                        <input v-model="wsPassword" class="input" placeholder="Enter Password"/>
+                        <span class="control">
+                            <span class="button is-primary" @click="joinWS(wsTemp)">Join</span>
+                        </span>
+                    </label>
+                </div>
+            </div>
+        </b-modal>
     </div>
 </template>
 
 <script>
     import Avatar from "../components/Avatar";
-    import {Task} from "../plugins/task";
-    import draggable from 'vuedraggable'
+    import TaskBoard from "../components/TaskBoard";
 
-    const _ = require("lodash")
+    const _ = require("lodash");
     export default {
-        components: {Avatar, draggable},
+        components: {TaskBoard, Avatar},
         head() {
             return {
                 title: this.title,
@@ -170,7 +186,7 @@
         data() {
             return {
                 timer: 0,
-                mode: "POMODORO",
+                mode: "POMODORO TIMER",
                 features: [
                     {
                         title: 'Podomoro Timer',
@@ -208,14 +224,10 @@
                         action: ''
                     }
                 ],
-                activeTasks: [],
-                dragOptions: {
-                    animation: 0,
-                    group: "description",
-                    disabled: false,
-                    ghostClass: "ghost"
-                },
-                board: null,
+                showNote: false,
+                wsPassword: null,
+                askPassword: false,
+                wsTemp: null
             }
         },
         computed: {
@@ -226,8 +238,10 @@
                 return "Bubblask - Online Pomodoro Timer - Best pomodoro tool!"
             },
             tasks() {
-                let board = this.board && this.board.id ? this.board.id : null;
-                return this.$store.state.task.tasks.filter(task => task.board === board);
+                let board = this.ws && this.ws.board ? this.ws.board.id : null;
+                return this.$store.state.task.tasks.filter(x => {
+                    return x.board === board;
+                });
             },
             runningTask() {
                 return this.$store.state.task.running
@@ -235,14 +249,11 @@
             setting() {
                 return this.$store.state.config.settings.timer
             },
-            taskOrder() {
-                return this.$store.state.config.settings.task_order || []
-            },
             showAbout() {
                 return this.$store.state.config.showAbout
             },
             style() {
-                let gSeting = this.$store.state.config.settings
+                let gSeting = this.$store.state.config.settings;
                 let img = gSeting.color ? gSeting.color.background : null;
                 if (img) {
                     return {
@@ -250,19 +261,13 @@
                         backgroundSize: 'cover'
                     }
                 }
-                return null
-            }
+                return null;
+            },
+            ws() {
+                return this.$store.state.config.ws
+            },
         },
         methods: {
-            init_task(val) {
-                this.activeTasks = [];
-                let temp = _.cloneDeep(val.filter(x => !['stopped', 'complete'].includes(x.status)));
-                this.activeTasks = this.hierarchy(temp, {idKey: 'id', parentKey: 'parent'})
-                this.activeTasks.forEach(x => {
-                    x.order = x.id ? this.taskOrder.indexOf(x.id) : 0
-                });
-                this.activeTasks.sort((a, b) => a.order - b.order)
-            },
             async task_break(m) {
                 this.mode = m === 5 ? "Short Break" : "Long Break";
                 await this.$store.commit('task/SET_RUNNING', null);
@@ -270,14 +275,6 @@
                     this.timer = m * 60;
                     this.toTop(41);
                 }
-            },
-            async task_add() {
-                let task = new Task({tomato: this.setting.tomato, updating: true})
-                await this.$store.commit('task/ADD_TASK', task);
-                if (this.currentUser === null) {
-                    await this.$indexedDB.add(task);
-                }
-                this.re_order();
             },
             move_text(flag, index, time) {
                 let elm = this.$refs[flag];
@@ -299,23 +296,14 @@
                     this.move_text('minutes', 6, "00:00:00");
                 }
             },
-            re_order() {
-                let order = this.activeTasks.map(x => x.id);
-                if (this.currentUser) {
-                    this.$axios.$put(`/auth/users/${this.currentUser.username}/`, {
-                        task_order: order
-                    }).then(res => {
-                        this.$store.commit('config/SET_SETTING_ORDER', order);
-                    })
-                } else {
-                    localStorage.setItem("task_order", order.toString());
-                }
-            },
-            handle_add_child(task) {
-                this.$store.commit('task/ADD_TASK', task);
-                if (this.currentUser === null) {
-                    this.$indexedDB.add(task);
-                }
+            joinWS(ws) {
+                this.$axios.$post(`/general/workspaces/${ws.id}/join/`, {password: this.wsPassword}).then(res => {
+                    if (res.status) {
+                        this.$store.commit('config/SET_WS', ws);
+                    }
+                    this.$router.replace({path: '/'});
+                    this.askPassword = false;
+                });
             }
         },
         async mounted() {
@@ -324,11 +312,26 @@
                 _this.run_timer();
             }, 1000);
             if (this.runningTask) {
-                this.mode = 'Pomodoro';
                 let now = new Date();
                 let due_date = new Date(this.runningTask.dueDate());
                 this.timer = (due_date.getTime() - now.getTime()) / 1000;
                 this.toTop(41);
+            }
+            if (this.$route.query.ws) {
+                if (this.currentUser && this.currentUser.profile.setting.ws !== this.$route.query.ws) {
+                    this.$axios.$get(`/general/workspaces/${this.$route.query.ws}/`).then(res => {
+                        if (res.isPrivate) {
+                            this.wsTemp = res;
+                            this.askPassword = true;
+                        } else {
+                            this.joinWS(res);
+                        }
+                    }).catch(() => {
+                        this.$router.replace({path: '/'});
+                    });
+                } else {
+
+                }
             }
         },
         watch: {
@@ -336,28 +339,24 @@
                 if (this.timer <= 0 && this.runningTask) {
                     this.runningTask.changeStatus('stopping', 0);
                 }
+                if (this.timer === 3) {
+                    this.playSource('audio_rang');
+                }
             },
             runningTask() {
                 // Lay timer cua running task
                 if (this.runningTask) {
-                    this.mode = 'Pomodoro';
+                    this.mode = this.runningTask.title;
                     let now = new Date();
                     let due_date = new Date(this.runningTask.dueDate());
                     this.timer = (due_date.getTime() - now.getTime()) / 1000;
                     this.toTop(41);
                 } else {
                     this.timer = 0;
+                    this.mode = "POMODORO TIMER";
                 }
-            },
-            tasks: {
-                deep: true,
-                handler: function (val, oldVal) {
-                    this.init_task(val);
-                }
+                this.showNote = false;
             }
-        },
-        created() {
-            this.init_task(this.tasks)
         }
     }
 </script>
@@ -408,6 +407,10 @@
             min-width: 500px;
             max-width: 500px;
             margin: 0 .5rem;
+
+            .media-right {
+                margin-left: .5rem;
+            }
         }
     }
 

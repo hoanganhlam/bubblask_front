@@ -9,12 +9,12 @@ export default {
     }),
     mutations: {
         ['SET_RUNNING'](state, task) {
-            let updateTask = []
+            let updateTask = [];
             if (task === null) {
                 if (state.running) {
-                    state.running.changeStatus('stopping')
-                    updateTask.push(state.running)
-                    state.running = null
+                    state.running.changeStatus('stopping');
+                    updateTask.push(state.running);
+                    state.running = null;
                 }
             } else {
                 if (state.running && state.running.uid === task.uid) {
@@ -22,8 +22,8 @@ export default {
                     state.running = null;
                 } else {
                     if (state.running) {
-                        state.running.changeStatus('stopping')
-                        updateTask.push(state.running)
+                        state.running.changeStatus('stopping');
+                        updateTask.push(state.running);
                     }
                     task.changeStatus('running');
                     state.running = task;

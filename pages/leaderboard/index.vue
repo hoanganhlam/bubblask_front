@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="hero is-primary">
+        <div class="hero is-dark">
             <div class="hero-body">
                 <div class="container small">
                     <h1 class="title">LeaderBoard</h1>
@@ -15,14 +15,14 @@
                         <div class="media">
                             <div class="media-left">{{i + 1}}</div>
                             <div class="media-left">
-                                <Avatar class="is-32x32"/>
+                                <Avatar class="is-32x32" :value="u.profile.media"/>
                             </div>
                             <div class="media-content">
                                 <div class="">
                                     <n-link :to="`/${u.username}`">{{convertName(u)}}</n-link>
                                 </div>
                             </div>
-                            <div class="media-right"><small>67 hours</small>
+                            <div class="media-right"><small>{{u.total_time / (60 * 60)}} hours</small>
                             </div>
                         </div>
                     </div>

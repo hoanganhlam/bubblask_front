@@ -1,6 +1,6 @@
 <template>
     <div v-bind:class="{'has-custom': $route.path === '/'}" v-bind:style="settings.color">
-        <header v-if="!$route.path.includes('/workspace')" class="header">
+        <header v-if="!isRunning && !$route.path.includes('/workspace')" class="header">
             <nav class="navbar" role="navigation" aria-label="main navigation">
                 <div class="container is-fullwidth">
                     <div class="navbar-brand">
@@ -8,12 +8,7 @@
                             <span class="primary">BUBBLASK</span>
                             <span class="second">.com</span>
                         </n-link>
-                        <div class="navbar-item">
-                            <n-link to="/leaderboard">LeaderBoard</n-link>
-                        </div>
-                        <div class="navbar-item">
-                            <n-link to="/template">Template</n-link>
-                        </div>
+                        <n-link class="navbar-item" to="/leaderboard">LeaderBoard</n-link>
                         <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
                            @click="burgerActive = !burgerActive">
                             <span aria-hidden="true"></span>
@@ -23,6 +18,7 @@
                     </div>
                     <div class="navbar-menu" v-bind:class="{'is-active' : burgerActive}">
                         <div class="navbar-end">
+                            <n-link class="navbar-item" to="/board">Board</n-link>
                             <div class="navbar-item">
                                 <div>
                                     <span class="field">Total: </span>
@@ -38,28 +34,32 @@
                             <div class="navbar-item">
                                 <b-switch :rounded="false"
                                           :value="settings && settings.timer  ? settings.timer.is_strict : false"
-                                          @input="setStrict"></b-switch>
+                                          @input="setStrict">Strict Mode
+                                </b-switch>
                             </div>
                             <client-only v-if="currentUser">
                                 <b-dropdown position="is-bottom-left" :trap-focus="true">
                                     <div slot="trigger" class="navbar-item clickable">
                                         <x-icon name="cogs"></x-icon>
+                                        <span>Setting</span>
                                     </div>
                                     <b-dropdown-item custom>
                                         <Options v-model="settings"></Options>
                                     </b-dropdown-item>
                                 </b-dropdown>
                             </client-only>
-                            <div class="navbar-item">
-                                <b-dropdown v-if="!Boolean(currentUser)" position="is-bottom-left">
+                            <div class="navbar-item" v-if="!Boolean(currentUser)">
+                                <b-dropdown position="is-bottom-left">
                                     <div class="clickable" slot="trigger">Login</div>
                                     <div class="dropdown-item" style="min-width: 335px">
                                         <div class="notification is-warning">Login to manage and track your work!</div>
                                         <div class="field" v-if="!logging">
                                             <label class="label">Username</label>
                                             <div class="control">
-                                                <input v-model="form.username" class="input" type="text"
-                                                       placeholder="Username">
+                                                <label>
+                                                    <input v-model="form.username" class="input" type="text"
+                                                           placeholder="Username"/>
+                                                </label>
                                             </div>
                                         </div>
                                         <div class="field" v-if="!logging">
@@ -79,8 +79,10 @@
                                         <div class="field">
                                             <label class="label">Email</label>
                                             <div class="control has-icons-right">
-                                                <input v-model="form.email" class="input is-success" type="email"
-                                                       placeholder="Email">
+                                                <label>
+                                                    <input v-model="form.email" class="input is-success" type="email"
+                                                           placeholder="Email">
+                                                </label>
                                             </div>
                                         </div>
                                         <div class="field">
@@ -115,10 +117,8 @@
                                         </div>
                                     </div>
                                 </b-dropdown>
-                                <div class="grouped" v-else>
-                                    <n-link to="/me">Report</n-link>
-                                </div>
                             </div>
+                            <n-link style="border-bottom: 0" v-else class="navbar-item" to="/me">Report</n-link>
                             <div class="navbar-item clickable" v-if="currentUser && $route.path === '/me'"
                                  @click="logout()">
                                 <x-icon name="logout"></x-icon>
@@ -131,7 +131,7 @@
         <main class="main-content">
             <nuxt/>
         </main>
-        <footer class="footer">
+        <footer class="footer" v-if="!isRunning">
             <div class="container small">
                 <div class="level is-mobile">
                     <div class="level-left">
@@ -151,15 +151,19 @@
         </footer>
         <div class="ws-members" v-bind:style="{height: wsMinimize ? undefined : '300px'}">
             <div class="header">
-                <div class="level is-mobile">
-                    <div class="level-left">
-                        <div @click="onOpenSelect" class="clickable">{{ws ? ws.name : 'Workspace'}}</div>
+                <div class="media">
+                    <div class="media-content">
+                        <div class="buttons has-addons">
+                            <button class="button" @click="onOpenSelect">
+                                <x-icon name="chevron-down"></x-icon>
+                            </button>
+                            <button class="button is-selected" @click="openGroupForm(false)">
+                                <b class="clickable">{{ws ? ws.name : 'Create Workspace'}}</b>
+                            </button>
+                        </div>
                     </div>
-                    <div class="level-right clickable">
+                    <div class="media-right">
                         <div class="buttons">
-                            <div class="button" v-if="ws" @click="openGroupForm(false)">
-                                <x-icon name="cogs"></x-icon>
-                            </div>
                             <div class="button" @click="wsMinimize = !wsMinimize">
                                 <x-icon :name="wsMinimize ? 'maximize': 'minimize'"></x-icon>
                             </div>
@@ -168,22 +172,27 @@
                 </div>
             </div>
             <transition name="fade">
-                <div v-if="!wsMinimize" class="members">
-                    <div class="wrapper">
-                        <div class="level is-mobile" v-for="i in 15" :key="i">
+                <div v-if="!wsMinimize && ws" class="members">
+                    <div class="wrapper" v-if="wsMembers.length">
+                        <div class="level is-mobile" v-for="user in wsMembers" :key="user.id">
                             <div class="level-left">
                                 <div class="media">
                                     <div class="media-left">
-                                        <avatar class="is-24x24"></avatar>
+                                        <avatar class="is-24x24" :value="user.profile.media"></avatar>
                                     </div>
                                     <div class="media-content">
-                                        <b>Lam Hoang</b>
+                                        <b>{{convertName(user)}}</b>
                                     </div>
                                 </div>
                             </div>
                             <div class="level-right">
-                                <small>200m</small>
+                                <small>{{user.total_time / 60}}m</small>
                             </div>
+                        </div>
+                    </div>
+                    <div class="wrapper" v-if="loadingMember">
+                        <div class="level" v-for="i in 5" :key="i">
+                            <div class="skeleton-user"></div>
                         </div>
                     </div>
                 </div>
@@ -193,9 +202,64 @@
             <div class="container small">
                 <div class="group-selector has-background-white">
                     <div class="header">
+                        <div>
+                            <p class="notification is-warning">Focus to work of meeting with others</p>
+                        </div>
                         <div class="media">
-                            <input @input="searchWS()" v-model="wsSearch" class="input"
-                                   placeholder="Search Workspace"/>
+                            <b-input expanded @input="searchWS()" v-model="wsSearch" placeholder="Enter keyword..."/>
+                        </div>
+                    </div>
+                    <div class="list">
+                        <div class="media" v-for="i in 5" :key="i" v-if="wsResponse.results[i - 1]"
+                             v-bind:class="{'is-active': ws && ws.id === wsResponse.results[i - 1].id}">
+                            <div class="media-content">
+                                <div>
+                                    <x-icon v-if="wsResponse.results[i - 1].board" name="board"
+                                            class="is-small"></x-icon>
+                                    <b>{{wsResponse.results[i - 1].name}}</b>
+                                </div>
+                                <small>By {{convertName(wsResponse.results[i - 1].user)}}</small>
+                            </div>
+                            <div class="media-right" v-if="ws && ws.id === wsResponse.results[i - 1].id">
+                                <div class="button is-small" @click="joinWS(wsResponse.results[i - 1])">
+                                    <span>Left</span>
+                                    <x-icon name="logout"></x-icon>
+                                </div>
+                            </div>
+                            <div class="media-right" v-else>
+                                <b-dropdown v-if="wsResponse.results[i - 1].isPrivate" position="is-bottom-left"
+                                            append-to-body aria-role="menu" trap-focus>
+                                    <div class="button is-small" slot="trigger">
+                                        <span>Join</span>
+                                        <x-icon name="shield-lock"></x-icon>
+                                    </div>
+                                    <b-dropdown-item aria-role="menu-item" :focusable="false" custom>
+                                        <div class="field has-addons" style="min-width: 280px;">
+                                            <b-input v-model="wsPassword" expanded placeholder="Enter Password"/>
+                                            <div class="control">
+                                                <div class="button is-primary"
+                                                     @click="joinWS(wsResponse.results[i - 1])">Join
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </b-dropdown-item>
+                                </b-dropdown>
+                                <div v-else class="button is-small" @click="joinWS(wsResponse.results[i - 1])">
+                                    <span>Join</span>
+                                    <x-icon name="shield-open"></x-icon>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="has-background-light">
+                        <div class="media">
+                            <div class="media-left">
+                                <div class="button is-static">OR</div>
+                            </div>
+                            <div class="media-content">
+                                <b-input @input="searchCode" v-model="wsCode" placeholder="Enter Code"></b-input>
+                            </div>
                         </div>
                         <div class="media">
                             <div class="media-left">
@@ -207,64 +271,62 @@
                             </div>
                         </div>
                     </div>
-                    <div class="list">
-                        <div class="media" v-for="i in 5" :key="i" v-if="wsResponse.results[i - 1]"
-                             v-bind:class="{'is-active': ws && ws.id === wsResponse.results[i - 1].id}">
-                            <div class="media-content">
-                                <div><b>{{wsResponse.results[i - 1].name}}</b></div>
-                                <small>By {{convertName(wsResponse.results[i - 1].user)}}</small>
-                            </div>
-                            <div class="media-left">
-                                <div class="button is-text" @click="joinWS(wsResponse.results[i - 1])">
-                                    {{ws && ws.id === wsResponse.results[i - 1].id ? 'Left' : 'Join'}}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </b-modal>
         <b-modal :active.sync="isActive" scroll="keep">
-            <div class="modal-card" style="width: auto">
-                <header class="modal-card-head">
-                    <div class="level is-mobile" style="width: 100%">
-                        <h4 class="level-left">Create new workspace</h4>
-                        <div class="level-right">
-                            <div class="buttons">
-                                <div class="button is-small" @click="isActive = false">Cancel</div>
-                                <div v-if="ws" class="button is-small" @click="joinWS(ws)">Left</div>
-                            </div>
-                        </div>
-                    </div>
-                </header>
-                <section class="modal-card-body">
-                    <div v-if="!formWS.isDone">
-                        <div class="field">
-                            <ce v-model="formWS.name" elm="h1" class="title" placeholder="Workspace name"></ce>
-                        </div>
-                        <div class="field">
-                            <div class="field-body">
-                                <div class="field">
-                                    <label class="label">Privacy</label>
-                                    <b-switch :rounded="false" size="is-medium" v-model="formWS.isPrivate">Private
-                                    </b-switch>
-                                </div>
-                                <div class="field" v-if="formWS.isPrivate">
-                                    <label class="label">Password</label>
-                                    <b-input v-model="formWS.password" type="password" password-reveal
-                                             placeholder="Password to access workspace"/>
+            <div class="container small">
+                <div class="modal-card" style="width: auto">
+                    <header class="modal-card-head">
+                        <div class="level is-mobile" style="width: 100%">
+                            <h4 class="level-left"><b>Create new workspace</b></h4>
+                            <div class="level-right">
+                                <div class="buttons">
+                                    <div class="button is-small" @click="isActive = false">Cancel</div>
+                                    <div v-if="ws" class="button is-small" @click="joinWS(ws)">Left</div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div v-if="formWS.isDone && wsURI" class="notification is-warning content">
-                        <p>Share with your friends</p>
-                        <b-input :value="wsURI"></b-input>
-                    </div>
-                </section>
-                <footer class="modal-card-foot">
-                    <button v-if="!formWS.isDone" class="button is-primary" @click="saveWS">Save</button>
-                </footer>
+                    </header>
+                    <section class="modal-card-body">
+                        <div v-if="!formWS.isDone">
+                            <div class="field">
+                                <ce v-model="formWS.name" elm="h1" class="title" placeholder="Workspace name"></ce>
+                            </div>
+                            <div class="field">
+                                <div class="field-body">
+                                    <div class="field">
+                                        <b-switch :rounded="false" size="is-medium" v-model="formWS.isPrivate">Private
+                                        </b-switch>
+                                    </div>
+                                    <div class="field" v-if="formWS.isPrivate">
+                                        <b-input expanded v-model="formWS.password" type="password" password-reveal
+                                                 placeholder="Password to access workspace"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field" v-if="!formWS.id">
+                                <div class="field-body">
+                                    <div class="field">
+                                        <b-switch :rounded="false" size="is-medium" v-model="formWS.hasBoard">Board
+                                        </b-switch>
+                                    </div>
+                                    <div class="field" v-if="formWS.hasBoard">
+                                        <b-input expanded v-model="formWS.board_name" placeholder="Board name"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if="formWS.isDone && wsURI" class="notification is-warning content">
+                            <p>Share with your friends</p>
+                            <b-input :value="wsURI"></b-input>
+                        </div>
+                    </section>
+                    <footer class="modal-card-foot" v-if="canUpdateWS">
+                        <button v-if="!formWS.isDone" class="button is-primary is-fullwidth" @click="saveWS">Save
+                        </button>
+                    </footer>
+                </div>
             </div>
         </b-modal>
     </div>
@@ -278,6 +340,15 @@
     import Options from "../components/options";
     import {debounce, cloneDeep} from "lodash"
     import {Task} from "../plugins/task";
+
+    const DEFAULT_FORM = {
+        name: null,
+        isPrivate: false,
+        password: null,
+        isDone: false,
+        hasBoard: false,
+        boardName: null
+    };
 
     export default {
         components: {BTaginput, BInput, BDropdownItem, Avatar, Options},
@@ -293,12 +364,7 @@
                     first_name: null,
                     last_name: null
                 },
-                formWS: {
-                    name: null,
-                    isPrivate: false,
-                    password: null,
-                    isDone: false
-                },
+                formWS: DEFAULT_FORM,
                 isActive: false,
                 wsURI: null,
                 wsResponse: {
@@ -306,15 +372,19 @@
                     count: 0
                 },
                 wsSearch: '',
+                wsCode: null,
                 wsLoading: true,
                 wsActive: false,
                 wsMinimize: true,
+                wsPassword: null,
+                wsMembers: [],
                 showAbout: true,
                 settings: null,
                 notify: {
                     msg: null,
                     ssf: true
-                }
+                },
+                loadingMember: false
             }
         },
         methods: {
@@ -322,13 +392,9 @@
                 if (data) {
                     this.formWS = cloneDeep(data);
                 } else {
-                    this.formWS = {
-                        name: null,
-                        isPrivate: false,
-                        password: null,
-                        isDone: false
-                    }
+                    this.formWS = this.formWS = DEFAULT_FORM;
                 }
+                this.formWS.isDone = false;
             },
             async logout() {
                 await this.$auth.logout();
@@ -365,14 +431,14 @@
                         }
                     }).catch(error => {
                         let fields = Object.keys(error.response.data);
-                        this.notify.msg = []
+                        this.notify.msg = [];
                         fields.forEach(field => {
                             this.notify.msg.push(`${field} - ${error.response.data[field][0]}`)
                         });
                         this.notify.ssf = false;
                     });
                 }
-                let _this = this
+                let _this = this;
                 setTimeout(function () {
                     _this.notify = {msg: null, ssf: true}
                 }, 2000)
@@ -383,17 +449,21 @@
                 } else {
                     this.initForm(this.ws);
                 }
-                this.isActive = true;
+                if (this.canUpdateWS) {
+                    this.isActive = true;
+                }
             },
             saveWS() {
                 if (typeof this.formWS.id === "undefined") {
                     this.$axios.$post('/general/workspaces/', this.formWS).then(res => {
+                        this.formWS = DEFAULT_FORM;
                         this.formWS.isDone = true;
                         this.wsURI = `https://bubblask.com?ws=${res.id}`;
                         this.joinWS(res);
                     });
                 } else {
                     this.$axios.$put(`/general/workspaces/${this.formWS.id}/`, this.formWS).then(res => {
+                        this.formWS = DEFAULT_FORM;
                         this.formWS.isDone = true;
                         this.wsURI = `https://bubblask.com?ws=${res.id}`;
                     });
@@ -404,11 +474,16 @@
                 this.wsResponse = await this.$axios.$get('/general/workspaces/', {
                     params: {
                         search: this.wsSearch ? this.wsSearch : undefined,
+                        code: this.wsCode ? this.wsCode : undefined,
                         page_size: 5
                     }
                 });
                 this.wsLoading = false;
             },
+            searchCode: debounce(function () {
+                this.wsSearch = null;
+                this.fetchWS();
+            }, 500),
             searchWS: debounce(function () {
                 this.fetchWS();
             }, 500),
@@ -430,7 +505,11 @@
             fetchTasks() {
                 this.$store.commit('task/SET_TASKS', []);
                 if (this.currentUser) {
-                    this.$axios.$get('/task/tasks/').then(res => {
+                    this.$axios.$get('/task/tasks/', {
+                        params: {
+                            board: this.ws && this.ws.board ? this.ws.board.id : undefined
+                        }
+                    }).then(res => {
                         for (let i = 0; i < res.length; i++) {
                             this.$store.commit('task/ADD_TASK', new Task(res[i]));
                         }
@@ -452,6 +531,13 @@
                         }, "title", "uid", []);
                 }
             },
+            async fetchMembers() {
+                if (this.ws) {
+                    this.loadingMember = true;
+                    this.wsMembers = await this.$axios.$get(`/general/workspaces/${this.ws.id}/members/`);
+                    this.loadingMember = false;
+                }
+            },
             async push_late() {
                 let needUpdate = this.$store.state.task.tasks.filter(x => x.updating);
                 for (let i = 0; i < needUpdate.length; i++) {
@@ -459,12 +545,14 @@
                     let task = _.cloneDeep(needUpdate[i]);
                     if (this.currentUser) {
                         if (task.parent === 0) {
-                            task.parent = null
+                            task.parent = null;
                         }
                         if (task.id) {
-                            res = await this.$axios.$put(`/task/tasks/${task.id}/`, task)
+                            if (this.currentUser.id === task.user) {
+                                res = await this.$axios.$put(`/task/tasks/${task.id}/`, task);
+                            }
                         } else {
-                            res = await this.$axios.$post("/task/tasks/", task)
+                            res = await this.$axios.$post("/task/tasks/", task);
                         }
                     } else {
                         await this.$indexedDB.put(task);
@@ -474,16 +562,17 @@
                     }
                     if (res) {
                         task.id = res.id;
-                        task.force = true
+                        task.force = true;
                         if (res.parent === null) {
                             res.parent = 0
                         }
-                        this.$store.commit('task/UPDATE_TASK', task)
+                        task.user = res.user;
+                        await this.$store.commit('task/UPDATE_TASK', task);
                     }
                 }
             },
             joinWS(ws) {
-                this.$axios.$post(`/general/workspaces/${ws.id}/join/`, {}).then(res => {
+                this.$axios.$post(`/general/workspaces/${ws.id}/join/`, {password: this.wsPassword}).then(res => {
                     if (res.status) {
                         if (this.ws && this.ws.id === ws.id) {
                             this.$store.commit('config/SET_WS', null);
@@ -519,6 +608,16 @@
             },
             ws() {
                 return this.$store.state.config.ws
+            },
+            isRunning() {
+                return Boolean(this.$store.state.task.running);
+            },
+            canUpdateWS() {
+                if (typeof this.formWS.id === "undefined") {
+                    return true;
+                } else {
+                    return this.currentUser && this.currentUser.id === this.formWS.user.id;
+                }
             }
         },
         watch: {
@@ -532,12 +631,19 @@
                 if (this.formWS.isPrivate === false) {
                     this.formWS.password = null
                 }
+            },
+            ws() {
+                if (this.ws) {
+                    this.wsMinimize = false;
+                }
+                this.fetchTasks();
+                this.fetchMembers();
             }
         },
         mounted() {
             if (process.client) {
-                let _this = this
-                this.fetchTasks()
+                let _this = this;
+                this.fetchTasks();
                 setInterval(function () {
                     _this.push_late();
                 }, 800);
@@ -572,6 +678,10 @@
             padding: .75rem 1rem;
             cursor: pointer;
 
+            .is-expanded {
+                width: 100%;
+            }
+
             .media-content {
                 line-height: 1;
             }
@@ -585,8 +695,8 @@
     .ws-members {
         position: fixed;
         right: .75rem;
-        bottom: .75rem;
-        width: 250px;
+        bottom: 0;
+        min-width: 280px;
         background: #FFFFFF;
         padding: .75rem;
         box-shadow: 0 1px 5px 0 rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.02);
@@ -594,18 +704,10 @@
         flex-direction: column;
 
         .header {
-            font-size: 12px;
 
-            svg {
-                width: 12px;
-            }
 
             .button {
-                height: 1rem;
-                border: 0;
-                margin-bottom: 0;
 
-                padding: 0 .25rem;
             }
         }
 
@@ -652,7 +754,7 @@
     .widget_title {
         font-weight: bold;
         font-size: 16px;
-        font-family: serif;
+        margin-bottom: 1rem;
     }
 
     .has-custom {
@@ -666,9 +768,14 @@
             background: var(--bg-color-primary);
             color: var(--bg-color-primary-text);
 
+            .button.is-text,
             .subtitle,
             .title {
                 color: var(--bg-color-primary-text);
+            }
+
+            .button.is-text:hover {
+                background: unset;
             }
 
             .timer {

@@ -2,9 +2,9 @@
     <div id="visual" ref="visual" class="visual">
         <div id="vs-background" class="background"></div>
         <div class="wrapper">
-            <task readonly v-for="task in tasks" :key="task.id" :value="task" @down="mouse_down"
-                  :graphing="true" @add="handle_add_child" @board-update="openBoardModal"
-                  @deleted="handle_delete_task"/>
+            <task-graph readonly v-for="task in tasks" :key="task.id" :value="task" @down="mouse_down"
+                        @add="handle_add_child" @board-update="openBoardModal"
+                        @deleted="handle_delete_task"/>
         </div>
         <b-modal :active.sync="activeBoardUpdate" scroll="keep">
             <div class="modal-card" style="width: auto">
@@ -47,9 +47,9 @@
 
 <script>
     import {SVG} from '@svgdotjs/svg.js';
-    import {Task} from "../../plugins/task";
-    import BInput from "../../components/input/Input";
-    import BTaginput from "../../components/taginput/Taginput";
+    import {Task} from "../../../plugins/task";
+    import BInput from "../../../components/input/Input";
+    import BTaginput from "../../../components/taginput/Taginput";
 
     const _ = require("lodash")
 
@@ -254,7 +254,7 @@
                         })
                     }
                     return out;
-                }
+                };
                 let deleted_tasks = find_all(task, []);
                 for (let i = 0; i < deleted_tasks.length; i++) {
                     let t = deleted_tasks[i];
@@ -292,16 +292,18 @@
                 fields.forEach(field => {
                     data[field] = this.boardF[field]
                 });
-                this.$axios.$put(`/task/boards/${this.board.slug}/`, data).then(res => {
-                    this.boardF = null;
-                    if (res.slug !== this.board.slug) {
-                        this.$router.replace({path: `/template/${res.slug}`});
-                    }
-                    this.board = res;
-                    this.tasks[0].title = res.title;
-                }).finally(() => {
-                    this.activeBoardUpdate = false
-                })
+                if (this.currentUser && this.currentUser.id === this.board.user) {
+                    this.$axios.$put(`/task/boards/${this.board.slug}/`, data).then(res => {
+                        this.boardF = null;
+                        if (res.slug !== this.board.slug) {
+                            this.$router.replace({path: `/template/${res.slug}`});
+                        }
+                        this.board = res;
+                        this.tasks[0].title = res.title;
+                    }).finally(() => {
+                        this.activeBoardUpdate = false
+                    })
+                }
             },
             openBoardModal() {
                 if (this.board) {
@@ -355,7 +357,7 @@
             if (this.board) {
                 this.settings = this.board.settings ? this.board.settings.task_graph_setting : {};
             } else {
-                this.settings = _.cloneDeep(this.$store.state.config.settings.task_graph_setting);
+                this.settings = this.$store.state.config.settings.task_graph_setting ? _.cloneDeep(this.$store.state.config.settings.task_graph_setting) : {};
             }
             this.init()
         },

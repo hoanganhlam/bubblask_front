@@ -2,9 +2,10 @@
     <div class="image avatar relative" v-bind:class="{'initials': !isUpdating && !(data && data.sizes)}">
         <Upload v-if="isUpdating" class="upload" @done="handleUpload"></Upload>
         <img class="is-round" v-else-if="data && data.sizes"
-             :src="cleanURI(data.sizes['thumb_270_270'] ? data.sizes['thumb_270_270'] : data.sizes['270_270'])" alt="">
+             :src="cleanURI(data.sizes[imageSize] ? data.sizes[imageSize] : data.sizes[imageSize])" alt="">
         <span v-else-if="name">{{avatarName(name, 2)}}</span>
-        <img v-else :src="`/avatar/${getRandomInt(4)}.png`" alt="">
+        <img v-else-if="!canUpdate" :src="`/avatar/${getRandomInt(4)}.png`" alt="">
+        <div v-else class="image-blank"></div>
         <div v-if="canUpdate" class="medal" @click="isUpdating = !isUpdating">
             <x-icon size="is-small" :name="isUpdating ? 'close' : 'upload'"></x-icon>
         </div>
@@ -32,6 +33,10 @@
             icon: {
                 default: 'account-circle-outline',
                 type: String
+            },
+            imageSize: {
+                default: 'thumb_96_96',
+                type: String
             }
         },
         data() {
@@ -44,6 +49,7 @@
             handleUpload(files) {
                 if (files.length) {
                     this.data = files[0]
+                    this.isUpdating = false;
                 }
             },
             getRandomInt(max) {
@@ -61,4 +67,32 @@
     }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+    .avatar {
+        position: relative;
+
+        img {
+            border-radius: 5px;
+        }
+
+        .medal,
+        .delete {
+            z-index: 1;
+            position: absolute;
+            right: -.75rem;
+        }
+
+        .medal {
+            top: -.75rem;
+            cursor: pointer;
+        }
+
+        .delete {
+            bottom: -.75rem;
+        }
+
+        .image-blank {
+            min-height: 150px;
+        }
+    }
+</style>

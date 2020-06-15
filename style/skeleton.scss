@@ -1,0 +1,122 @@
+@mixin loading-skeleton(
+    $objects: (),
+    $element-height: 150px,
+    $color: #ddd,
+    $background: #fff,
+    $highlight-height: $element-height
+) {
+    $positions: ();
+    $gradients: ();
+    $sizes: ();
+    $rnd: unique-id();
+
+    @each $obj in $objects {
+        $positions: append($positions, #{map-get($obj, 'x') map-get($obj, 'y')}, 'comma');
+        $gradients: append($gradients, linear-gradient($color #{map-get($obj, 'height')}, transparent 0), 'comma');
+        $sizes: append($sizes, #{map-get($obj, 'width') $element-height}, 'comma');
+    }
+
+    @at-root {
+        @keyframes loading-skeleton-animation-#{$rnd} {
+            to {
+                background-position: calc(100% + 50px) 0, #{$positions};
+            }
+        }
+    }
+
+    background-image: linear-gradient(100deg, rgba($background, 0), rgba($background, 0.5) 50%, rgba($background, 0) 80%),
+    #{$gradients};
+    background-size: 50px $highlight-height, #{$sizes};
+    background-position: 0 0, #{$positions};
+    animation: loading-skeleton-animation-#{$rnd} 1s infinite;
+}
+
+.skeleton-activity {
+    background-color: #FFF;
+    height: 96px;
+    width: 100%;
+    background-repeat: repeat-y;
+
+    @include loading-skeleton(
+                (
+                    (x: 0, y: 0px, width: 96px, height: 96px),
+                    (x: 106px, y: 0px, width: calc(100% - 106px), height: 15px),
+                    (x: 106px, y: 30px, width: calc(100% - 126px), height: 10px),
+                    (x: 106px, y: 50px, width: calc(100% - 146px), height: 10px)
+                ),
+            96px,
+            #eee,
+            #FFF
+    );
+}
+
+.skeleton-task {
+    background-color: #FFF;
+    height: 35px;
+    width: 100%;
+    background-repeat: repeat-y;
+
+    @include loading-skeleton(
+                (
+                    (x: 0, y: 0px, width: 30px, height: 30px),
+                    (x: 46px, y: 0px, width: calc(40%), height: 8px),
+                    (x: 46px, y: 16px, width: calc(80px), height: 16px),
+                    (x: 100%, y: 0, width: 35px, height: 35px),
+                ),
+            35px,
+            #eee,
+            #FFF
+    );
+}
+
+.skeleton-user {
+    background-color: #FFF;
+    height: 32px;
+    width: 100px;
+    background-repeat: repeat-y;
+
+    @include loading-skeleton(
+                (
+                    (x: 0, y: 0px, width: 32px, height: 32px),
+                    (x: 42px, y: 0px, width: calc(58px), height: 10px),
+                    (x: 42px, y: 20px, width: calc(48px), height: 10px)
+                ),
+            96px,
+            #eee,
+            #FFF
+    );
+}
+
+.skeleton-board {
+    background-color: #FFF;
+    height: 48px;
+    width: 100%;
+    background-repeat: repeat-y;
+
+    @include loading-skeleton(
+                (
+                    (x: 0, y: 0px, width: 48px, height: 48px),
+                    (x: 58px, y: 0px, width: 80%, height: 10px),
+                    (x: 58px, y: 20px, width: calc(48px), height: 10px)
+                ),
+            96px,
+            #eee,
+            #FFF
+    );
+}
+
+.skeleton-line {
+    background-color: #FFF;
+    height: .8rem;
+    width: 100%;
+    background-repeat: repeat-y;
+
+    @include loading-skeleton(
+                (
+                    (x: 0, y: 0px, width: 100%, height: 100%),
+                ),
+            .8rem,
+            #eee,
+            #FFF
+    );
+}

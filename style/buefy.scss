@@ -343,38 +343,47 @@ $dropdown-disabled-opacity: 0.5 !default;
 
 .autocomplete {
     position: relative;
+
     .dropdown-menu {
         display: block;
         min-width: 100%;
         max-width: 100%;
+
         &.is-opened-top {
             top: auto;
             bottom: 100%;
         }
     }
+
     .dropdown-content {
         overflow: auto;
         max-height: 200px;
     }
+
     .dropdown-item {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+
         &.is-hovered {
             background: $dropdown-item-hover-background-color;
             color: $dropdown-item-hover-color;
         }
+
         &.is-disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
     }
+
     &.is-small {
         @include control-small;
     }
-    &.is-medium{
+
+    &.is-medium {
         @include control-medium;
     }
+
     &.is-large {
         @include control-large;
     }
@@ -412,10 +421,12 @@ $taginput-height: 1.7em !default;
             margin-bottom: calc(0.275em - 1px);
             font-size: 0.9em;
             height: $taginput-height;
+
             .tag {
                 margin-bottom: 0;
                 font-size: 0.9em;
                 height: $taginput-height;
+
                 &.is-delete {
                     width: $taginput-height;
                 }
@@ -424,6 +435,7 @@ $taginput-height: 1.7em !default;
 
         .autocomplete {
             flex: 1;
+
             input {
                 height: $taginput-height;
                 margin-bottom: calc(0.275em - 1px);
@@ -432,19 +444,205 @@ $taginput-height: 1.7em !default;
                 border: none;
                 box-shadow: none;
                 min-width: 8em;
+
                 &:focus {
                     box-shadow: none !important;
                 }
             }
+
             .icon {
                 height: $taginput-height;
             }
+
             > .control.is-loading::after {
                 top: 0.375em;
             }
         }
     }
 }
+
+// Rate
+$rate-color: $grey-lighter !default;
+$rate-color-active: #908f8f;
+$rate-spaced: 0.25rem !default;
+$rate-text-spaced: 0.35rem !default;
+
+.rate {
+    align-items: center;
+    display: flex;
+
+    &:not(:last-child) {
+        margin-bottom: ($block-spacing / 2);
+    }
+
+    &.is-spaced .rate-item:not(:last-child) {
+        margin-right: $rate-spaced;
+    }
+
+    &.is-disabled .rate-item {
+        cursor: initial;
+
+        &:hover {
+            transform: none;
+        }
+    }
+
+    &.is-rtl {
+        .rate-item {
+            order: 1;
+        }
+
+        .rate-text {
+            margin-left: 0;
+            margin-right: $rate-text-spaced;
+        }
+    }
+
+    .rate-item {
+        cursor: pointer;
+        display: inline-flex;
+        position: relative;
+        transition: all 0.3s;
+
+        &:hover {
+            transform: scale(1.1);
+        }
+
+        &.set-on .icon,
+        &.set-half .is-half {
+            color: $rate-color-active;
+
+            svg {
+                fill: $rate-color-active;
+            }
+        }
+
+        &.set-half .is-half {
+            position: absolute;
+            left: 0;
+            top: 0;
+            overflow: hidden;
+        }
+    }
+
+    .icon {
+        color: $rate-color;
+        line-height: 1;
+        pointer-events: none;
+        width: inherit;
+
+        svg {
+            fill: $rate-color;
+        }
+    }
+
+    .is-half > i {
+        position: absolute;
+        left: 0;
+    }
+
+    .rate-text {
+        font-size: calc(#{$size-normal} / 1.25);
+        margin-left: $rate-text-spaced;
+
+        &.is-small {
+            font-size: calc(#{$size-small} / 1.25);
+        }
+
+        &.is-medium {
+            font-size: calc(#{$size-medium} / 1.25);
+        }
+
+        &.is-large {
+            font-size: calc(#{$size-large} / 1.25);
+        }
+    }
+}
+
+// Upload
+.upload {
+    position: relative;
+    display: inline-flex;
+    width: 100%;
+    height: 100%;
+
+    input[type=file] {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        outline: none;
+        cursor: pointer;
+        z-index: -1;
+    }
+
+    .upload-draggable {
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        padding: 0.25em;
+        border: 1px dashed $grey-light;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        justify-items: center;
+
+        &.is-disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        &.is-loading {
+            position: relative;
+            pointer-events: none;
+            opacity: 0.5;
+
+            &:after {
+                @include loader;
+                top: 0;
+                left: calc(50% - 1.5em);
+                width: 3em;
+                height: 3em;
+                border-width: 0.25em;
+            }
+        }
+
+        &:hover,
+        &.is-hovered {
+            @each $name, $pair in $colors {
+                $color: nth($pair, 1);
+                &.is-#{$name} {
+                    border-color: $color;
+                    background: rgba($color, 0.05);
+                }
+            }
+        }
+
+        &.is-expanded {
+            width: 100%;
+        }
+    }
+
+    &.is-expanded {
+        width: 100%;
+    }
+}
+
+// temporary IE 11 hack !!!
+@media screen and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {
+    .upload {
+        input[type=file] {
+            z-index: auto;
+        }
+
+        .upload-draggable + input[type=file] {
+            z-index: -1;
+        }
+    }
+}
+
 
 // Some of the animations are from animate.css (https://daneden.github.io/animate.css)
 
@@ -457,6 +655,7 @@ $taginput-height: 1.7em !default;
         opacity: 0;
     }
 }
+
 .fadeOut {
     animation-name: fadeOut;
 }
@@ -470,6 +669,7 @@ $taginput-height: 1.7em !default;
         transform: translate3d(0, 100%, 0);
     }
 }
+
 .fadeOutDown {
     animation-name: fadeOutDown;
 }
@@ -483,6 +683,7 @@ $taginput-height: 1.7em !default;
         transform: translate3d(0, -100%, 0);
     }
 }
+
 .fadeOutUp {
     animation-name: fadeOutUp;
 }
@@ -496,6 +697,7 @@ $taginput-height: 1.7em !default;
         opacity: 1;
     }
 }
+
 .fadeIn {
     animation-name: fadeIn;
 }
@@ -510,6 +712,7 @@ $taginput-height: 1.7em !default;
         transform: none;
     }
 }
+
 .fadeInDown {
     animation-name: fadeInDown;
 }
@@ -524,6 +727,7 @@ $taginput-height: 1.7em !default;
         transform: none;
     }
 }
+
 .fadeInUp {
     animation-name: fadeInUp;
 }
@@ -537,6 +741,7 @@ $taginput-height: 1.7em !default;
 .fade-leave-active {
     transition: opacity $speed-slow $easing;
 }
+
 .fade-enter,
 .fade-leave-to {
     opacity: 0;
@@ -546,14 +751,17 @@ $taginput-height: 1.7em !default;
 .zoom-in-enter-active,
 .zoom-in-leave-active {
     transition: opacity $speed-slow $easing;
+
     .animation-content,
     .animation-content {
         transition: transform $speed-slow $easing;
     }
 }
+
 .zoom-in-enter,
 .zoom-in-leave-active {
     opacity: 0;
+
     .animation-content,
     .animation-content {
         transform: scale(0.95);
@@ -565,14 +773,17 @@ $taginput-height: 1.7em !default;
 .zoom-out-enter-active,
 .zoom-out-leave-active {
     transition: opacity $speed-slow $easing;
+
     .animation-content,
     .animation-content {
         transition: transform $speed-slow $easing;
     }
 }
+
 .zoom-out-enter,
 .zoom-out-leave-active {
     opacity: 0;
+
     .animation-content,
     .animation-content {
         transform: scale(1.05);
@@ -586,13 +797,17 @@ $taginput-height: 1.7em !default;
 .slide-prev-leave-active {
     transition: transform $speed-slower cubic-bezier(0.785, 0.135, 0.150, 0.860);
 }
+
 .slide-prev-leave-to, .slide-next-enter {
     transform: translate3d(-100%, 0, 0);
     position: absolute;
     width: 100%;
 }
+
 .slide-prev-enter, .slide-next-leave-to {
     transform: translate3d(100%, 0, 0);
     position: absolute;
     width: 100%;
 }
+
+// Rate

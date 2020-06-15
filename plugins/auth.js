@@ -1,31 +1,31 @@
-const cookieparser = process['server'] ? require('cookieparser') : undefined
-const IndexedDB = process['server'] ? null : require('../plugins/IndexedDB')
+const cookieparser = process['server'] ? require('cookieparser') : undefined;
+const IndexedDB = process['server'] ? null : require('../plugins/IndexedDB');
 
 export default async function (context, inject) {
 
-    const $auth = {}
+    const $auth = {};
     const logout = async () => {
-        await setToken(null)
-        await setUser(null)
-    }
+        await setToken(null);
+        await setUser(null);
+    };
     const login = async (credential) => {
         let res = await context.$axios.$post('/auth/rest-auth/login/', credential).catch(e => {
             console.log(e);
-        })
+        });
         if (res) {
-            await setToken(res['token'])
-            let user = await getUser()
-            await setUser(user)
+            await setToken(res['token']);
+            let user = await getUser();
+            await setUser(user);
         }
-    }
+    };
     const getUser = async () => {
         try {
-            return await context.$axios.$get('/auth/users/me/')
+            return await context.$axios.$get('/auth/users/me/');
         } catch (e) {
-            await logout()
-            return null
+            await logout();
+            return null;
         }
-    }
+    };
     const getToken = async () => {
         let token = null
         if (process['server'] && context.req.headers.cookie) {
@@ -50,10 +50,16 @@ export default async function (context, inject) {
         await context.store.commit('auth/SET_TOKEN', token)
     };
     const setUser = async (user) => {
-        await context.store.commit('auth/SET_USER', user)
+        await context.store.commit('auth/SET_USER', user);
         if (user) {
-            await context.store.commit('config/SET_SETTING', user.profile.setting)
-        } else if(process.client) {
+            await context.store.commit('config/SET_SETTING', user.profile.setting);
+            let ws = user.profile.setting ? user.profile.setting.ws : null;
+            if (ws) {
+                context.$axios.$get(`/general/workspaces/${ws}/`).then(res => {
+                    context.store.commit('config/SET_WS', res);
+                });
+            }
+        } else if (process.client) {
             let x = localStorage.getItem("task_order");
             if (x) {
                 await context.store.commit('config/SET_SETTING_ORDER', x.split(','))
@@ -74,17 +80,18 @@ export default async function (context, inject) {
                 }
             }
         }
-    }
-    await init()
-    $auth.login = login
-    $auth.logout = logout
-    context.$auth = $auth
+    };
+    await init();
+
+    $auth.login = login;
+    $auth.logout = logout;
+    context.$auth = $auth;
     inject('auth', $auth)
 
     if (IndexedDB) {
-        const SimpleIndexedDB = IndexedDB.default.IndexedDB
+        const SimpleIndexedDB = IndexedDB.default.IndexedDB;
         const indexedDB = new SimpleIndexedDB('bubblask');
-        context.$indexedDB = indexedDB
-        inject('indexedDB', indexedDB)
+        context.$indexedDB = indexedDB;
+        inject('indexedDB', indexedDB);
     }
 }

@@ -1,5 +1,5 @@
 <template>
-    <div class="section has-background-warning">
+    <div class="section">
         <div class="container content">
             <div class="card">
                 <div class="card-content">

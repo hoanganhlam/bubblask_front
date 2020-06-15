@@ -147,31 +147,31 @@
                 this.$axios.$put(`/auth/users/${this.currentUser.username}/`, {
                     options: this.data
                 }).then(res => {
-                    this.$store.commit('auth/SET_USER', res)
-                    this.$store.commit('config/SET_SETTING', res.profile.setting)
+                    this.$store.commit('auth/SET_USER', res);
+                    this.$store.commit('config/SET_SETTING', res.profile.setting);
                 })
             },
             reset() {
-                this.data = Object.assign({}, config.settings)
-                this.$store.commit('config/SET_SETTING_BACKGROUND', null)
+                this.data = Object.assign({}, config.settings);
+                this.$store.commit('config/SET_SETTING_BACKGROUND', null);
             }
         },
         watch: {
             value: {
                 deep: true,
                 handler: function () {
-                    this.data = this.value
+                    this.data = this.value;
                 }
             },
             data: {
                 deep: true,
                 handler: function () {
-                    this.$emit('input', this.data)
+                    this.$emit('input', this.data);
                 }
             }
         },
         created() {
-            this.data = cloneDeep(this.$store.state.config.settings)
+            this.data = cloneDeep(this.$store.state.config.settings);
             if (typeof this.data.notification === 'undefined') {
                 this.data.notification = {
                     wake_me: 5
