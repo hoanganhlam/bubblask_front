@@ -22,7 +22,7 @@
                                     <n-link :to="`/${u.username}`">{{convertName(u)}}</n-link>
                                 </div>
                             </div>
-                            <div class="media-right"><small>{{u.total_time / (60 * 60)}} hours</small>
+                            <div v-if="u.profile.extra" class="media-right"><small>{{(u.profile.extra.temp_score / (60)).toFixed(2)}} m</small>
                             </div>
                         </div>
                     </div>

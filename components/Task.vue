@@ -2,7 +2,7 @@
     <div class="task" v-bind:class="{'is-active': updateTree}">
         <div :id="`task-${task.id}`">
             <transition name="fade">
-                <div @dblclick="dblClick" class="notification media"
+                <div class="notification media"
                      v-bind:class="{'is-warning': task.status === 'running'}">
                     <div class="media-left">
                         <div class="button is-small" v-if="tree" @click="editing = !editing; updateTree = false"
@@ -14,12 +14,13 @@
                             <x-icon name="check"/>
                         </div>
                     </div>
-                    <div class="media-content">
+                    <div class="media-content" @click="dblClick">
                         <ce placeholder="Untitled" elm="h4" class="title"
                             :editable="task.status !== 'running' && !readonly" @input="on_input()"
                             v-model="task.title"></ce>
                         <small v-if="tree" class="field">{{task.interval * task.tomato}}m</small>
-                        <b-rate :disabled="!editing || readonly" v-else class="is-small" v-model="task.settings.priority" @input="setPriority"/>
+                        <b-rate :disabled="!editing || readonly" v-else class="is-small"
+                                v-model="task.settings.priority" @input="setPriority"/>
                     </div>
                     <div class="media-right clickable" v-if="!['stopped', 'complete'].includes(task.status) && !tree">
                         <div class="buttons" v-if="!readonly">
@@ -51,7 +52,8 @@
                             v-model="task.title"></ce>
                     </div>
                     <div class="card-content" v-if="task.parent && !tree">
-                        <b-rate custom-text="Priority" :disabled="!editing" class="is-small" v-model="task.settings.priority" @input="setPriority"/>
+                        <b-rate custom-text="Priority" :disabled="!editing" class="is-small"
+                                v-model="task.settings.priority" @input="setPriority"/>
                     </div>
                     <div class="card-content">
                         <ce v-if="!tree || updateTree" @input="on_input()" elm="p" class="note" placeholder="Note"
@@ -181,6 +183,7 @@
         },
         methods: {
             dblClick() {
+                console.log("A");
                 if (this.task.id === 0) {
                     this.$emit('board-update');
                 } else {
@@ -211,8 +214,12 @@
                 }
             },
             task_done() {
-                this.task.changeStatus('complete');
-                this.$store.commit('task/UPDATE_TASK', this.task);
+                if (this.children.length === 0) {
+                    this.task.changeStatus('complete');
+                    this.$store.commit('task/UPDATE_TASK', this.task);
+                } else {
+                    this.editing = true;
+                }
             },
             async task_add() {
                 let st = this.$store.state.config.settings.timer;

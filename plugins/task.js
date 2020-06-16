@@ -59,14 +59,14 @@ export class Task {
             due_estimate: fmDate(new Date(now.setSeconds(now.getSeconds() + this.tomato * 60)))
         };
         if (status === 'running') {
-            if (this.status === 'pending') {// Chay tu pending
+            if (['pending', 'OFF'].includes(this.status)) {// Chay tu pending
                 this.times.push(newTime);
             } else {
                 now = new Date();
                 let recent_stop_point = new Date(lastTime.stop_times[lastTime.stop_times.length - 1]);
-                let due_date = new Date(lastTime.due_estimate)
-                let reminder = (due_date.getTime() - recent_stop_point.getTime()) / 1000
-                lastTime.due_estimate = fmDate(new Date(now.setSeconds(now.getSeconds() + reminder)))
+                let due_date = new Date(lastTime.due_estimate);
+                let reminder = (due_date.getTime() - recent_stop_point.getTime()) / 1000;
+                lastTime.due_estimate = fmDate(new Date(now.setSeconds(now.getSeconds() + reminder)));
             }
         } else if (status === 'stopping') {
             if (timer === 0) { // running
@@ -92,14 +92,14 @@ export class Task {
     }
 
     timeLeft() {
-        let total = this.tomato * this.interval * 60
+        let total = this.tomato * this.interval * 60;
         for (let i = 0; i < this.times.length; i++) {
             let recent_stop_point = new Date(this.times[i].stop_times[this.times[i].stop_times.length - 1]);
-            let due_date = new Date(this.times[i].due_estimate)
-            let reminder = (due_date.getTime() - recent_stop_point.getTime()) / 1000
-            total = total - (60 * this.tomato - reminder)
+            let due_date = new Date(this.times[i].due_estimate);
+            let reminder = (due_date.getTime() - recent_stop_point.getTime()) / 1000;
+            total = total - (60 * this.tomato - reminder);
         }
-        return total <= 0 ? 0 : total
+        return total <= 0 ? 0 : total;
     }
 
     totalTimeLeft() {
@@ -111,8 +111,8 @@ export class Task {
     }
 
     timer() {
-        let lastTime = this.lastTime()
-        return lastTime ? lastTime.remainder : 0
+        let lastTime = this.lastTime();
+        return lastTime ? lastTime.remainder : 0;
     }
 
     dueDate() {
@@ -122,9 +122,9 @@ export class Task {
     check() {
         if (this.lastTime() && this.isRunning()) {
             let now = new Date();
-            let due_date = new Date(this.lastTime().due_estimate)
+            let due_date = new Date(this.lastTime().due_estimate);
             if (now.getTime() >= due_date.getTime()) {
-                this.changeStatus('stopped')
+                this.changeStatus('stopped');
             }
         }
     }

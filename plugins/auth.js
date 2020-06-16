@@ -1,6 +1,10 @@
 const cookieparser = process['server'] ? require('cookieparser') : undefined;
 const IndexedDB = process['server'] ? null : require('../plugins/IndexedDB');
 
+const getLocalTZ = () => {
+    return 0 - new Date().getTimezoneOffset() / 60;
+};
+
 export default async function (context, inject) {
 
     const $auth = {};
@@ -27,10 +31,10 @@ export default async function (context, inject) {
         }
     };
     const getToken = async () => {
-        let token = null
+        let token = null;
         if (process['server'] && context.req.headers.cookie) {
-            const parsed = cookieparser.parse(context.req.headers.cookie)
-            token = parsed['auth.token']
+            const parsed = cookieparser.parse(context.req.headers.cookie);
+            token = parsed['auth.token'];
         } else {
             token = context.store.$ck.get('auth.token')
         }
@@ -38,14 +42,14 @@ export default async function (context, inject) {
     };
     const setToken = async (token) => {
         if (token) {
-            context.$axios.setHeader('Authorization', 'JWT ' + token)
+            context.$axios.setHeader('Authorization', 'JWT ' + token);
             context.store.$ck.set('auth.token', token, {
                 maxAge: 60 * 60 * 24 * 7,
                 path: '/'
             })
         } else {
-            context.$axios.setHeader('Authorization', undefined)
-            context.store.$ck.remove('auth.token')
+            context.$axios.setHeader('Authorization', undefined);
+            context.store.$ck.remove('auth.token');
         }
         await context.store.commit('auth/SET_TOKEN', token)
     };
@@ -53,6 +57,15 @@ export default async function (context, inject) {
         await context.store.commit('auth/SET_USER', user);
         if (user) {
             await context.store.commit('config/SET_SETTING', user.profile.setting);
+            if (process.client) {
+                let tz = user.profile.time_zone;
+                context.$axios.$put(`/auth/users/${user.username}/`, {
+                    time_zone: tz !== null && tz !== getLocalTZ() ? getLocalTZ() : undefined,
+                    status: "online"
+                }).then(() => {
+
+                })
+            }
             let ws = user.profile.setting ? user.profile.setting.ws : null;
             if (ws) {
                 context.$axios.$get(`/general/workspaces/${ws}/`).then(res => {
@@ -67,11 +80,11 @@ export default async function (context, inject) {
         }
     };
     const init = async () => {
-        let token = await getToken()
-        await setToken(token)
+        let token = await getToken();
+        await setToken(token);
         if (token) {
-            let user = await getUser()
-            await setUser(user)
+            let user = await getUser();
+            await setUser(user);
         } else {
             if (process.client) {
                 let x = localStorage.getItem("task_order");

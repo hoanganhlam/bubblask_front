@@ -178,7 +178,8 @@
                             <div class="level-left">
                                 <div class="media">
                                     <div class="media-left">
-                                        <avatar class="is-24x24" :value="user.profile.media"></avatar>
+                                        <avatar :class="user.profile.extra.status" class="is-24x24"
+                                                :value="user.profile.media"/>
                                     </div>
                                     <div class="media-content">
                                         <b>{{convertName(user)}}</b>
@@ -186,7 +187,7 @@
                                 </div>
                             </div>
                             <div class="level-right">
-                                <small>{{user.total_time / 60}}m</small>
+                                <small>{{getScore(user).toFixed(2)}}m</small>
                             </div>
                         </div>
                     </div>
@@ -384,7 +385,9 @@
                     msg: null,
                     ssf: true
                 },
-                loadingMember: false
+                loadingMember: false,
+                cloneReport: {},
+                is_online: true
             }
         },
         methods: {
@@ -543,6 +546,9 @@
                 for (let i = 0; i < needUpdate.length; i++) {
                     let res = null;
                     let task = _.cloneDeep(needUpdate[i]);
+                    if (this.ws) {
+                        task.ws = this.ws.id;
+                    }
                     if (this.currentUser) {
                         if (task.parent === 0) {
                             task.parent = null;
@@ -585,6 +591,52 @@
                         this.isActive = false;
                     }
                 });
+            },
+            getScore(user) {
+                if (user && this.ws && this.cloneReport) {
+                    return this.cloneReport[user.id] / 60;
+                }
+                return 0;
+            },
+            connectSocket() {
+                if (this.ws) {
+                    let pusher = new Pusher('eccf1067acf541fbc5d4', {
+                        cluster: 'ap1'
+                    });
+                    let channel = pusher.subscribe(`ws_${this.ws.id}`);
+                    channel.bind('change-user-score', function (data) {
+                        if (data) {
+                            this.cloneReport[data.user] = data.score;
+                        }
+                    }.bind(this));
+                    channel.bind('change-user-status', function (data) {
+                        if (data) {
+                            let index = this.wsMembers.map(u => u.id).indexOf(data.user);
+                            if (index >= 0) {
+                                this.wsMembers[index].profile.extra.status = data.status;
+                            }
+                        }
+                    }.bind(this));
+                }
+            },
+            awakeMe() {
+                if (!this.is_online || this.currentUser === null) return;
+                let dead_time_str = localStorage.getItem('time_off');
+                let now = new Date();
+                if (!dead_time_str) {
+                    let oldDateObj = new Date();
+                    let newDateObj = new Date();
+                    newDateObj.setTime(oldDateObj.getTime() + (5 * 60 * 1000));
+                } else {
+                    let dead_time = new Date(dead_time_str);
+                    if (now > dead_time) {
+                        this.$axios.$put(`/auth/users/${this.currentUser.username}/`, {
+                            status: "offline"
+                        }).then(() => {
+                            this.is_online = false;
+                        })
+                    }
+                }
             }
         },
         created() {
@@ -635,9 +687,21 @@
             ws() {
                 if (this.ws) {
                     this.wsMinimize = false;
+                    this.cloneReport = cloneDeep(this.ws.report);
+                } else {
+                    this.cloneReport = {};
                 }
                 this.fetchTasks();
                 this.fetchMembers();
+                this.connectSocket();
+            },
+            is_online() {
+                console.log(this.is_online);
+                if (this.is_online) {
+                    this.$axios.$put(`/auth/users/${this.currentUser.username}/`, {
+                        status: "online"
+                    });
+                }
             }
         },
         mounted() {
@@ -646,8 +710,21 @@
                 this.fetchTasks();
                 setInterval(function () {
                     _this.push_late();
+                    _this.awakeMe();
                 }, 800);
+                this.connectSocket();
+                window.onmousemove = debounce(function () {
+                    _this.is_online = true;
+                    let oldDateObj = new Date();
+                    let newDateObj = new Date();
+                    newDateObj.setTime(oldDateObj.getTime() + (5 * 60 * 1000));
+                    localStorage.setItem('time_off', newDateObj.toISOString());
+                }, 1000)
             }
+
+        },
+        beforeDestroy() {
+
         }
     }
 </script>
@@ -698,7 +775,7 @@
         bottom: 0;
         min-width: 280px;
         background: #FFFFFF;
-        padding: .75rem;
+        padding: .375rem;
         box-shadow: 0 1px 5px 0 rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.02);
         display: flex;
         flex-direction: column;

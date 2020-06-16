@@ -22,7 +22,10 @@ export default {
             {rel: 'icon', sizes: '96x96', type: 'image/png', href: '/icon/favicon-96x96.png'},
             {rel: 'icon', sizes: '32x32', type: 'image/png', href: '/icon/favicon-32x32.png'},
             {rel: 'icon', sizes: '16x16', type: 'image/png', href: '/icon/favicon-16x16.png'}
-        ]
+        ],
+        script: [
+            {src: 'https://js.pusher.com/6.0/pusher.min.js'}
+        ],
     },
     /*
     ** Customize the progress-bar color

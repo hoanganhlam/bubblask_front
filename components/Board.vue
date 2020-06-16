@@ -1,5 +1,5 @@
 <template>
-    <div class="card board">
+    <div class="card">
         <div class="card-content">
             <div class="media">
                 <div class="media-content">
@@ -28,8 +28,4 @@
 </script>
 
 <style lang="scss">
-    .board {
-        .card-image {
-        }
-    }
 </style>

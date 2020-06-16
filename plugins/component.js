@@ -9,6 +9,7 @@ import Switch from "../components/switch/Switch";
 import Task from "../components/Task";
 import TaskGraph from "../components/TaskGraph";
 import draggable from 'vuedraggable';
+import TimeChart from "../components/TimeChart";
 
 Vue.component('x-icon', Icon);
 Vue.component('ce', ContentEditable);
@@ -20,3 +21,4 @@ Vue.component('b-rate', Rate);
 Vue.component('task', Task);
 Vue.component('task-graph', TaskGraph);
 Vue.component('draggable', draggable);
+Vue.component('time-chart', TimeChart);

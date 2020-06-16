@@ -2,7 +2,7 @@
     <div>
         <div class="section">
             <div class="container">
-                <h1 class="title">Board</h1>
+                <h1 class="title is-spaced">Board</h1>
                 <div class="notification is-light subtitle">Get or sharing template to learn something by expert!</div>
                 <board-list v-if="currentUser"/>
                 <div class="subsection">

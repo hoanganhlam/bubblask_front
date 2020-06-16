@@ -94,5 +94,23 @@
         .image-blank {
             min-height: 150px;
         }
+
+        &:before {
+            position: absolute;
+            bottom: -.25rem;
+            right: -.25rem;
+            width: .65rem;
+            height: .65rem;
+            border-radius: 2px;
+            content: ""
+        }
+
+        &.online:before {
+            background: #d8ab34;
+        }
+
+        &.offline:before {
+            background: #dddddd;
+        }
     }
 </style>

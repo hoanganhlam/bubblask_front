@@ -47,7 +47,7 @@ export default {
         },
         ['UPDATE_TASK'](state, task) {
             task.updating = !task.force;
-            delete task.force
+            delete task.force;
             let index = state.tasks.map(x => x.uid).indexOf(task.uid);
             if (index >= 0) {
                 Vue.set(state.tasks, index, task);

@@ -72,23 +72,31 @@
                             <h4>A SIMPLE HACK FOR DEEP WORK</h4>
                         </div>
                     </div>
-                    <div class="buttons timer-control"
-                         v-bind:class="{'hidden': !(runningTask === null || !setting.is_strict)}">
-                        <div class="button is-primary" @click="task_break(5)">Short Break</div>
-                        <div class="button is-primary" @click="task_break(10)">Long Break</div>
-                        <div v-if="runningTask" class="button is-primary"
+                    <div class="buttons timer-control">
+                        <div v-if="(runningTask === null || !setting.is_strict)" class="button is-primary"
+                             @click="task_break(5)">Short Break
+                        </div>
+                        <div v-if="(runningTask === null || !setting.is_strict)" class="button is-primary"
+                             @click="task_break(10)">Long Break
+                        </div>
+                        <div v-if="runningTask && !setting.is_strict" class="button is-primary"
                              @click="$store.commit('task/SET_RUNNING', runningTask)">
                             <x-icon name="pause"/>
                         </div>
+                        <div v-if="runningTask" class="button is-primary" @click="makeDone">
+                            <x-icon name="check"/>
+                        </div>
                     </div>
-                    <div v-if="runningTask && !showNote" class="button is-text" @click="showNote = true">Show Note</div>
+                    <div v-if="runningTask && !showNote && runningTask.description" class="button is-text"
+                         @click="showNote = true">Show Note
+                    </div>
                 </div>
             </div>
         </div>
         <div v-if="!runningTask" class="hero is-secondary is-small" style="min-height: calc(50vh - 20px)">
             <div class="hero-body">
-                <div class="container small">
-                    <div v-if="setting.is_strict" class="notification is-warning content">
+                <div class="container small" v-if="setting.is_strict">
+                    <div class="notification is-warning content">
                         <b>Strict mode</b>
                         <ul>
                             <li>You can't stop timer when working</li>
@@ -304,6 +312,13 @@
                     this.$router.replace({path: '/'});
                     this.askPassword = false;
                 });
+            },
+            async makeDone() {
+                let clone = _.cloneDeep(this.runningTask);
+                await this.$store.commit('task/SET_RUNNING', null);
+                clone.changeStatus('complete');
+                await this.$store.commit('task/UPDATE_TASK', clone);
+
             }
         },
         async mounted() {

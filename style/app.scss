@@ -270,6 +270,7 @@ header.header {
         background: #fae0ca40;
         padding: .75rem;
         margin: -.5rem;
+        font-size: 1rem;
     }
 
     .close {
@@ -481,6 +482,7 @@ header.header {
 
     .board {
         min-width: calc(100% - 1.5rem) !important;
+        margin: 0 auto;
     }
 }
 
@@ -539,6 +541,14 @@ header.header {
             padding: 1rem 0.75rem;
             border-bottom: 1px solid #EEE;
         }
+    }
+
+    .modal-content .container {
+        padding: 0 1rem;
+    }
+
+    .column {
+        padding: .375rem .75rem;
     }
 }
 

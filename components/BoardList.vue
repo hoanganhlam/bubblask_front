@@ -1,6 +1,6 @@
 <template>
     <div class="subsection">
-        <div class="level">
+        <div class="level is-mobile">
             <div class="level-left">
                 <h4 class="widget_title">Your Board</h4>
             </div>
@@ -22,7 +22,7 @@
         </div>
         <div v-if="loading" class="columns is-multiline">
             <div v-for="i in 2" :key="i" class="column is-6">
-                <div class="card board">
+                <div class="card">
                     <div class="card-content">
                         <div class="skeleton-line"></div>
                     </div>
