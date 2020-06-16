@@ -73,6 +73,7 @@ $card-shadow: $box-shadow;
 $navbar-height: 2.5rem;
 $card-content-padding: 1rem;
 $box-padding: .5rem;
+$input-placeholder-color: #818181;
 @import "~bulma/bulma";
 @import "buefy";
 @import "skeleton";
@@ -270,7 +271,6 @@ header.header {
         background: #fae0ca40;
         padding: .75rem;
         margin: -.5rem;
-        font-size: 1rem;
     }
 
     .close {
@@ -549,6 +549,10 @@ header.header {
 
     .column {
         padding: .375rem .75rem;
+    }
+
+    [contenteditable] {
+        font-size: 1rem!important;
     }
 }
 

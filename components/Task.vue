@@ -183,7 +183,6 @@
         },
         methods: {
             dblClick() {
-                console.log("A");
                 if (this.task.id === 0) {
                     this.$emit('board-update');
                 } else {

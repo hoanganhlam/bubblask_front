@@ -283,7 +283,6 @@
                     })
                 });
                 let max = Math.max(...time_working);
-                console.log(max);
                 this.time_works = time_working.map(x => x / max);
             }
         },

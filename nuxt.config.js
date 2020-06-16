@@ -72,6 +72,7 @@ export default {
     ** Build configuration
     */
     build: {
+        extractCSS: true,
         postcss: {
             preset: {
                 features: {
