@@ -508,13 +508,13 @@
             async fetchTasks() {
                 await this.$store.commit('task/SET_TASKS', []);
                 if (this.currentUser) {
-                    this.$axios.$get('/task/tasks/', {
+                    await this.$axios.$get('/task/tasks/', {
                         params: {
                             board: this.ws && this.ws.board ? this.ws.board.id : undefined
                         }
-                    }).then(res => {
+                    }).then(async (res) => {
                         for (let i = 0; i < res.length; i++) {
-                            this.$store.commit('task/ADD_TASK', new Task(res[i]));
+                            await this.$store.commit('task/ADD_TASK', new Task(res[i]));
                         }
                     })
                 } else {
@@ -539,6 +539,8 @@
                     this.loadingMember = true;
                     this.wsMembers = await this.$axios.$get(`/general/workspaces/${this.ws.id}/members/`);
                     this.loadingMember = false;
+                } else {
+                    this.wsMembers = [];
                 }
             },
             async push_late() {
@@ -684,19 +686,18 @@
                     this.formWS.password = null
                 }
             },
-            ws() {
+            async ws() {
                 if (this.ws) {
                     this.wsMinimize = false;
                     this.cloneReport = cloneDeep(this.ws.report);
                 } else {
                     this.cloneReport = {};
                 }
-                this.fetchTasks();
+                await this.fetchTasks();
                 this.fetchMembers();
                 this.connectSocket();
             },
             is_online() {
-                console.log(this.is_online);
                 if (this.is_online) {
                     this.$axios.$put(`/auth/users/${this.currentUser.username}/`, {
                         status: "online"
@@ -704,10 +705,10 @@
                 }
             }
         },
-        mounted() {
+        async mounted() {
             if (process.client) {
                 let _this = this;
-                this.fetchTasks();
+                await this.fetchTasks();
                 setInterval(function () {
                     _this.push_late();
                     _this.awakeMe();
