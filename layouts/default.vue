@@ -505,8 +505,8 @@
                 this.$store.commit('config/SET_STRICT', val);
                 this.settings.timer.is_strict = val;
             },
-            fetchTasks() {
-                this.$store.commit('task/SET_TASKS', []);
+            async fetchTasks() {
+                await this.$store.commit('task/SET_TASKS', []);
                 if (this.currentUser) {
                     this.$axios.$get('/task/tasks/', {
                         params: {
