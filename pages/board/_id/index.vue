@@ -1,13 +1,13 @@
 <template>
     <div class="board-detail">
-        <div class="section">
+        <div class="section tree-task">
             <div class="container">
-                <div class="card" v-if="board.media || updating">
+                <div v-if="board.media || updating" style="margin-bottom: 1rem">
                     <avatar v-model="board.media" :can-update="updating" image-size="thumb_728_200"/>
                 </div>
                 <div class="media subsection">
                     <div class="media-content">
-                        <ce :editable="updating" class="title" elm="h1" v-model="board.title"></ce>
+                        <ce :editable="updating" class="title is-1" elm="h1" v-model="board.title"></ce>
                     </div>
                     <div class="media-right" v-if="currentUser && currentUser.id === board.user">
                         <div class="button is-small" v-if="!updating && board.is_interface" @click="useBoard">Use</div>
@@ -71,10 +71,6 @@
                 <div class="field" v-if="updating">
                     <b-taginput icon="tag" placeholder="Hash tag" v-model="board.text_tags"></b-taginput>
                 </div>
-            </div>
-        </div>
-        <div class="section tree-task">
-            <div class="container">
                 <task-board :tasks="flat_tasks" :board="board" :readonly="readonly" tree @deleted="handleDeleted"/>
             </div>
         </div>
@@ -118,6 +114,11 @@
         data() {
             return {
                 updating: false
+            }
+        },
+        head() {
+            return {
+                title: this.board.title + ' - Self Study - Tasks and Steps'
             }
         },
         computed: {
@@ -199,7 +200,8 @@
                 }
             }
         },
-        created() {
+        mounted() {
+            this.toTop();
         }
     }
 </script>
@@ -216,22 +218,28 @@
     }
 
     .tree-task {
-        background: #F5F5F5;
         padding: 1rem 0;
         flex: 1;
 
+        .task.master .task {
+            position: relative;
+        }
+
         .task {
             margin-bottom: .75rem;
-            box-shadow: none;
 
             .tasks:not(:empty) {
-                padding: 0 0 0 2rem;
+                padding: 0 1rem .25rem;
+
+                .task.is-active {
+                    margin: 0 0 .75rem;
+                }
             }
 
             .card {
                 position: unset;
                 box-shadow: unset;
-
+                border: 0;
                 .card-content {
                     padding: 0;
                 }
@@ -245,16 +253,19 @@
                 margin: 0 -.75rem .75rem;
                 padding: .75rem;
                 background: #FAFAFA;
-                border: 1px solid #EEEEEE;
-
-                .note {
-                    margin-top: .75rem;
-                }
 
                 .notification,
                 .card {
                     background: #FAFAFA;
                 }
+
+                .tasks:not(:empty) {
+                    padding: 0;
+                }
+            }
+
+            .notification {
+                padding: 1rem;
             }
         }
     }

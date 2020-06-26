@@ -3,7 +3,8 @@ export default {
     state: () => ({
         user: null,
         token: null,
-        loggedIn: false
+        loggedIn: false,
+        openAuth: false
     }),
     mutations: {
         ['SET_USER'](state, user) {
@@ -12,6 +13,9 @@ export default {
         },
         ['SET_TOKEN'](state, token) {
             state.token = token
+        },
+        ['SET_OPEN_AUTH'](state, stt) {
+            state.openAuth = stt
         }
     },
     actions: {},

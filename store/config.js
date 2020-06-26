@@ -4,16 +4,12 @@ export default {
     namespaced: true,
     state: () => ({
         contentTypes: null,
-        showAbout: true,
         settings: config.settings,
-        ws: null
+        ws: false
     }),
     mutations: {
         ['SET_CONTENT_TYPE'](state, ct) {
             state.contentTypes = ct
-        },
-        ['SET_SHOW_ABOUT'](state, ct) {
-            state.showAbout = ct
         },
         ['SET_SETTING_COLOR'](state, ct) {
             state.settings.color = ct

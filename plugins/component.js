@@ -10,10 +10,12 @@ import Task from "../components/Task";
 import TaskGraph from "../components/TaskGraph";
 import draggable from 'vuedraggable';
 import TimeChart from "../components/TimeChart";
+import Tooltip from "../components/tooltip/Tooltip";
 
 Vue.component('x-icon', Icon);
 Vue.component('ce', ContentEditable);
 Vue.component('b-modal', Modal);
+Vue.component('b-tooltip', Tooltip);
 Vue.component('b-dropdown', Dropdown);
 Vue.component('b-number-input', NumberInput);
 Vue.component('b-switch', Switch);

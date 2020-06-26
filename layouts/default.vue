@@ -8,7 +8,6 @@
                             <span class="primary">BUBBLASK</span>
                             <span class="second">.com</span>
                         </n-link>
-                        <n-link class="navbar-item" to="/leaderboard">LeaderBoard</n-link>
                         <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
                            @click="burgerActive = !burgerActive">
                             <span aria-hidden="true"></span>
@@ -18,7 +17,6 @@
                     </div>
                     <div class="navbar-menu" v-bind:class="{'is-active' : burgerActive}">
                         <div class="navbar-end">
-                            <n-link class="navbar-item" to="/board">Board</n-link>
                             <div class="navbar-item">
                                 <div>
                                     <span class="field">Total: </span>
@@ -31,26 +29,62 @@
                                     <span class="value">{{totalTime}}m</span>
                                 </div>
                             </div>
-                            <div class="navbar-item">
-                                <b-switch :rounded="false"
-                                          :value="settings && settings.timer  ? settings.timer.is_strict : false"
-                                          @input="setStrict">Strict Mode
-                                </b-switch>
-                            </div>
-                            <client-only v-if="currentUser">
-                                <b-dropdown position="is-bottom-left" :trap-focus="true">
-                                    <div slot="trigger" class="navbar-item clickable">
-                                        <x-icon name="cogs"></x-icon>
-                                        <span>Setting</span>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <div v-bind:class="{'main-content': !isRunning}">
+            <div class="sidebar" v-if="!isRunning">
+                <aside class="menu">
+                    <div class="menu-child">
+                        <ul class="menu-list">
+                            <li>
+                                <b-tooltip position="is-right" label="Leader board">
+                                    <n-link to="/leaderboard"
+                                            v-bind:class="{'is-active': $route.path === '/leaderboard'}">
+                                        <x-icon name="poll"></x-icon>
+                                    </n-link>
+                                </b-tooltip>
+                            </li>
+                            <li>
+                                <b-tooltip position="is-right" label="Board">
+                                    <n-link to="/board" v-bind:class="{'is-active': $route.path === '/board'}">
+                                        <x-icon name="board"></x-icon>
+                                    </n-link>
+                                </b-tooltip>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="menu-child">
+                        <ul class="menu-list">
+                            <li v-if="currentUser">
+                                <b-tooltip position="is-right" label="Setting">
+                                    <client-only>
+                                        <b-dropdown class="elm" position="is-top-right" :trap-focus="true">
+                                            <template slot="trigger" class="clickable">
+                                                <x-icon name="cogs"></x-icon>
+                                            </template>
+                                            <b-dropdown-item custom>
+                                                <Options v-model="settings"></Options>
+                                            </b-dropdown-item>
+                                        </b-dropdown>
+                                    </client-only>
+                                </b-tooltip>
+                            </li>
+                            <li>
+                                <b-tooltip position="is-right" label="Strict Mode">
+                                    <label class="elm b-checkbox checkbox">
+                                        <input type="checkbox" v-model="strictTemp">
+                                    </label>
+                                </b-tooltip>
+                            </li>
+                            <li v-if="!Boolean(currentUser)">
+                                <b-dropdown :can-close="['escape']" class="elm" position="is-top-right"
+                                            :force-active="openAuth" @active-change="openLogin($event)">
+                                    <div slot="trigger">
+                                        <x-icon name="account"/>
                                     </div>
-                                    <b-dropdown-item custom>
-                                        <Options v-model="settings"></Options>
-                                    </b-dropdown-item>
-                                </b-dropdown>
-                            </client-only>
-                            <div class="navbar-item" v-if="!Boolean(currentUser)">
-                                <b-dropdown position="is-bottom-left">
-                                    <div class="clickable" slot="trigger">Login</div>
                                     <div class="dropdown-item" style="min-width: 335px">
                                         <div class="notification is-warning">Login to manage and track your work!</div>
                                         <div class="field" v-if="!logging">
@@ -66,23 +100,18 @@
                                             <div class="field-body">
                                                 <div class="field">
                                                     <label class="label">Firstname</label>
-                                                    <b-input v-model="form.first_name" type="text"
-                                                             placeholder="John"/>
+                                                    <b-input v-model="form.first_name" type="text" placeholder="John"/>
                                                 </div>
                                                 <div class="field">
                                                     <label class="label">Lastname</label>
-                                                    <b-input v-model="form.last_name" type="text"
-                                                             placeholder="Due"/>
+                                                    <b-input v-model="form.last_name" type="text" placeholder="Due"/>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="field">
                                             <label class="label">Email</label>
                                             <div class="control has-icons-right">
-                                                <label>
-                                                    <input v-model="form.email" class="input is-success" type="email"
-                                                           placeholder="Email">
-                                                </label>
+                                                <b-input v-model="form.email" type="email" placeholder="Email"/>
                                             </div>
                                         </div>
                                         <div class="field">
@@ -94,15 +123,22 @@
                                         </div>
                                         <div class="field">
                                             <div class="level is-mobile">
-                                                <div class="level-left">
-                                                    <div class="button is-text" @click="logging = !logging">
-                                                        {{logging ? 'Register' : 'Login'}}
+                                                <div>
+                                                    <div class="field has-addons">
+                                                        <div class="control">
+                                                            <div class="button" @click="openLogin(false)">
+                                                                <x-icon name="close"/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="control">
+                                                            <div class="button" @click="logging = !logging">
+                                                                <span>{{logging ? 'Register' : 'Login'}}</span>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="level-right">
-                                                    <div class="button" @click="handleSubmit">{{logging ? 'Login' :
-                                                        'Register'}}
-                                                    </div>
+                                                <div class="button is-primary" @click="handleSubmit">
+                                                    <span>{{logging ? 'Login' : 'Register'}}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -117,41 +153,47 @@
                                         </div>
                                     </div>
                                 </b-dropdown>
-                            </div>
-                            <n-link style="border-bottom: 0" v-else class="navbar-item" to="/me">Report</n-link>
-                            <div class="navbar-item clickable" v-if="currentUser && $route.path === '/me'"
-                                 @click="logout()">
-                                <x-icon name="logout"></x-icon>
-                            </div>
-                        </div>
+                            </li>
+                            <li v-else>
+                                <b-tooltip position="is-right" label="Report">
+                                    <n-link to="/me">
+                                        <x-icon name="report"></x-icon>
+                                    </n-link>
+                                </b-tooltip>
+                            </li>
+                            <li v-if="currentUser && $route.path === '/me'">
+                                <b-tooltip position="is-right" label="Logout">
+                                    <div class="elm" @click="logout()">
+                                        <x-icon name="logout"></x-icon>
+                                    </div>
+                                </b-tooltip>
+                            </li>
+                        </ul>
                     </div>
-                </div>
-            </nav>
-        </header>
-        <main class="main-content">
-            <nuxt/>
-        </main>
-        <footer class="footer" v-if="!isRunning">
-            <div class="container small">
-                <div class="level is-mobile">
-                    <div class="level-left">
-                        <div class="buttons">
-                            <div @click="showAbout = !showAbout" class="button"
-                                 v-bind:class="{'is-primary': showAbout}">
-                                About
-                            </div>
-                            <n-link to="/privacy" class="button is-text">Privacy</n-link>
-                        </div>
-                    </div>
-                    <div class="level-right">
-                        <p><strong>Made</strong> with ❤️</p>
-                    </div>
-                </div>
+                </aside>
             </div>
-        </footer>
+            <main class="main">
+                <nuxt class="main-body"/>
+                <footer class="footer" v-if="!isRunning">
+                    <div class="container small">
+                        <div class="level is-mobile">
+                            <div class="level-left">
+                                <div class="buttons">
+                                    <div class="button">About</div>
+                                    <n-link to="/privacy" class="button is-text">Privacy</n-link>
+                                </div>
+                            </div>
+                            <div class="level-right">
+                                <p><strong>Made</strong> with ❤️</p>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </main>
+        </div>
         <div class="ws-members" v-bind:style="{height: wsMinimize ? undefined : '300px'}">
             <div class="header">
-                <div class="media">
+                <div class="media" v-if="currentUser">
                     <div class="media-content">
                         <div class="buttons has-addons">
                             <button class="button" @click="onOpenSelect">
@@ -170,6 +212,7 @@
                         </div>
                     </div>
                 </div>
+                <div @click="openLogin(true)" class="button is-fullwidth" v-else>Login to join Workspace</div>
             </div>
             <transition name="fade">
                 <div v-if="!wsMinimize && ws" class="members">
@@ -341,6 +384,7 @@
     import Options from "../components/options";
     import {debounce, cloneDeep} from "lodash"
     import {Task} from "../plugins/task";
+    import Template from "../pages/board/index";
 
     const DEFAULT_FORM = {
         name: null,
@@ -352,7 +396,7 @@
     };
 
     export default {
-        components: {BTaginput, BInput, BDropdownItem, Avatar, Options},
+        components: {Template, BTaginput, BInput, BDropdownItem, Avatar, Options},
         data() {
             return {
                 colors: [],
@@ -379,7 +423,6 @@
                 wsMinimize: true,
                 wsPassword: null,
                 wsMembers: [],
-                showAbout: true,
                 settings: null,
                 notify: {
                     msg: null,
@@ -387,7 +430,8 @@
                 },
                 loadingMember: false,
                 cloneReport: {},
-                is_online: true
+                is_online: true,
+                strictTemp: false
             }
         },
         methods: {
@@ -402,7 +446,7 @@
             async logout() {
                 await this.$auth.logout();
                 this.$router.replace({path: '/'});
-                this.fetchTasks();
+                await this.fetchTasks();
             },
             async handleSubmit() {
                 if (this.logging) {
@@ -411,7 +455,6 @@
                         password: this.form.password
                     }).then(res => {
                         if (res) {
-                            this.showAbout = false;
                             this.fetchTasks();
                             this.notify.msg = "Login successfully :D";
                         } else {
@@ -552,6 +595,7 @@
                         task.ws = this.ws.id;
                     }
                     if (this.currentUser) {
+                        console.log(this.currentUser);
                         if (task.parent === 0) {
                             task.parent = null;
                         }
@@ -643,9 +687,7 @@
         },
         created() {
             this.settings = cloneDeep(this.$store.state.config.settings);
-            if (this.currentUser !== null) {
-                this.showAbout = false;
-            }
+            this.strictTemp = this.settings && this.settings.timer ? this.settings.timer.is_strict : false;
         },
         computed: {
             displayTasks() {
@@ -672,14 +714,14 @@
                 } else {
                     return this.currentUser && this.currentUser.id === this.formWS.user.id;
                 }
+            },
+            openAuth() {
+                return this.$store.state.auth.openAuth
             }
         },
         watch: {
-            showAbout() {
-                this.$store.commit('config/SET_SHOW_ABOUT', this.showAbout)
-            },
             currentUser() {
-                this.fetchTasks()
+                this.settings = cloneDeep(this.$store.state.config.settings);
             },
             'formWS.isPrivate'() {
                 if (this.formWS.isPrivate === false) {
@@ -693,7 +735,7 @@
                 } else {
                     this.cloneReport = {};
                 }
-                await this.fetchTasks();
+                this.fetchTasks();
                 this.fetchMembers();
                 this.connectSocket();
             },
@@ -703,6 +745,9 @@
                         status: "online"
                     });
                 }
+            },
+            strictTemp() {
+                this.setStrict(this.strictTemp);
             }
         },
         async mounted() {
@@ -722,10 +767,6 @@
                     localStorage.setItem('time_off', newDateObj.toISOString());
                 }, 1000)
             }
-
-        },
-        beforeDestroy() {
-
         }
     }
 </script>

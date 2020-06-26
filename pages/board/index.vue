@@ -2,7 +2,17 @@
     <div>
         <div class="section">
             <div class="container">
-                <h1 class="title is-spaced">Board</h1>
+                <div class="level">
+                    <div class="level-left">
+                        <h1 class="title is-spaced">Board</h1>
+                    </div>
+                    <div class="level-right">
+                        <div v-if="currentUser" class="button is-text" @click="create">
+                            <x-icon name="plus"></x-icon>
+                            <span>Create</span>
+                        </div>
+                    </div>
+                </div>
                 <div class="notification is-light subtitle">Get or sharing template to learn something by expert!</div>
                 <board-list v-if="currentUser"/>
                 <div class="subsection">
@@ -14,7 +24,7 @@
                     </div>
                     <div v-if="response.results.length" class="columns is-multiline">
                         <div v-for="board in response.results" :key="board.id" class="column is-4">
-                            <div class="media box template-board">
+                            <div class="media box clickable template-board"  @click="navigate(`/board/${board.slug}`)">
                                 <div class="media-left">
                                     <avatar :value="board.media" class="is-48x48"></avatar>
                                 </div>
@@ -38,9 +48,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="create" v-if="currentUser">
-            <div class="button is-rounded" @click="create">Create</div>
         </div>
     </div>
 </template>
@@ -106,12 +113,6 @@
 </script>
 
 <style lang="scss">
-    .create {
-        position: fixed;
-        bottom: 1rem;
-        left: 1rem;
-    }
-
     .template-board {
         h4 {
             line-height: 1;

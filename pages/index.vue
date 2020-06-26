@@ -93,7 +93,7 @@
                 </div>
             </div>
         </div>
-        <div v-if="!runningTask" class="hero is-secondary is-small" style="min-height: calc(50vh - 20px)">
+        <div v-if="!runningTask" class="hero is-secondary is-small" style="min-height: 50vh">
             <div class="hero-body">
                 <div class="container small" v-if="setting.is_strict">
                     <div class="notification is-warning content">
@@ -110,7 +110,7 @@
             </div>
         </div>
         <transition name="fade">
-            <div v-if="!runningTask && showAbout" class="hero">
+            <div v-if="!(runningTask || currentUser)" class="hero is-light">
                 <div class="hero-body">
                     <div class="container small content">
                         <h1 class="title">Bublask</h1>
@@ -137,9 +137,6 @@
                                 <div class="media-content">
                                     <strong class="value">{{f.title}}</strong>
                                     <p>{{f.description}}</p>
-                                </div>
-                                <div class="media-right">
-                                    <div class="button is-text is-small">Show me</div>
                                 </div>
                             </div>
                         </div>
@@ -257,9 +254,6 @@
             setting() {
                 return this.$store.state.config.settings.timer
             },
-            showAbout() {
-                return this.$store.state.config.showAbout
-            },
             style() {
                 let gSeting = this.$store.state.config.settings;
                 let img = gSeting.color ? gSeting.color.background : null;
@@ -348,6 +342,7 @@
 
                 }
             }
+            this.toTop();
         },
         watch: {
             timer() {

@@ -1,5 +1,6 @@
 const cookieparser = process['server'] ? require('cookieparser') : undefined;
 const IndexedDB = process['server'] ? null : require('../plugins/IndexedDB');
+import * as config from "../helpers/configs"
 
 const getLocalTZ = () => {
     return 0 - new Date().getTimezoneOffset() / 60;
@@ -54,25 +55,28 @@ export default async function (context, inject) {
         await context.store.commit('auth/SET_TOKEN', token)
     };
     const setUser = async (user) => {
-        await context.store.commit('auth/SET_USER', user);
         if (user) {
             await context.store.commit('config/SET_SETTING', user.profile.setting);
+            await context.store.commit('auth/SET_USER', user);
+            let ws = user.profile.setting ? user.profile.setting.ws : null;
+            if (ws) {
+                await context.$axios.$get(`/general/workspaces/${ws}/`).then(res => {
+                    context.store.commit('config/SET_WS', res);
+                });
+            } else {
+                context.store.commit('config/SET_WS', null);
+            }
             if (process.client) {
                 let tz = user.profile.time_zone;
                 context.$axios.$put(`/auth/users/${user.username}/`, {
                     time_zone: tz !== null && tz !== getLocalTZ() ? getLocalTZ() : undefined,
                     status: "online"
                 }).then(() => {
-
                 })
             }
-            let ws = user.profile.setting ? user.profile.setting.ws : null;
-            if (ws) {
-                context.$axios.$get(`/general/workspaces/${ws}/`).then(res => {
-                    context.store.commit('config/SET_WS', res);
-                });
-            }
         } else if (process.client) {
+            await context.store.commit('config/SET_SETTING', config.settings);
+            await context.store.commit('auth/SET_USER', null);
             let x = localStorage.getItem("task_order");
             if (x) {
                 await context.store.commit('config/SET_SETTING_ORDER', x.split(','))
@@ -99,7 +103,7 @@ export default async function (context, inject) {
     $auth.login = login;
     $auth.logout = logout;
     context.$auth = $auth;
-    inject('auth', $auth)
+    inject('auth', $auth);
 
     if (IndexedDB) {
         const SimpleIndexedDB = IndexedDB.default.IndexedDB;

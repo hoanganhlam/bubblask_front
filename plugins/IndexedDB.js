@@ -19,13 +19,11 @@ class IndexedDB {
     open(onsuccess, onerror, onupgradeneeded, objName, keyPath, objData) {
         this.objName = objName;
         this.request = window.indexedDB.open(this.dbName, this.dbVersionNumber);
-
         this.request.onerror = event => onerror(event);
         this.request.onsuccess = event => {
-            this.db = this.request.result;
+            this.db = event.target.result;
             onsuccess();
         };
-
         this.request.onupgradeneeded = event => {
             let db = event.target['result'];
             let objectStore = db.createObjectStore(objName, {keyPath: keyPath});

@@ -10,19 +10,23 @@
         </div>
         <div class="hero">
             <div class="hero-body">
-                <div class="container small">
-                    <div class="box user" v-for="(u, i) in response.results" :key="i">
-                        <div class="media">
-                            <div class="media-left">{{i + 1}}</div>
-                            <div class="media-left">
-                                <Avatar class="is-32x32" :value="u.profile.media"/>
-                            </div>
-                            <div class="media-content">
-                                <div class="">
-                                    <n-link :to="`/${u.username}`">{{convertName(u)}}</n-link>
+                <div class="container medium">
+                    <div class="columns is-multiline">
+                        <div class="column is-6" v-for="(u, i) in response.results" :key="i">
+                            <div class="box user clickable" @click="navigate(`/${u.username}`)">
+                                <div class="media">
+                                    <div class="media-left">{{i + 1}}</div>
+                                    <div class="media-left">
+                                        <Avatar class="is-32x32" :value="u.profile.media"/>
+                                    </div>
+                                    <div class="media-content">
+                                        <div class="">
+                                            <n-link :to="`/${u.username}`">{{convertName(u)}}</n-link>
+                                        </div>
+                                    </div>
+                                    <div v-if="u.profile.extra" class="media-right"><small>{{(u.profile.extra.temp_score / (60 * 60)).toFixed(2)}}h</small>
+                                    </div>
                                 </div>
-                            </div>
-                            <div v-if="u.profile.extra" class="media-right"><small>{{(u.profile.extra.temp_score / (60)).toFixed(2)}} m</small>
                             </div>
                         </div>
                     </div>

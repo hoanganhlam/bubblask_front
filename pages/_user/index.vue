@@ -83,8 +83,8 @@
                                         <h4>AVG focus</h4>
                                     </div>
                                     <div class="media-right">
-                                        <span class="title is-1">{{reportData.avg_focus.toFixed(1)}}</span>
-                                        <span>m/day</span>
+                                        <span class="title is-1">{{(reportData.avg_focus / 60).toFixed(1)}}</span>
+                                        <span>h/day</span>
                                     </div>
                                 </div>
                             </div>
@@ -275,7 +275,7 @@
                         if (str_start && str_stop) {
                             let time_start = new Date(str_start);
                             let time_stop = new Date(str_stop);
-                            let ranges = Array.range(time_start.getHours(), time_stop.getHours())
+                            let ranges = Array.range(time_start.getHours(), time_stop.getHours());
                             ranges.forEach(r => {
                                 time_working[r] = time_working[r] + 1;
                             })
@@ -314,6 +314,9 @@
                 }
                 return [] // Numbers
             }
+        },
+        mounted() {
+            this.toTop();
         }
     }
 </script>

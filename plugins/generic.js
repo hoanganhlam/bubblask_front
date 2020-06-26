@@ -61,7 +61,7 @@ Vue.mixin({
             return new moment(dateStr, 'YYYY-MM-DD').format('YYYY-MM-DD')
         },
         cleanData(data, fields) {
-            let out = {}
+            let out = {};
             if (typeof fields === 'undefined') {
                 fields = Object.keys(data)
             }
@@ -79,11 +79,11 @@ Vue.mixin({
                         out[i] = data[i]
                     }
                 }
-            })
+            });
             return out
         },
         cleanFilter(data, fields) {
-            let out = {}
+            let out = {};
             if (typeof fields === 'undefined') {
                 fields = Object.keys(data)
             }
@@ -91,9 +91,9 @@ Vue.mixin({
                 if (typeof data[i] !== 'undefined') {
                     if (Array.isArray(data[i])) {
                         out[i] = data[i].map(x => {
-                            if (x.id) return x.id
-                            else if (x.value) return x.value
-                            else return x
+                            if (x.id) return x.id;
+                            else if (x.value) return x.value;
+                            else return x;
                         })
                     } else if (typeof data[i] === 'object' && data[i] !== null) {
                         if (data[i].id) {
@@ -105,8 +105,8 @@ Vue.mixin({
                         out[i] = data[i]
                     }
                 }
-            })
-            return out
+            });
+            return out;
         },
         convertDate(date) {
             if (date) {
@@ -141,7 +141,10 @@ Vue.mixin({
             return matches.join('')
         },
         toTop(range = 0) {
-            const myDiv = document.getElementById('__layout');
+            let myDiv = document.querySelector('.main-content .main');
+            if (myDiv === null) {
+                myDiv = document.getElementById('__nuxt');
+            }
             myDiv.scrollTop = range;
             document.body.scrollTop = range;
             document.documentElement.scrollTop = range;
@@ -185,7 +188,7 @@ Vue.mixin({
             let point = {
                 y: rect.top + scrollTop - 40,
                 x: rect.left + scrollLeft
-            }
+            };
             let points = [
                 point,
                 {
@@ -228,6 +231,14 @@ Vue.mixin({
                 }
             }
         },
+        openLogin(flag) {
+            if (flag !== this.$store.state.auth.openAuth) {
+                this.$store.commit('auth/SET_OPEN_AUTH', flag);
+            }
+        },
+        navigate(url) {
+            this.$router.replace({path: url});
+        }
     },
     computed: {
         currentUser: {
@@ -246,4 +257,4 @@ Vue.mixin({
             return new Audio("/sound/002.mp3")
         }
     }
-})
+});

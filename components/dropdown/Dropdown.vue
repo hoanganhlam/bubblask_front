@@ -91,12 +91,16 @@
                 type: [Array, Boolean],
                 default: true
             },
-            expanded: Boolean
+            expanded: Boolean,
+            forceActive: {
+                type: Boolean,
+                default: false
+            }
         },
         data() {
             return {
                 selected: this.value,
-                isActive: false,
+                isActive: this.forceActive,
                 isHoverable: this.hoverable,
                 _isDropdown: true // Used internally by DropdownItem
             }
@@ -139,6 +143,9 @@
              */
             isActive(value) {
                 this.$emit('active-change', value)
+            },
+            forceActive() {
+                this.isActive = this.forceActive;
             }
         },
         methods: {
@@ -208,8 +215,8 @@
              * Close dropdown if clicked outside.
              */
             clickedOutside(event) {
-                if (this.cancelOptions.indexOf('outside') < 0) return
-                if (this.inline) return
+                if (this.cancelOptions.indexOf('outside') < 0) return;
+                if (this.inline) return;
 
                 if (!this.isInWhiteList(event.target)) this.isActive = false
             },
