@@ -326,7 +326,7 @@ header.header {
 
 .timer {
     width: 440px;
-    height: 248px;
+    height: 200px;
     display: block;
     margin: 0 auto .5rem;
 
@@ -356,7 +356,7 @@ header.header {
             .number-grp {
                 width: auto;
                 display: block;
-                height: 140px;
+                height: 100px;
                 float: left;
                 overflow: hidden;
 
@@ -369,13 +369,13 @@ header.header {
                     .num {
                         width: 100%;
                         position: relative;
-                        height: 140px;
+                        height: 100px;
 
                         p {
                             width: auto;
                             display: table;
-                            font-size: 110px;
-                            line-height: 125px;
+                            font-size: 90px;
+                            line-height: 100px;
                             font-weight: bold;
                         }
 
@@ -390,7 +390,7 @@ header.header {
             width: auto;
             float: left;
             display: block;
-            height: 140px;
+            height: 100px;
 
             p {
                 width: auto;
