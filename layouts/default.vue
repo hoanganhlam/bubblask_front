@@ -5,6 +5,7 @@
                 <div class="container is-fullwidth">
                     <div class="navbar-brand">
                         <n-link class="navbar-item logo" to="/">
+                            <img src="/logo.svg" alt="Bubblask">
                             <span class="primary">BUBBLASK</span>
                             <span class="second">.com</span>
                         </n-link>
@@ -179,7 +180,7 @@
                         <div class="level is-mobile">
                             <div class="level-left">
                                 <div class="buttons">
-                                    <div class="button">About</div>
+                                    <div class="button is-text">About</div>
                                     <n-link to="/privacy" class="button is-text">Privacy</n-link>
                                 </div>
                             </div>
@@ -196,23 +197,23 @@
                 <div class="media" v-if="currentUser">
                     <div class="media-content">
                         <div class="buttons has-addons">
-                            <button class="button" @click="onOpenSelect">
+                            <button class="button is-small" @click="onOpenSelect">
                                 <x-icon name="chevron-down"></x-icon>
                             </button>
-                            <button class="button is-selected" @click="openGroupForm(false)">
+                            <button class="button is-small is-selected" @click="openGroupForm(false)">
                                 <b class="clickable">{{ws ? ws.name : 'Create Workspace'}}</b>
                             </button>
                         </div>
                     </div>
                     <div class="media-right">
                         <div class="buttons">
-                            <div class="button" @click="wsMinimize = !wsMinimize">
+                            <div class="button is-small" @click="wsMinimize = !wsMinimize">
                                 <x-icon :name="wsMinimize ? 'maximize': 'minimize'"></x-icon>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div @click="openLogin(true)" class="button is-fullwidth" v-else>Login to join Workspace</div>
+                <div @click="openLogin(true)" class="button is-small is-fullwidth" v-else>Login to join Workspace</div>
             </div>
             <transition name="fade">
                 <div v-if="!wsMinimize && ws" class="members">
@@ -334,13 +335,11 @@
                     </header>
                     <section class="modal-card-body">
                         <div v-if="!formWS.isDone">
-                            <div class="field">
-                                <ce v-model="formWS.name" elm="h1" class="title" placeholder="Workspace name"></ce>
-                            </div>
-                            <div class="field">
-                                <div class="field-body">
+                            <ce v-model="formWS.name" elm="h1" class="title" placeholder="Workspace name"></ce>
+                            <div class="columns">
+                                <div class="column">
                                     <div class="field">
-                                        <b-switch :rounded="false" size="is-medium" v-model="formWS.isPrivate">Private
+                                        <b-switch :rounded="false" v-model="formWS.isPrivate">Is private
                                         </b-switch>
                                     </div>
                                     <div class="field" v-if="formWS.isPrivate">
@@ -348,12 +347,9 @@
                                                  placeholder="Password to access workspace"/>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="field" v-if="!formWS.id">
-                                <div class="field-body">
+                                <div class="column" v-if="!formWS.id">
                                     <div class="field">
-                                        <b-switch :rounded="false" size="is-medium" v-model="formWS.hasBoard">Board
-                                        </b-switch>
+                                        <b-switch :rounded="false" v-model="formWS.hasBoard">Create a board</b-switch>
                                     </div>
                                     <div class="field" v-if="formWS.hasBoard">
                                         <b-input expanded v-model="formWS.board_name" placeholder="Board name"/>
@@ -595,7 +591,6 @@
                         task.ws = this.ws.id;
                     }
                     if (this.currentUser) {
-                        console.log(this.currentUser);
                         if (task.parent === 0) {
                             task.parent = null;
                         }

@@ -5,7 +5,7 @@
                 <div class="notification media"
                      v-bind:class="{'is-warning': task.status === 'running'}">
                     <div class="media-left">
-                        <div class="button is-small" v-if="tree" @click="editing = !editing; updateTree = false"
+                        <div class="button" v-if="tree" @click="editing = !editing; updateTree = false"
                              v-bind:class="{'is-static': !children || children.length === 0}">
                             <x-icon name="tree"/>
                         </div>
@@ -56,7 +56,8 @@
                                 v-model="task.settings.priority" @input="setPriority"/>
                     </div>
                     <div class="card-content">
-                        <ce v-if="!tree || updateTree" @input="on_input()" elm="p" class="note" placeholder="Note"
+                        <ce v-if="!tree || updateTree" @input="on_input()" elm="div" class="note" placeholder="Note"
+                            allow-paste-html
                             v-model="task.description"
                             :editable="!task.isRunning() && !readonly"></ce>
                         <draggable :list="children" @change="re_order" class="tasks" v-bind="dragOptions">
@@ -204,18 +205,18 @@
                     this.sendUpdate();
                 }
             }, 500),
-            task_run() {
+            async task_run() {
                 this.playSource('audio_press');
                 if (this.children.length === 0) {
-                    this.$store.commit('task/SET_RUNNING', this.task);
+                    await this.$store.commit('task/SET_RUNNING', this.task);
                 } else {
                     this.editing = true;
                 }
             },
-            task_done() {
+            async task_done() {
                 if (this.children.length === 0) {
                     this.task.changeStatus('complete');
-                    this.$store.commit('task/UPDATE_TASK', this.task);
+                    await this.$store.commit('task/UPDATE_TASK', this.task);
                 } else {
                     this.editing = true;
                 }

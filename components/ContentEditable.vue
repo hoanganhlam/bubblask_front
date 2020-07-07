@@ -11,7 +11,10 @@
                 attrs: {
                     contentEditable: this.editable,
                 },
-                ref: 'xxx'
+                ref: 'xxx',
+                domProps: {
+                    innerHTML: this.data
+                }
             }, eml)
         },
         props: {

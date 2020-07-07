@@ -7,20 +7,25 @@
                         <h1 class="title is-spaced">Board</h1>
                     </div>
                     <div class="level-right">
-                        <div v-if="currentUser" class="button is-text" @click="create">
+                        <div v-if="currentUser" class="button is-light" @click="create">
                             <x-icon name="plus"></x-icon>
                             <span>Create</span>
                         </div>
                     </div>
                 </div>
-                <div class="notification is-light subtitle">Get or sharing template to learn something by expert!</div>
+                <div class="subtitle">Get or sharing template to learn something by expert!</div>
                 <board-list v-if="currentUser"/>
                 <div class="subsection">
-                    <h4 class="widget_title">Sample Board</h4>
+                    <h4 class="widget_title">Template</h4>
+                    <div class="field">
+                        <div class="control">
+                            <b-input type="search" size="is-medium" placeholder="Learn something"></b-input>
+                        </div>
+                    </div>
                     <div class="buttons" v-if="taxonomies.length">
                         <a v-for="tax in taxonomies" :key="tax.id" :href="`/board/?tag=${tax.id}`"
                            v-bind:class="{'is-primary': tag && tag.id === tax.id}"
-                           class="button is-rounded" @click="clickTag($event, tax)">{{tax.title}}</a>
+                           class="button is-small" @click="clickTag($event, tax)">{{tax.title}}</a>
                     </div>
                     <div v-if="response.results.length" class="columns is-multiline">
                         <div v-for="board in response.results" :key="board.id" class="column is-4">
@@ -56,10 +61,11 @@
     import Board from "../../components/Board";
     import Avatar from "../../components/Avatar";
     import BoardList from "../../components/BoardList";
+    import BInput from "../../components/input/Input";
 
     export default {
         name: "Template",
-        components: {BoardList, Avatar, Board},
+        components: {BInput, BoardList, Avatar, Board},
         async asyncData({$axios, query}) {
             let tag = await $axios.$get(`/general/hash-tags/?for_model=board`);
             query.page_size = 9;

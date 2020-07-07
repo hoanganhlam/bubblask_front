@@ -150,7 +150,7 @@ export async function setContext (app, context) {
       payload: context.payload,
       error: context.error,
       base: '/',
-      env: {"BASE_URL":"http://localhost:3000","API_DOMAIN":"https://api.bubblask.com","NODE_ENV":"production"}
+      env: {"BASE_URL":"https://bubblask.com","API_DOMAIN":"https://api.bubblask.com","NODE_ENV":"production"}
     }
     // Only set once
     if (context.req) {

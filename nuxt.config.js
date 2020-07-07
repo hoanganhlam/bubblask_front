@@ -72,7 +72,7 @@ export default {
     ** Build configuration
     */
     build: {
-        extractCSS: process.env.NODE_ENV === 'production',
+        // extractCSS: process.env.NODE_ENV === 'production',
         postcss: {
             preset: {
                 features: {
