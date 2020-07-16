@@ -94,7 +94,7 @@ $input-placeholder-color: #818181;
 
 html {
     scroll-behavior: smooth;
-    overflow-y: auto;
+    overflow-y: hidden;
 }
 
 .main-content .main {
@@ -128,7 +128,7 @@ body {
 }
 
 .container {
-    max-width: 728px;
+    max-width: 828px;
 
     &.small {
         max-width: 500px;
@@ -325,7 +325,7 @@ header.header {
 
 .timer {
     width: 440px;
-    height: 260px;
+    height: 230px;
     display: block;
     margin: 0 auto .5rem;
 
@@ -585,20 +585,20 @@ header.header {
 }
 
 .main-content {
-    height: calc(100vh - 3.3rem);
+    height: calc(100vh - 57px);
     position: relative;
     display: flex;
     flex-direction: row;
 
     .main-body {
-        min-height: calc(100vh - 3.3rem);
+        min-height: calc(100vh - 3rem);
     }
 
     .sidebar {
-        width: 4rem;
+        width: 3.75rem;
         border-right: 1px solid #EEE;
         position: absolute;
-        background: #FFF;
+        background: #fafafa;
         bottom: 0;
         top: 0;
         z-index: 1;
@@ -679,12 +679,13 @@ header.header {
 }
 
 .navbar-item.logo {
-    padding: .25rem 0;
+    padding: 0;
 
     img {
-        max-height: 2.75rem;
+        max-height: 3.5rem;
         width: 3.75rem;
         border-right: 1px solid #EEE;
         margin-right: .5rem;
+        background: #fafafa;
     }
 }

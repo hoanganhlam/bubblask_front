@@ -4,8 +4,8 @@ export const settings = {
         "--task-text-color": "#333333",
         "--btn-color": "#cd2653",
         "--btn-text-color": "#FFF",
-        "--bg-color-primary": "#fae0ca",
-        "--bg-color-secondary": "#ffffff",
+        "--bg-color-primary": "#FFFFFF",
+        "--bg-color-secondary": "#FAFAFA",
         "--bg-color-primary-text": "#333333",
         "--bg-color-secondary-text": "#333333",
         background: null

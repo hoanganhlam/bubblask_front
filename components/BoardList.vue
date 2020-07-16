@@ -16,12 +16,12 @@
             </div>
         </div>
         <div class="columns is-multiline" v-if="response.results.length">
-            <div v-for="board in response.results" :key="board.id" class="column is-6">
+            <div v-for="board in response.results" :key="board.id" class="column is-3">
                 <board :value="board"></board>
             </div>
         </div>
         <div v-if="loading" class="columns is-multiline">
-            <div v-for="i in 2" :key="i" class="column is-6">
+            <div v-for="i in 4" :key="i" class="column is-3">
                 <div class="card">
                     <div class="card-content">
                         <div class="skeleton-line"></div>
@@ -56,7 +56,7 @@
                 this.response = await this.$axios.$get('/task/boards/', {
                     params: {
                         user: this.currentUser.id,
-                        page_size: 2,
+                        page_size: 4,
                         only_user: true,
                         page: this.page
                     }
@@ -82,8 +82,3 @@
         }
     }
 </script>
-
-<style lang="scss">
-    .control {
-    }
-</style>

@@ -155,7 +155,6 @@
                         ...this.value,
                         settings: this.value.settings ? this.value.settings : {}
                     });
-                    this.updateTree = false;
                 }
             },
             'value.children': {

@@ -2,33 +2,31 @@
     <div v-bind:class="{'has-custom': $route.path === '/'}" v-bind:style="settings.color">
         <header v-if="!isRunning && !$route.path.includes('/workspace')" class="header">
             <nav class="navbar" role="navigation" aria-label="main navigation">
-                <div class="container is-fullwidth">
-                    <div class="navbar-brand">
-                        <n-link class="navbar-item logo" to="/">
-                            <img src="/logo.svg" alt="Bubblask">
-                            <span class="primary">BUBBLASK</span>
-                            <span class="second">.com</span>
-                        </n-link>
-                        <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
-                           @click="burgerActive = !burgerActive">
-                            <span aria-hidden="true"></span>
-                            <span aria-hidden="true"></span>
-                            <span aria-hidden="true"></span>
-                        </a>
-                    </div>
-                    <div class="navbar-menu" v-bind:class="{'is-active' : burgerActive}">
-                        <div class="navbar-end">
-                            <div class="navbar-item">
-                                <div>
-                                    <span class="field">Total: </span>
-                                    <span class="value">{{displayTasks.length}}</span>
-                                </div>
+                <div class="navbar-brand">
+                    <n-link class="navbar-item logo" to="/">
+                        <img src="/logo.svg" alt="Bubblask">
+                        <span class="primary">BUBBLASK</span>
+                        <span class="second">.com</span>
+                    </n-link>
+                    <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
+                       @click="burgerActive = !burgerActive">
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                    </a>
+                </div>
+                <div class="navbar-menu" v-bind:class="{'is-active' : burgerActive}">
+                    <div class="navbar-end">
+                        <div class="navbar-item">
+                            <div>
+                                <span class="field">Total: </span>
+                                <span class="value">{{displayTasks.length}}</span>
                             </div>
-                            <div class="navbar-item">
-                                <div>
-                                    <span class="field">Time: </span>
-                                    <span class="value">{{totalTime}}m</span>
-                                </div>
+                        </div>
+                        <div class="navbar-item">
+                            <div>
+                                <span class="field">Time: </span>
+                                <span class="value">{{totalTime}}m</span>
                             </div>
                         </div>
                     </div>
@@ -868,7 +866,10 @@
     .widget_title {
         font-weight: bold;
         font-size: 16px;
-        margin-bottom: 1rem;
+
+        &:not(:last-child) {
+            margin-bottom: 1rem;
+        }
     }
 
     .has-custom {
@@ -878,6 +879,7 @@
         }
 
         .hero.is-primary {
+            border-bottom: 1px solid #EEE;
             background-size: cover;
             background: var(--bg-color-primary);
             color: var(--bg-color-primary-text);

@@ -12,7 +12,7 @@
             <div class="hero-body">
                 <div class="container medium">
                     <div class="columns is-multiline">
-                        <div class="column is-6" v-for="(u, i) in response.results" :key="i">
+                        <div class="column is-4" v-for="(u, i) in response.results" :key="i">
                             <div class="box user clickable" @click="navigate(`/${u.username}`)">
                                 <div class="media">
                                     <div class="media-left">{{i + 1}}</div>

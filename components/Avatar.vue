@@ -79,16 +79,16 @@
         .delete {
             z-index: 1;
             position: absolute;
-            right: -.75rem;
+            right: .75rem;
         }
 
         .medal {
-            top: -.75rem;
+            top: .75rem;
             cursor: pointer;
         }
 
         .delete {
-            bottom: -.75rem;
+            bottom: .75rem;
         }
 
         .image-blank {

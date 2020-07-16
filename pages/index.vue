@@ -415,7 +415,7 @@
 
         .board {
             min-width: 500px;
-            max-width: 500px;
+            max-width: 600px;
             margin: 0 .5rem;
 
             .media-right {

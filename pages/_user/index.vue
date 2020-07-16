@@ -45,7 +45,7 @@
                             :values="chartValues"
                             :end-date="new Date()"/>
                     </div>
-                    <div class="column is-6">
+                    <div class="column is-4">
                         <div class="card">
                             <div class="card-content">
                                 <div class="media">
@@ -53,14 +53,14 @@
                                         <h4>Focus</h4>
                                     </div>
                                     <div class="media-right">
-                                        <span class="title is-1">{{reportData.total_focus.toFixed(1)}}</span>
+                                        <span class="title">{{reportData.total_focus.toFixed(1)}}</span>
                                         <span>h</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="column is-6">
+                    <div class="column is-4">
                         <div class="card">
                             <div class="card-content">
                                 <div class="media">
@@ -68,14 +68,14 @@
                                         <h4>Accurate estimates</h4>
                                     </div>
                                     <div class="media-right">
-                                        <span class="title is-1">{{100 - reportData.accurate_estimates.toFixed(1)}}</span>
+                                        <span class="title">{{100 - reportData.accurate_estimates.toFixed(1)}}</span>
                                         <span>%</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="column is-6">
+                    <div class="column is-4">
                         <div class="card">
                             <div class="card-content">
                                 <div class="media">
@@ -83,14 +83,14 @@
                                         <h4>AVG focus</h4>
                                     </div>
                                     <div class="media-right">
-                                        <span class="title is-1">{{(reportData.avg_focus / 60).toFixed(1)}}</span>
+                                        <span class="title">{{(reportData.avg_focus / 60).toFixed(1)}}</span>
                                         <span>h/day</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="column is-6">
+                    <div class="column is-4">
                         <div class="card">
                             <div class="card-content">
                                 <div class="media">
@@ -98,14 +98,14 @@
                                         <h4>Total complete</h4>
                                     </div>
                                     <div class="media-right">
-                                        <span class="title is-1">{{reportData.total_task_done}}</span>
+                                        <span class="title">{{reportData.total_task_done}}</span>
                                         <span>tasks</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="column is-6">
+                    <div class="column is-4">
                         <div class="card">
                             <div class="card-content">
                                 <div class="media">
@@ -113,14 +113,14 @@
                                         <h4>Total Delays/Interruptions</h4>
                                     </div>
                                     <div class="media-right">
-                                        <span class="title is-1">{{reportData.total_task_delay}}</span>
+                                        <span class="title">{{reportData.total_task_delay}}</span>
                                         <span>tasks</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="column is-6">
+                    <div class="column is-4">
                         <div class="card">
                             <div class="card-content">
                                 <div class="media">
@@ -128,7 +128,7 @@
                                         <h4>Ranking</h4>
                                     </div>
                                     <div class="media-right">
-                                        <span class="title is-1">{{reportData.rank}}</span>
+                                        <span class="title">{{reportData.rank}}</span>
                                         <span>th</span>
                                     </div>
                                 </div>

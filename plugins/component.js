@@ -24,3 +24,4 @@ Vue.component('task', Task);
 Vue.component('task-graph', TaskGraph);
 Vue.component('draggable', draggable);
 Vue.component('time-chart', TimeChart);
+Vue.config.devtools = true;
