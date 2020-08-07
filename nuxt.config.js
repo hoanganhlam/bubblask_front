@@ -73,6 +73,19 @@ export default {
     */
     build: {
         // extractCSS: process.env.NODE_ENV === 'production',
+        extractCSS: true,
+        optimization: {
+            splitChunks: {
+                cacheGroups: {
+                    styles: {
+                        name: 'styles',
+                        test: /\.(css|vue)$/,
+                        chunks: 'all',
+                        enforce: true
+                    }
+                }
+            }
+        },
         postcss: {
             preset: {
                 features: {
