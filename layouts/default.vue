@@ -758,7 +758,17 @@
                     let newDateObj = new Date();
                     newDateObj.setTime(oldDateObj.getTime() + (5 * 60 * 1000));
                     localStorage.setItem('time_off', newDateObj.toISOString());
-                }, 1000)
+                }, 1000);
+
+                window.fhApp = 'bubblask';
+                let a = document.createElement("script");
+                a.type = "text/javascript";
+                a.src = 'https://featurehub.co/analytic.js';
+                document.head.appendChild(a);
+                let b = document.createElement("script");
+                b.type = "text/javascript";
+                b.src = 'https://featurehub.co/embed.js';
+                document.head.appendChild(b);
             }
         }
     }
