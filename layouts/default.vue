@@ -761,6 +761,10 @@
                 }, 1000);
 
                 window.fhApp = 'bubblask';
+                window.fhStyle = {
+                    left: '4.5rem',
+                    right: 'unset'
+                }
                 let a = document.createElement("script");
                 a.type = "text/javascript";
                 a.src = 'https://featurehub.co/analytic.js';

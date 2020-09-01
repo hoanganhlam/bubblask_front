@@ -131,15 +131,6 @@
                             <li>After 5 minutes you have to again start studying for 25 minutes.</li>
                             <li>After 4 sessions of 25 minutes, you can take a break of 15–20 minutes.</li>
                         </ul>
-                        <h2 class="title is-4">Features</h2>
-                        <div class="feature" v-for="(f, i) in features" :key="`f-${i}`">
-                            <div class="media">
-                                <div class="media-content">
-                                    <strong class="value">{{f.title}}</strong>
-                                    <p>{{f.description}}</p>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -192,43 +183,6 @@
             return {
                 timer: 0,
                 mode: "POMODORO TIMER",
-                features: [
-                    {
-                        title: 'Podomoro Timer',
-                        description: 'Timer base on Podomoro Technique',
-                        action: ''
-                    },
-                    {
-                        title: 'Strict mode',
-                        description: 'Especially, with strict mode, Bubblask take you work under the framework, while you\'re working you can\'t stop or update the task, you only can break when time out!',
-                        action: ''
-                    },
-                    {
-                        title: 'LeaderBoard',
-                        description: 'That\'s make challenge, you can see how others work and compare your productivity with leader.',
-                        action: ''
-                    },
-                    {
-                        title: 'Report',
-                        description: 'You can see how you work daily, weekly, monthly, even yearly',
-                        action: ''
-                    },
-                    {
-                        title: 'Save your work',
-                        description: 'You can store your task on cloud, ',
-                        action: ''
-                    },
-                    {
-                        title: 'Personalized',
-                        description: 'With Personalized you can custom your settings: color, audio and timer!',
-                        action: ''
-                    },
-                    {
-                        title: 'Group',
-                        description: 'You can join or create any public group and work with your friends together in real time, I think that will make a challenge!',
-                        action: ''
-                    }
-                ],
                 showNote: false,
                 wsPassword: null,
                 askPassword: false,
