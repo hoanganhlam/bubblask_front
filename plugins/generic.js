@@ -1,13 +1,7 @@
 import Vue from 'vue'
-import moment from "moment";
 import {Task} from "./task";
 
 Vue.mixin({
-    data() {
-        return {
-            moment: moment
-        }
-    },
     methods: {
         cleanURI(url) {
             if (url) {
@@ -58,7 +52,7 @@ Vue.mixin({
             return user.username
         },
         formatDate(dateStr) {
-            return new moment(dateStr, 'YYYY-MM-DD').format('YYYY-MM-DD')
+            return dateStr
         },
         cleanData(data, fields) {
             let out = {};

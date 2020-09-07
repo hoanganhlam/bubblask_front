@@ -1,13 +1,21 @@
 {
   "entry": "server.js",
   "files": {
-    "10a2c279c490955bd71b.js": "10a2c279c490955bd71b.js",
-    "6bee4120a295e0b822d2.js": "6bee4120a295e0b822d2.js",
-    "80dc4a1760f87c36c733.js": "80dc4a1760f87c36c733.js",
-    "8e4dde267407b6ecd281.js": "8e4dde267407b6ecd281.js",
-    "a5cbae6e29b092f3820e.js": "a5cbae6e29b092f3820e.js",
-    "cec5e614c7d35e2ad28b.js": "cec5e614c7d35e2ad28b.js",
+    "pages/_user/index.js": "pages/_user/index.js",
+    "pages/board/_id/index.js": "pages/board/_id/index.js",
+    "pages/board/_id/mindmap.js": "pages/board/_id/mindmap.js",
+    "pages/index.js": "pages/index.js",
+    "pages/leaderboard/index.js": "pages/leaderboard/index.js",
+    "pages/privacy.js": "pages/privacy.js",
     "server.js": "server.js"
   },
-  "maps": {}
+  "maps": {
+    "pages/_user/index.js": "pages/_user/index.js.map",
+    "pages/board/_id/index.js": "pages/board/_id/index.js.map",
+    "pages/board/_id/mindmap.js": "pages/board/_id/mindmap.js.map",
+    "pages/index.js": "pages/index.js.map",
+    "pages/leaderboard/index.js": "pages/leaderboard/index.js.map",
+    "pages/privacy.js": "pages/privacy.js.map",
+    "server.js": "server.js.map"
+  }
 }

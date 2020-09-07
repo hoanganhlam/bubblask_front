@@ -72,6 +72,9 @@ $hero-body-padding: 3rem 0;
 $card-shadow: $box-shadow;
 $card-content-padding: 1rem;
 $box-padding: .5rem;
+$notification-padding: 1rem;
+$notification-padding-ltr: 1rem;
+$notification-padding-rtl: 1rem;
 $input-placeholder-color: #818181;
 @import "~bulma/bulma";
 @import "buefy";
@@ -548,6 +551,14 @@ header.header {
     [contenteditable] {
         font-size: 1rem !important;
     }
+
+    .main-content .sidebar {
+        left: -100%;
+
+        &.active {
+            left: 0;
+        }
+    }
 }
 
 .gap {
@@ -689,3 +700,4 @@ header.header {
         background: #fafafa;
     }
 }
+

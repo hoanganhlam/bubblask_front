@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import Vuex from 'vuex'
 import Meta from 'vue-meta'
 import ClientOnly from 'vue-client-only'
 import NoSsr from 'vue-no-ssr'
@@ -50,7 +51,14 @@ Vue.use(Meta, {"keyName":"head","attribute":"data-n-head","ssrAttribute":"data-n
 
 const defaultTransition = {"name":"page","mode":"out-in","appear":false,"appearClass":"appear","appearActiveClass":"appear-active","appearToClass":"appear-to"}
 
-async function createApp (ssrContext) {
+const originalRegisterModule = Vuex.Store.prototype.registerModule
+const baseStoreOptions = { preserveState: process.client }
+
+function registerModule (path, rawModule, options = {}) {
+  return originalRegisterModule.call(this, path, rawModule, { ...baseStoreOptions, ...options })
+}
+
+async function createApp(ssrContext, config = {}) {
   const router = await createRouter(ssrContext)
 
   const store = createStore(ssrContext)
@@ -58,15 +66,14 @@ async function createApp (ssrContext) {
   store.$router = router
 
   // Fix SSR caveat https://github.com/nuxt/nuxt.js/issues/3757#issuecomment-414689141
-  const registerModule = store.registerModule
-  store.registerModule = (path, rawModule, options) => registerModule.call(store, path, rawModule, Object.assign({ preserveState: process.client }, options))
+  store.registerModule = registerModule
 
   // Create Root instance
 
   // here we inject the router and store to all child components,
   // making them available everywhere as `this.$router` and `this.$store`.
   const app = {
-    head: {"titleTemplate":"%s - Bubblask.com","title":"Bubblask","meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"hid":"description","name":"description","content":"Bubblask is the flexible and easy app that use pomodoro technique to manage your time in working, studying. More over Bubblask help you improve the ability to estimate the time of work by analytic how you work!"},{"hid":"mobile-web-app-capable","name":"mobile-web-app-capable","content":"yes"},{"hid":"apple-mobile-web-app-title","name":"apple-mobile-web-app-title","content":"bubblask"},{"hid":"author","name":"author","content":"lam"},{"hid":"theme-color","name":"theme-color","content":"#FFF"},{"hid":"og:type","name":"og:type","property":"og:type","content":"website"},{"hid":"og:title","name":"og:title","property":"og:title","content":"bubblask"},{"hid":"og:site_name","name":"og:site_name","property":"og:site_name","content":"bubblask"},{"hid":"og:description","name":"og:description","property":"og:description","content":"Bubble Task"}],"link":[{"rel":"apple-touch-icon","sizes":"57x57","type":"image\u002Fx-icon","href":"\u002Ficon\u002Fapple-icon-57x57.png"},{"rel":"icon","sizes":"96x96","type":"image\u002Fpng","href":"\u002Ficon\u002Ffavicon-96x96.png"},{"rel":"icon","sizes":"32x32","type":"image\u002Fpng","href":"\u002Ficon\u002Ffavicon-32x32.png"},{"rel":"icon","sizes":"16x16","type":"image\u002Fpng","href":"\u002Ficon\u002Ffavicon-16x16.png"},{"rel":"manifest","href":"\u002F_nuxt\u002Fmanifest.dba99f66.json"},{"rel":"shortcut icon","href":"\u002F_nuxt\u002Ficons\u002Ficon_64.5f6a36.png"}],"script":[{"src":"https:\u002F\u002Fjs.pusher.com\u002F6.0\u002Fpusher.min.js"}],"style":[],"htmlAttrs":{"lang":"en"}},
+    head: {"titleTemplate":"%s - Bubblask.com","title":"Bubblask","meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"hid":"description","name":"description","content":"Bubblask is the flexible and easy app that use pomodoro technique to manage your time in working, studying. More over Bubblask help you improve the ability to estimate the time of work by analytic how you work!"},{"hid":"mobile-web-app-capable","name":"mobile-web-app-capable","content":"yes"},{"hid":"apple-mobile-web-app-title","name":"apple-mobile-web-app-title","content":"bubblask"},{"hid":"author","name":"author","content":"lam"},{"hid":"theme-color","name":"theme-color","content":"#FFF"},{"hid":"og:type","name":"og:type","property":"og:type","content":"website"},{"hid":"og:title","name":"og:title","property":"og:title","content":"bubblask"},{"hid":"og:site_name","name":"og:site_name","property":"og:site_name","content":"bubblask"},{"hid":"og:description","name":"og:description","property":"og:description","content":"Bubble Task"}],"link":[{"rel":"apple-touch-icon","sizes":"57x57","type":"image\u002Fx-icon","href":"\u002Ficon\u002Fapple-icon-57x57.png"},{"rel":"icon","sizes":"96x96","type":"image\u002Fpng","href":"\u002Ficon\u002Ffavicon-96x96.png"},{"rel":"icon","sizes":"32x32","type":"image\u002Fpng","href":"\u002Ficon\u002Ffavicon-32x32.png"},{"rel":"icon","sizes":"16x16","type":"image\u002Fpng","href":"\u002Ficon\u002Ffavicon-16x16.png"},{"rel":"manifest","href":"\u002F_nuxt\u002Fmanifest.e00d1733.json"},{"rel":"shortcut icon","href":"\u002F_nuxt\u002Ficons\u002Ficon_64x64.5f6a36.png"}],"script":[{"src":"https:\u002F\u002Fjs.pusher.com\u002F6.0\u002Fpusher.min.js"}],"style":[],"htmlAttrs":{"lang":"en"}},
 
     store,
     router,
@@ -139,7 +146,7 @@ async function createApp (ssrContext) {
     ssrContext
   })
 
-  const inject = function (key, value) {
+  function inject(key, value) {
     if (!key) {
       throw new Error('inject(key, value) has no key provided')
     }
@@ -150,6 +157,10 @@ async function createApp (ssrContext) {
     key = '$' + key
     // Add into app
     app[key] = value
+    // Add into context
+    if (!app.context[key]) {
+      app.context[key] = value
+    }
 
     // Add into store
     store[key] = app[key]
@@ -162,7 +173,7 @@ async function createApp (ssrContext) {
     Vue[installKey] = true
     // Call Vue.use() to install the plugin into vm
     Vue.use(() => {
-      if (!Object.prototype.hasOwnProperty.call(Vue, key)) {
+      if (!Object.prototype.hasOwnProperty.call(Vue.prototype, key)) {
         Object.defineProperty(Vue.prototype, key, {
           get () {
             return this.$root.$options[key]
@@ -172,6 +183,9 @@ async function createApp (ssrContext) {
     })
   }
 
+  // Inject runtime config as $config
+  inject('config', config)
+
   if (process.client) {
     // Replace store state before plugins execution
     if (window.__NUXT__ && window.__NUXT__.state) {
@@ -179,6 +193,13 @@ async function createApp (ssrContext) {
     }
   }
 
+  // Add enablePreview(previewData = {}) in context for plugins
+  if (process.static && process.client) {
+    app.context.enablePreview = function (previewData = {}) {
+      app.previewData = Object.assign({}, previewData)
+      inject('preview', previewData)
+    }
+  }
   // Plugin execution
 
   if (process.client && typeof nuxt_plugin_workbox_5abaff30 === 'function') {
@@ -213,12 +234,23 @@ async function createApp (ssrContext) {
     await nuxt_plugin_generic_3bef84be(app.context, inject)
   }
 
+  // Lock enablePreview in context
+  if (process.static && process.client) {
+    app.context.enablePreview = function () {
+      console.warn('You cannot call enablePreview() outside a plugin.')
+    }
+  }
+
   // If server-side, wait for async component to be resolved first
   if (process.server && ssrContext && ssrContext.url) {
     await new Promise((resolve, reject) => {
-      router.push(ssrContext.url, resolve, () => {
+      router.push(ssrContext.url, resolve, (err) => {
+        // https://github.com/vuejs/vue-router/blob/v3.4.3/src/util/errors.js
+        if (!err._isRouter) return reject(err)
+        if (err.type !== 2 /* NavigationFailureType.redirected */) return resolve()
+
         // navigated to a different route in router guard
-        const unregister = router.afterEach(async (to, from, next) => {
+        const unregister = router.afterEach(async (to, from) => {
           ssrContext.url = to.fullPath
           app.context.route = await getRouteData(to)
           app.context.params = to.params || {}

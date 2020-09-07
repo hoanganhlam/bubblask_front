@@ -34,51 +34,51 @@
 
 <script>
 
-    import Board from "./Board";
+import Board from "./Board";
 
-    export default {
-        name: "BoardList",
-        components: {Board},
-        data() {
-            return {
-                response: {
-                    results: [],
-                    count: 0
-                },
-                loading: false,
-                page: 1
-            }
-        },
-        methods: {
-            async fetch() {
-                this.loading = true;
-                this.response.results = [];
-                this.response = await this.$axios.$get('/task/boards/', {
-                    params: {
-                        user: this.currentUser.id,
-                        page_size: 4,
-                        only_user: true,
-                        page: this.page
-                    }
-                });
-                this.loading = false;
+export default {
+    name: "BoardList",
+    components: {Board},
+    data() {
+        return {
+            response: {
+                results: [],
+                count: 0
             },
-            async clickFetch(flag) {
-                if (flag) {
-                    this.page = this.page + 1;
-                } else {
-                    this.page = this.page - 1;
-                }
-                await this.fetch();
-            }
-        },
-        computed: {
-            total() {
-                return this.response.count / 2;
-            }
-        },
-        created() {
-            this.fetch();
+            loading: false,
+            page: 1
         }
+    },
+    methods: {
+        async fetch() {
+            this.loading = true;
+            this.response.results = [];
+            this.response = await this.$axios.$get('/task/boards/', {
+                params: {
+                    user: this.currentUser.id,
+                    page_size: 4,
+                    is_interface: false,
+                    page: this.page
+                }
+            });
+            this.loading = false;
+        },
+        async clickFetch(flag) {
+            if (flag) {
+                this.page = this.page + 1;
+            } else {
+                this.page = this.page - 1;
+            }
+            await this.fetch();
+        }
+    },
+    computed: {
+        total() {
+            return this.response.count / 4;
+        }
+    },
+    created() {
+        this.fetch();
     }
+}
 </script>

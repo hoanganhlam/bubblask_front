@@ -18,17 +18,17 @@
                         <ce placeholder="Untitled" elm="h4" class="title"
                             :editable="task.status !== 'running' && !readonly" @input="on_input()"
                             v-model="task.title"></ce>
-                        <small v-if="tree" class="field">{{task.interval * task.tomato}}m</small>
+                        <small v-if="tree" class="field">{{ task.interval * task.tomato }}m</small>
                         <b-rate :disabled="!editing || readonly" v-else class="is-small"
                                 v-model="task.settings.priority" @input="setPriority"/>
                     </div>
                     <div class="media-right clickable" v-if="!['stopped', 'complete'].includes(task.status) && !tree">
                         <div class="buttons" v-if="!readonly">
                             <div class="button is-hidden-mobile is-text">
-                                {{task.times.length}} / {{task.interval}}
+                                {{ task.times.length }} / {{ task.interval }}
                             </div>
                             <div v-if="task.status !== 'running'" class="button is-text is-hidden-mobile">
-                                {{fancyTimeFormat(task.totalTimeLeft())}}
+                                {{ fancyTimeFormat(task.totalTimeLeft()) }}
                             </div>
                             <div class="button" @click="task_run()">
                                 <x-icon class="is-medium"
@@ -62,7 +62,7 @@
                             :editable="!task.isRunning() && !readonly"></ce>
                         <draggable :list="children" @change="re_order" class="tasks" v-bind="dragOptions">
                             <task v-for="child in children" :key="child.id" :value="child"
-                                  :readonly="readonly"
+                                  :readonly="readonly" :board="board"
                                   @add="handle_add" @deleted="$emit('deleted', $event)" :tree="tree"/>
                         </draggable>
                         <div class="field" v-if="task.id && (!tree || updateTree) && !readonly">
@@ -98,161 +98,191 @@
 </template>
 
 <script>
-    const _ = require("lodash");
-    import {Task} from "../plugins/task";
+const _ = require("lodash");
+import {Task} from "~/plugins/task";
 
-    export default {
-        name: "Task",
-        props: {
-            value: {
-                type: Object,
-                default: () => {
-                    return {}
-                }
-            },
-            readonly: {
-                type: Boolean,
-                default: false
-            },
-            tree: {
-                type: Boolean,
-                default: false
+export default {
+    name: "Task",
+    props: {
+        value: {
+            type: Object,
+            default: () => {
+                return {}
             }
         },
-        data() {
-            let task = this.value;
-            if (task.settings === null) {
-                task.settings = {}
-            }
-            if (task.children && task.settings.order) {
-                task.children.forEach(x => {
-                    x.order = x.id ? task.settings.order.indexOf(x.id) : 0
-                });
-                task.children.sort((a, b) => a.order - b.order);
-            }
-            return {
-                editing: false,
-                task: task,
-                updateTree: false,
-                children: task.children
-            }
+        readonly: {
+            type: Boolean,
+            default: false
         },
-        computed: {
-            dragOptions() {
-                return {
-                    animation: 0,
-                    group: "description",
-                    disabled: this.readonly,
-                    ghostClass: "ghost"
-                }
-            }
+        tree: {
+            type: Boolean,
+            default: false
         },
-        watch: {
-            value: {
-                deep: true,
-                handler: function () {
-                    this.task = new Task({
-                        ...this.value,
-                        settings: this.value.settings ? this.value.settings : {}
-                    });
-                }
-            },
-            'value.children': {
-                deep: true,
-                handler: function (val) {
-                    let xxxx = _.cloneDeep(val);
-                    xxxx.forEach(x => {
-                        x.order = x.id && this.task.settings.order ? this.task.settings.order.indexOf(x.id) : 0
-                    });
-                    xxxx.sort((a, b) => a.order - b.order);
-                    this.children = xxxx;
-                }
-            },
-            task: {
-                deep: true,
-                handler: function () {
-                    this.$emit('input', {
-                        ...this.task,
-                        children: this.children
-                    });
-                }
-            },
-            editing() {
-                this.$emit('editing', this.editing);
-            },
-        },
-        methods: {
-            dblClick() {
-                if (this.task.id === 0) {
-                    this.$emit('board-update');
-                } else {
-                    this.editing = true;
-                }
-                if (this.tree) {
-                    this.updateTree = true;
-                }
-            },
-            close() {
-                if (this.tree) {
-                    this.updateTree = false;
-                } else {
-                    this.editing = false;
-                }
-            },
-            on_input: _.debounce(function () {
-                if (this.task.id) {
-                    this.sendUpdate();
-                }
-            }, 500),
-            async task_run() {
-                this.playSource('audio_press');
-                if (this.children.length === 0) {
-                    await this.$store.commit('task/SET_RUNNING', this.task);
-                } else {
-                    this.editing = true;
-                }
-            },
-            async task_done() {
-                if (this.children.length === 0) {
-                    this.task.changeStatus('complete');
-                    await this.$store.commit('task/UPDATE_TASK', this.task);
-                } else {
-                    this.editing = true;
-                }
-            },
-            async task_add() {
-                let st = this.$store.state.config.settings.timer;
-                let task = new Task({
-                    tomato: st.tomato,
-                    updating: true,
-                    parent: this.task.id !== 0 ? this.task.id : undefined,
-                    board: this.task.board
-                });
-                this.$emit('add', task);
-            },
-            async handle_add(task) {
-                this.$emit('add', task);
-            },
-            async handle_delete() {
-                await this.$axios.$delete(`/task/tasks/${this.task.id}/`);
-                this.$store.commit('task/REMOVE_TASK', this.task);
-                this.editing = false;
-                this.$emit('deleted', this.task);
-            },
-            re_order() {
-                this.task.settings.order = this.children.map(x => x.id);
-                this.sendUpdate();
-            },
-            setPriority(value) {
-                this.task.settings.priority = value;
-                this.sendUpdate();
-            },
-            async sendUpdate() {
-                this.task.updating = true;
-                await this.$store.commit('task/UPDATE_TASK', _.cloneDeep(this.task));
+        board: {
+            type: Object,
+            default: () => {
+                return {}
             }
         }
+    },
+    data() {
+        let task = this.value;
+        if (task.settings === null) {
+            task.settings = {}
+        }
+        if (task.children && task.settings.order) {
+            task.children.forEach(x => {
+                x.order = x.id ? task.settings.order.indexOf(x.id) : 0
+            });
+            task.children.sort((a, b) => a.order - b.order);
+        }
+        return {
+            editing: false,
+            task: task,
+            updateTree: false,
+            children: task.children,
+            fetchChild: false,
+        }
+    },
+    computed: {
+        dragOptions() {
+            return {
+                animation: 0,
+                group: "description",
+                disabled: this.readonly,
+                ghostClass: "ghost"
+            }
+        }
+    },
+    watch: {
+        value: {
+            deep: true,
+            handler: function () {
+                this.task = new Task({
+                    ...this.value,
+                    settings: this.value.settings ? this.value.settings : {}
+                });
+            }
+        },
+        'value.children': {
+            deep: true,
+            handler: function (val) {
+                let v = _.cloneDeep(val);
+                v.forEach(x => {
+                    x.order = x.id && this.task.settings.order ? this.task.settings.order.indexOf(x.id) : 0
+                });
+                v.sort((a, b) => a.order - b.order);
+                this.children = v;
+            }
+        },
+        task: {
+            deep: true,
+            handler: function () {
+                this.$emit('input', {
+                    ...this.task,
+                    children: this.children
+                });
+            }
+        },
+        editing() {
+            this.$emit('editing', this.editing);
+        },
+    },
+    methods: {
+        init() {
+            this.$axios.$get('/task/tasks/', {
+                params: {
+                    board: this.task.board,
+                    page_size: 100,
+                    statuses: this.board['is_interface'] ? undefined : ['pending', 'running', 'stopping'].toString(),
+                    parent: this.value.id,
+                    user: this.currentUser ? this.currentUser.id : undefined
+                }
+            }).then(async (res) => {
+                for (let i = 0; i < res.results.length; i++) {
+                    await this.$store.commit('task/ADD_TASK', new Task({
+                        ...res.results[i],
+                        parent: res.results[i]['parent_id'],
+                        user: res.results[i]['user_id'],
+                    }));
+                }
+            })
+            this.fetchChild = true;
+        },
+        dblClick() {
+            if (this.task.id === 0) {
+                this.$emit('board-update');
+            } else {
+                this.editing = true;
+            }
+            if (this.tree) {
+                this.updateTree = true;
+            }
+            if (!this.fetchChild && this.children.length === 0) {
+                this.init();
+            }
+        },
+        close() {
+            if (this.tree) {
+                this.updateTree = false;
+            } else {
+                this.editing = false;
+            }
+        },
+        on_input: _.debounce(function () {
+            if (this.task.id) {
+                this.sendUpdate();
+            }
+        }, 500),
+        async task_run() {
+            this.playSource('audio_press');
+            if (this.children.length === 0) {
+                await this.$store.commit('task/SET_RUNNING', this.task);
+            } else {
+                this.editing = true;
+            }
+        },
+        async task_done() {
+            if (this.children.length === 0) {
+                this.task.changeStatus('complete');
+                await this.$store.commit('task/UPDATE_TASK', this.task);
+            } else {
+                this.editing = true;
+            }
+        },
+        async task_add() {
+            let st = this.$store.state.config.settings.timer;
+            let task = new Task({
+                tomato: st.tomato,
+                updating: true,
+                parent: this.task.id !== 0 ? this.task.id : undefined,
+                board: this.task.board
+            });
+            this.$emit('add', task);
+        },
+        async handle_add(task) {
+            this.$emit('add', task);
+        },
+        async handle_delete() {
+            await this.$axios.$delete(`/task/tasks/${this.task.id}/`);
+            this.$store.commit('task/REMOVE_TASK', this.task);
+            this.editing = false;
+            this.$emit('deleted', this.task);
+        },
+        re_order() {
+            this.task.settings.order = this.children.map(x => x.id);
+            this.sendUpdate();
+        },
+        setPriority(value) {
+            this.task.settings.priority = value;
+            this.sendUpdate();
+        },
+        async sendUpdate() {
+            this.task.updating = true;
+            await this.$store.commit('task/UPDATE_TASK', _.cloneDeep(this.task));
+        }
     }
+}
 </script>
 
 <style lang="scss">

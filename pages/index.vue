@@ -110,7 +110,7 @@
             </div>
         </div>
         <transition name="fade">
-            <div v-if="!(runningTask || currentUser)" class="hero is-light">
+            <div v-if="!(runningTask || currentUser)" class="hero">
                 <div class="hero-body">
                     <div class="container small content">
                         <h1 class="title">Bublask</h1>
