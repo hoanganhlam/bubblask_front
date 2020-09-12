@@ -1,100 +1,107 @@
 <template>
     <div class="board-detail">
-        <div class="hero tree-task">
-            <div class="hero-body">
-                <div class="container">
-                    <div class="columns">
-                        <div class="column is-4">
-                            <n-link to="/board" class="button is-fullwidth is-light" style="margin-bottom: 1.5rem;">
-                                <x-icon name="chevron-left"></x-icon>
-                                <span>Back</span>
-                            </n-link>
-                            <div class="media" style="margin-bottom: 1rem">
-                                <div class="media-left" v-if="board.media || updating">
-                                    <avatar class="is-48x48" v-model="board.media" :can-update="updating"/>
-                                </div>
-                                <div class="media-content">
-                                    <ce :editable="updating" class="title" elm="h1" v-model="board.title"></ce>
+        <div class="section main-body tree-task">
+            <div class="container">
+                <nav class="breadcrumb" aria-label="breadcrumbs">
+                    <ul>
+                        <li>
+                            <n-link to="/">Bubblask</n-link>
+                        </li>
+                        <li>
+                            <n-link to="/board">Board</n-link>
+                        </li>
+                        <li class="is-active">
+                            <n-link :to="`/board/${board.slug}`" aria-current="page">{{ board.title }}</n-link>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="columns">
+                    <div class="column is-4">
+                        <div class="media" style="margin-bottom: 1rem">
+                            <div class="media-left" v-if="board.media || updating">
+                                <avatar class="is-96x96" v-model="board.media" :can-update="updating"/>
+                            </div>
+                            <div class="media-content">
+                                <ce :editable="updating" class="title" elm="h1" v-model="board.title"></ce>
+                            </div>
+                        </div>
+                        <div class="notification is-light" v-if="updating || board.description">
+                            <ce :editable="updating" elm="p"
+                                v-model="board.description"
+                                placeholder="Description"/>
+                        </div>
+                        <div class="columns is-variable is-2 is-mobile"
+                             v-if="currentUser && currentUser.id === board.user">
+                            <div class="column" v-if="!updating && board['is_interface']">
+                                <div class="button is-fullwidth is-primary" @click="useBoard">Clone</div>
+                            </div>
+                            <div class="column" v-if="!updating && !board['is_interface']">
+                                <div class="button is-fullwidth is-primary" @click="launchBoard">Launch</div>
+                            </div>
+                            <div class="column" v-if="updating">
+                                <div class="button is-fullwidth" @click="handleUpdate">
+                                    <x-icon name="check"></x-icon>
                                 </div>
                             </div>
-                            <div class="notification is-light" v-if="updating || board.description">
-                                <ce :editable="updating" elm="p"
-                                    v-model="board.description"
-                                    placeholder="Description"/>
-                            </div>
-                            <div class="columns is-variable is-2 is-mobile"
-                                 v-if="currentUser && currentUser.id === board.user">
-                                <div class="column" v-if="!updating && board['is_interface']">
-                                    <div class="button is-fullwidth is-primary" @click="useBoard">Clone</div>
-                                </div>
-                                <div class="column" v-if="!updating && !board['is_interface']">
-                                    <div class="button is-fullwidth is-primary" @click="launchBoard">Launch</div>
-                                </div>
-                                <div class="column" v-if="updating">
-                                    <div class="button is-fullwidth" @click="handleUpdate">
-                                        <x-icon name="check"></x-icon>
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="button is-fullwidth" @click="updating = !updating">
-                                        <x-icon :name="!updating ? 'pen' : 'close'"></x-icon>
-                                    </div>
+                            <div class="column">
+                                <div class="button is-fullwidth" @click="updating = !updating">
+                                    <x-icon :name="!updating ? 'pen' : 'close'"></x-icon>
                                 </div>
                             </div>
                         </div>
-                        <div class="column">
-                            <div class="level is-mobile" v-if="updating">
-                                <div class="level-left">
-                                    <div class="field" v-if="board.parent === null">
-                                        <b-switch :rounded="false" v-model="board['is_interface']">Template</b-switch>
-                                    </div>
+                    </div>
+                    <div class="column">
+                        <div class="level is-mobile" v-if="updating">
+                            <div class="level-left">
+                                <div class="field" v-if="board.parent === null">
+                                    <b-switch :rounded="false" v-model="board['is_interface']">Template</b-switch>
                                 </div>
-                                <div class="level-right">
-                                    <b-dropdown position="is-bottom-left" :trap-focus="true">
-                                        <div slot="trigger" class="navbar-item clickable">
-                                            <x-icon name="cogs"></x-icon>
-                                            <span>Privacy</span>
+                            </div>
+                            <div class="level-right">
+                                <b-dropdown position="is-bottom-left" :trap-focus="true">
+                                    <div slot="trigger" class="navbar-item clickable">
+                                        <x-icon name="cogs"></x-icon>
+                                        <span>Privacy</span>
+                                    </div>
+                                    <b-dropdown-item custom style="min-width: 300px;">
+                                        <div class="level is-mobile">
+                                            <div class="level-left">Public</div>
+                                            <div class="level-right">
+                                                <b-switch :rounded="false"
+                                                          v-model="board.settings['is_public']"></b-switch>
+                                            </div>
                                         </div>
-                                        <b-dropdown-item custom style="min-width: 300px;">
-                                            <div class="level is-mobile">
-                                                <div class="level-left">Public</div>
-                                                <div class="level-right">
-                                                    <b-switch :rounded="false"
-                                                              v-model="board.settings['is_public']"></b-switch>
-                                                </div>
+                                        <div class="level is-mobile">
+                                            <div class="level-left">Team</div>
+                                            <div class="level-right">
+                                                <b-switch :rounded="false"
+                                                          v-model="board.settings['is_team']"></b-switch>
                                             </div>
-                                            <div class="level is-mobile">
-                                                <div class="level-left">Team</div>
-                                                <div class="level-right">
-                                                    <b-switch :rounded="false"
-                                                              v-model="board.settings['is_team']"></b-switch>
-                                                </div>
+                                        </div>
+                                        <div class="field"
+                                             v-if="!board.settings['is_public'] && board.settings['is_team']">
+                                            <b-input expanded placeholder="Password"
+                                                     v-model="board.settings.password"></b-input>
+                                            <p class="help">Use password to join!</p>
+                                        </div>
+                                        <div class="level is-mobile">
+                                            <div class="level-left">Readonly</div>
+                                            <div class="level-right">
+                                                <b-switch :rounded="false"
+                                                          v-model="board.settings['is_readonly']"></b-switch>
                                             </div>
-                                            <div class="field"
-                                                 v-if="!board.settings['is_public'] && board.settings['is_team']">
-                                                <b-input expanded placeholder="Password"
-                                                         v-model="board.settings.password"></b-input>
-                                                <p class="help">Use password to join!</p>
-                                            </div>
-                                            <div class="level is-mobile">
-                                                <div class="level-left">Readonly</div>
-                                                <div class="level-right">
-                                                    <b-switch :rounded="false"
-                                                              v-model="board.settings['is_readonly']"></b-switch>
-                                                </div>
-                                            </div>
-                                        </b-dropdown-item>
-                                    </b-dropdown>
-                                </div>
+                                        </div>
+                                    </b-dropdown-item>
+                                </b-dropdown>
                             </div>
-                            <div class="field" v-if="updating">
-                                <b-input icon="label" v-model="board.slug" placeholder="Board Slug"/>
-                            </div>
-                            <div class="field" v-if="updating">
-                                <b-tag-input icon="tag" placeholder="Hash tag" v-model="board.text_tags"/>
-                            </div>
-                            <task-board :tasks="storeTasks" :board="board" :readonly="updating"/>
                         </div>
+                        <div class="field" v-if="updating">
+                            <b-input icon="label" v-model="board.slug" placeholder="Board Slug"/>
+                        </div>
+                        <div class="field" v-if="updating">
+                            <b-tag-input icon="tag" placeholder="Hash tag" v-model="board.text_tags"/>
+                        </div>
+                        <task-board :tasks="storeTasks" :board="board" :readonly="updating"/>
                     </div>
                 </div>
             </div>
@@ -255,7 +262,6 @@ export default {
 }
 
 .tree-task {
-    padding: 1rem 0;
     flex: 1;
 
     .task.master .task {

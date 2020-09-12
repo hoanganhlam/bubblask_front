@@ -6,21 +6,21 @@
     "6.894d4b8.js",
     "LICENSES",
     "app.5e079a7.js",
-    "app.d44e427.css",
+    "app.8323978.css",
     "manifest.e00d1733.json",
     "pages/_user/index.bde11a3.js",
     "pages/board/_id/mindmap.339cea6.js",
     "runtime.e7ebb2b.js",
-    "styles.0fa81db.js",
-    "styles.63c81e6.css",
+    "styles.6504ece.js",
+    "styles.9cece5c.css",
     "vendors/commons.a53845b.js"
   ],
   "initial": [
     "runtime.e7ebb2b.js",
     "vendors/commons.a53845b.js",
-    "styles.63c81e6.css",
-    "styles.0fa81db.js",
-    "app.d44e427.css",
+    "styles.9cece5c.css",
+    "styles.6504ece.js",
+    "app.8323978.css",
     "app.5e079a7.js"
   ],
   "async": [
@@ -187,7 +187,7 @@
       11,
       10
     ],
-    "6ebe41b8": [
+    "1eed12b6": [
       11,
       10
     ],
@@ -195,7 +195,7 @@
       11,
       10
     ],
-    "488492f6": [
+    "6b60703a": [
       11,
       10
     ],
@@ -1387,7 +1387,7 @@
       11,
       10
     ],
-    "2f21f4c0": [
+    "02d224d4": [
       11,
       10
     ],
@@ -1395,7 +1395,7 @@
       11,
       10
     ],
-    "2516e344": [
+    "07d7ad92": [
       11,
       10
     ],
@@ -2036,7 +2036,7 @@
       11,
       10
     ],
-    "486c838a": [
+    "a19493aa": [
       11,
       10
     ],
@@ -2044,7 +2044,7 @@
       11,
       10
     ],
-    "480c05c8": [
+    "a2558f2e": [
       11,
       10
     ],
@@ -2162,7 +2162,7 @@
       "runtime.e7ebb2b.js"
     ],
     "ed305750": [
-      "styles.0fa81db.js"
+      "styles.6504ece.js"
     ],
     "07a97964": [
       "vendors/commons.a53845b.js"

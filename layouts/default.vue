@@ -198,17 +198,17 @@
                 <div class="media" v-if="currentUser">
                     <div class="media-content">
                         <div class="buttons has-addons">
-                            <button class="button" @click="onOpenSelect">
+                            <button class="button is-text" @click="onOpenSelect">
                                 <x-icon name="chevron-down"></x-icon>
                             </button>
-                            <button class="button is-selected" @click="openGroupForm(false)">
+                            <button class="button is-text is-selected" @click="openGroupForm(false)">
                                 <b class="clickable">{{ ws ? ws.name : 'Create Workspace' }}</b>
                             </button>
                         </div>
                     </div>
                     <div class="media-right">
                         <div class="buttons">
-                            <div class="button" @click="wsMinimize = !wsMinimize">
+                            <div class="button is-text" @click="wsMinimize = !wsMinimize">
                                 <x-icon :name="wsMinimize ? 'maximize': 'minimize'"></x-icon>
                             </div>
                         </div>
@@ -328,8 +328,10 @@
                             <h4 class="level-left"><b>Create new workspace</b></h4>
                             <div class="level-right">
                                 <div class="buttons">
-                                    <div class="button is-small" @click="isActive = false">Cancel</div>
-                                    <div v-if="ws" class="button is-small" @click="joinWS(ws)">Left</div>
+                                    <div class="button is-text is-small" @click="isActive = false">
+                                        <x-icon name="close"/>
+                                    </div>
+                                    <div v-if="ws" class="button is-danger is-small" @click="joinWS(ws)">Left</div>
                                 </div>
                             </div>
                         </div>
