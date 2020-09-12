@@ -10,7 +10,7 @@ module.exports = {};
 
 /***/ }),
 
-/***/ 58:
+/***/ 57:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -598,7 +598,7 @@ var Autocomplete_component = Object(componentNormalizer["a" /* default */])(
 
 /* harmony default export */ var Autocomplete = (Autocomplete_component.exports);
 // EXTERNAL MODULE: ./components/utils/config.js
-var config = __webpack_require__(2);
+var config = __webpack_require__(3);
 
 // CONCATENATED MODULE: ./node_modules/babel-loader/lib??ref--2-0!./node_modules/vue-loader/lib??vue-loader-options!./components/taginput/Taginput.vue?vue&type=script&lang=js&
 //
@@ -963,7 +963,7 @@ var Taginput_component = Object(componentNormalizer["a" /* default */])(
 
 /***/ }),
 
-/***/ 62:
+/***/ 61:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -975,7 +975,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ 70:
+/***/ 68:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -999,7 +999,7 @@ var plugins_task = __webpack_require__(5);
 var Input = __webpack_require__(6);
 
 // EXTERNAL MODULE: ./components/taginput/Taginput.vue + 14 modules
-var Taginput = __webpack_require__(58);
+var Taginput = __webpack_require__(57);
 
 // CONCATENATED MODULE: ./node_modules/babel-loader/lib??ref--2-0!./node_modules/vue-loader/lib??vue-loader-options!./pages/board/_id/mindmap.vue?vue&type=script&lang=js&
 //
@@ -1054,7 +1054,7 @@ var Taginput = __webpack_require__(58);
 
 
 
-const _ = __webpack_require__(4);
+const _ = __webpack_require__(2);
 
 /* harmony default export */ var mindmapvue_type_script_lang_js_ = ({
   name: "visual",
@@ -1409,7 +1409,7 @@ var componentNormalizer = __webpack_require__(1);
 
 function injectStyles (context) {
   
-  var style0 = __webpack_require__(62)
+  var style0 = __webpack_require__(61)
 if (style0.__inject__) style0.__inject__(context)
 
 }

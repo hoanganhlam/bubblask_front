@@ -272,14 +272,29 @@ header.header {
 
     .close {
         position: absolute;
-        top: 0;
-        right: 0;
+        top: -.5rem;
+        right: .5rem;
+        background: #FFF;
+        border: 1px solid #EEEEEE;
+        height: 1rem;
+        padding: 0 .25rem;
+
+        .icon {
+            height: 1rem;
+        }
     }
 }
 
 .button {
     &.is-text {
         text-decoration: unset;
+    }
+
+    &.is-primary,
+    &.is-dark {
+        .icon svg {
+            fill: #FFF;
+        }
     }
 
     .field {
@@ -463,102 +478,8 @@ header.header {
     padding: 0.25rem 0.75rem;
 }
 
-@media all and (max-width: 728px) {
-    .main-content .container {
-        padding: 0 .75rem;
-    }
-
-    .main-content .gap .container,
-    .main-content .section .container {
-        padding: 0;
-    }
-
-    .media-content {
-        overflow-x: unset;
-    }
-
-    .board {
-        min-width: calc(100% - 1.5rem) !important;
-        margin: 0 auto;
-    }
-}
-
-@media all and (max-width: 480px) {
-    .unsplash,
-    .container.is-fullwidth {
-        max-width: unset;
-        min-width: unset;
-    }
-
-    .footer {
-        padding: .75rem;
-    }
-
-    .vc-chrome {
-        width: 100% !important;
-    }
-
-    .timer {
-        width: 100%;
-
-        .timer--clock .clock-display-grp .number-grp {
-            height: 110px;
-
-            .num {
-                height: 110px;
-
-                p {
-                    font-size: 100px;
-                }
-            }
-        }
-
-        .timer--clock .clock-separator {
-            height: 120px;
-
-            p {
-                font-size: 100px;
-                line-height: 126.5px;
-            }
-        }
-    }
-
-    .board {
-        min-width: unset;
-        width: calc(100% - 2rem) !important;
-    }
-
-    .navbar-end {
-        .dropdown-trigger,
-        .dropdown {
-            width: 100%;
-        }
-
-        .navbar-item {
-            padding: 1rem 0.75rem;
-            border-bottom: 1px solid #EEE;
-        }
-    }
-
-    .modal-content .container {
-        padding: 0 1rem;
-    }
-
-    .column {
-        padding: .375rem .75rem;
-    }
-
-    [contenteditable] {
-        font-size: 1rem !important;
-    }
-
-    .main-content .sidebar {
-        left: -100%;
-
-        &.active {
-            left: 0;
-        }
-    }
+.columns.is-variable .column {
+    padding: var(--columnGap);
 }
 
 .gap {
@@ -606,13 +527,18 @@ header.header {
     }
 
     .sidebar {
+        left: -3.75rem;
         width: 3.75rem;
         border-right: 1px solid #EEE;
         position: absolute;
-        background: #fafafa;
+        background: #FFFFFF;
         bottom: 0;
         top: 0;
         z-index: 1;
+
+        &.active {
+            left: 0;
+        }
 
         .menu {
             width: 100%;
@@ -701,3 +627,192 @@ header.header {
     }
 }
 
+.timer-control {
+    transition: visibility 0s, opacity 0.1s linear;
+    opacity: 1;
+
+    &.hidden {
+        opacity: 0;
+    }
+}
+
+/* bounce */
+.bounce-enter-active {
+    animation: moveUp .25s;
+}
+
+.bounce-leave-active {
+    animation: moveUp .25s reverse;
+}
+
+@keyframes moveUp {
+    0% {
+        top: 100px;
+    }
+    100% {
+        bottom: 0;
+    }
+}
+
+.feature {
+    border: 1px #EEEEEE solid;
+    padding: .5rem .75rem;
+    margin-bottom: .5rem;
+    background: #FFFFFF;
+}
+
+.boards {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    .board {
+        width: 550px;
+        margin: 0 .5rem;
+
+        .media-right {
+            margin-left: .5rem;
+        }
+    }
+}
+
+.task.master {
+    position: relative;
+
+    .task {
+        position: unset;
+
+        .card {
+            top: 5%;
+        }
+    }
+}
+
+.fuh-button.fuh-fixed {
+    border-radius: 0 !important;
+    background: #FFFFFF !important;
+}
+
+.sidebar-control {
+    position: absolute;
+    top: calc(50% - 70px);
+    right: -21px;
+    border-left: 0;
+    border-color: #eee;
+    padding: 1.5rem .5rem;
+}
+
+@media all and (max-width: 728px) {
+    .main-content .container {
+        padding: 0 .75rem;
+    }
+
+    .main-content .gap .container,
+    .main-content .section .container {
+        padding: 0;
+    }
+
+    .media-content {
+        overflow-x: unset;
+    }
+
+    .board {
+        min-width: calc(100% - 1.5rem) !important;
+        margin: 0 auto;
+    }
+
+    .fuh-embed,
+    .fuh-button.fuh-fixed {
+        left: .5rem !important;
+    }
+
+    .fuh-button.fuh-fixed {
+        padding: .95rem 1rem !important;
+
+        span:last-child {
+            display: none;
+        }
+
+        svg {
+            margin-right: 0 !important;
+        }
+    }
+    .fuh-embed {
+        width: calc(100% - 1.25rem);
+        min-width: unset !important;
+        height: 100% !important;
+        max-height: calc(100vh - 100px) !important;
+    }
+}
+
+@media all and (max-width: 480px) {
+    .unsplash,
+    .container.is-fullwidth {
+        max-width: unset;
+        min-width: unset;
+    }
+
+    .footer {
+        padding: .75rem;
+    }
+
+    .vc-chrome {
+        width: 100% !important;
+    }
+
+    .timer {
+        width: 100%;
+
+        .timer--clock .clock-display-grp .number-grp {
+            height: 110px;
+
+            .num {
+                height: 110px;
+
+                p {
+                    font-size: 100px;
+                }
+            }
+        }
+
+        .timer--clock .clock-separator {
+            height: 120px;
+
+            p {
+                font-size: 100px;
+                line-height: 126.5px;
+            }
+        }
+    }
+
+    .board {
+        min-width: unset;
+        width: calc(100% - 2rem) !important;
+    }
+
+    .navbar-end {
+        .dropdown-trigger,
+        .dropdown {
+            width: 100%;
+        }
+
+        .navbar-item {
+            padding: 1rem 0.75rem;
+            border-bottom: 1px solid #EEE;
+        }
+    }
+
+    .modal-content .container {
+        padding: 0 1rem;
+    }
+
+    .column {
+        padding: .375rem .75rem;
+    }
+
+    [contenteditable] {
+        font-size: 1rem !important;
+    }
+}

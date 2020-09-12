@@ -9,9 +9,9 @@
                                 <x-icon name="chevron-left"></x-icon>
                                 <span>Back</span>
                             </n-link>
-                            <div class="media" style="margin-bottom: 1.5rem">
+                            <div class="media" style="margin-bottom: 1rem">
                                 <div class="media-left" v-if="board.media || updating">
-                                    <avatar v-model="board.media" :can-update="updating"/>
+                                    <avatar class="is-48x48" v-model="board.media" :can-update="updating"/>
                                 </div>
                                 <div class="media-content">
                                     <ce :editable="updating" class="title" elm="h1" v-model="board.title"></ce>
@@ -25,7 +25,7 @@
                             <div class="columns is-variable is-2 is-mobile"
                                  v-if="currentUser && currentUser.id === board.user">
                                 <div class="column" v-if="!updating && board['is_interface']">
-                                    <div class="button is-fullwidth is-primary" @click="useBoard">Use</div>
+                                    <div class="button is-fullwidth is-primary" @click="useBoard">Clone</div>
                                 </div>
                                 <div class="column" v-if="!updating && !board['is_interface']">
                                     <div class="button is-fullwidth is-primary" @click="launchBoard">Launch</div>
@@ -93,8 +93,7 @@
                             <div class="field" v-if="updating">
                                 <b-tag-input icon="tag" placeholder="Hash tag" v-model="board.text_tags"/>
                             </div>
-                            <task-board :tasks="flat_tasks" :board="board" :readonly="readonly" tree
-                                        @deleted="handleDeleted"/>
+                            <task-board :tasks="storeTasks" :board="board" :readonly="updating"/>
                         </div>
                     </div>
                 </div>
@@ -109,20 +108,22 @@ import BTagInput from "../../../components/taginput/Taginput";
 import BInput from "../../../components/input/Input";
 import TaskBoard from "../../../components/TaskBoard";
 import BDropdownItem from "../../../components/dropdown/DropdownItem";
+import {Task} from "@/plugins/task";
 
 export default {
     name: "TemplateDetail",
     components: {BDropdownItem, TaskBoard, BInput, BTagInput, Avatar},
     async fetch() {
-        let query = {};
         if (this.$route.params.id !== 'visual') {
             this.board = await this.$axios.$get(`/task/boards/${this.$route.params.id}/`);
-            query.board = this.board.id;
+            let rp = await this.$axios.$get('/task/tasks/', {
+                params: {
+                    board: this.board.id,
+                    page_size: 100
+                }
+            });
+            this.board.tasks = rp.results;
         }
-        let flat_tasks = await this.$axios.$get('/task/tasks/', {
-            params: query
-        });
-        this.flat_tasks = flat_tasks['results'];
         this.board = {
             ...this.board,
             text_tags: this.board['hash_tags'] ? this.board['hash_tags'].map(x => x.title) : [],
@@ -133,13 +134,12 @@ export default {
     data() {
         return {
             updating: false,
-            flat_tasks: [],
             board: {
                 title: "Your Work",
                 description: "Manage your task on a tree!",
                 slug: null
             },
-            boardSlug: null
+            boardSlug: null,
         }
     },
     head() {
@@ -149,7 +149,15 @@ export default {
     },
     computed: {
         storeTasks() {
-            return this.$store.state.task.tasks.filter(x => {
+            if (process['server']) {
+                return this.board.tasks.map(x => new Task({
+                    ...x,
+                    board: x['board_id'],
+                    parent: x['parent_id'],
+                    user: x['user_id'],
+                }))
+            }
+            return this.hierarchy(this.$store.state.task.tasks, {idKey: 'id', parentKey: 'parent'}).filter(x => {
                 if (this.board.id) {
                     return x.board === this.board.id && x.id;
                 } else {
@@ -194,10 +202,6 @@ export default {
                 })
             }
         },
-        handleDeleted(task) {
-            let index = this.flat_tasks.map(x => x.id).indexOf(task.id);
-            this.flat_tasks.splice(index, 1);
-        },
         useBoard() {
             this.$axios.$post(`/task/boards/${this.board.id}/clone/`).then(res => {
                 this.$router.replace({path: `/board/${res.slug}`})
@@ -206,18 +210,24 @@ export default {
             })
         },
         launchBoard() {
+        },
+        async syncTask() {
+            if (!this.board.tasks) return;
+            for (let i = 0; i < this.board.tasks.length; i++) {
+                await this.$store.commit('task/ADD_TASK', new Task({
+                    ...this.board.tasks[i],
+                    board: this.board.tasks[i]['board_id'],
+                    parent: this.board.tasks[i]['parent_id'],
+                    user: this.board.tasks[i]['user_id'],
+                }));
+            }
         }
     },
     watch: {
-        storeTasks: {
+        'board.tasks': {
             deep: true,
             handler: function () {
-                let ids = this.flat_tasks.map(x => x.id);
-                this.storeTasks.forEach(item => {
-                    if (!ids.includes(item.id)) {
-                        this.flat_tasks.unshift(item);
-                    }
-                })
+                this.syncTask();
             }
         }
     },
@@ -264,10 +274,6 @@ export default {
         }
 
         .card {
-            position: unset;
-            box-shadow: unset;
-            border: 0;
-
             .card-content {
                 padding: 0;
             }
@@ -286,6 +292,10 @@ export default {
 
         .notification {
             padding: .75rem;
+        }
+
+        .field .label {
+            padding: 0 .5rem;
         }
     }
 }

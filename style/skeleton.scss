@@ -89,15 +89,17 @@
 
 .skeleton-board {
     background-color: #FFF;
-    height: 48px;
+    height: 76px;
     width: 100%;
     background-repeat: repeat-y;
 
     @include loading-skeleton(
                 (
                     (x: 0, y: 0px, width: 48px, height: 48px),
-                    (x: 58px, y: 0px, width: 80%, height: 10px),
-                    (x: 58px, y: 20px, width: calc(48px), height: 10px)
+                    (x: 58px, y: 0px, width: 80%, height: 15px),
+                    (x: 58px, y: 20px, width: 90%, height: 10px),
+                    (x: 58px, y: 40px, width: calc(78px), height: 10px),
+                    (x: 58px, y: 60px, width: calc(30px), height: 10px),
                 ),
             96px,
             #eee,

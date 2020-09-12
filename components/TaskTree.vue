@@ -68,7 +68,7 @@
                 let st = this.$store.state.config.settings.timer;
                 let task = new Task({
                     tomato: st.tomato,
-                    updating: true,
+                    update: true,
                     parent: this.task.id !== 0 ? this.task.id : undefined,
                     board: this.task.board
                 });

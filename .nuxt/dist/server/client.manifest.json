@@ -3,30 +3,30 @@
   "all": [
     "../server/index.spa.html",
     "../server/index.ssr.html",
-    "6.0d80a6e.js",
+    "6.894d4b8.js",
     "LICENSES",
-    "app.8edebd0.js",
-    "app.c5c1373.css",
+    "app.5e079a7.js",
+    "app.d44e427.css",
     "manifest.e00d1733.json",
-    "pages/_user/index.d6f610e.js",
-    "pages/board/_id/mindmap.87d94ea.js",
-    "runtime.f89cafe.js",
-    "styles.060549f.js",
-    "styles.7c753b2.css",
-    "vendors/commons.add365d.js"
+    "pages/_user/index.bde11a3.js",
+    "pages/board/_id/mindmap.339cea6.js",
+    "runtime.e7ebb2b.js",
+    "styles.0fa81db.js",
+    "styles.63c81e6.css",
+    "vendors/commons.a53845b.js"
   ],
   "initial": [
-    "runtime.f89cafe.js",
-    "vendors/commons.add365d.js",
-    "styles.7c753b2.css",
-    "styles.060549f.js",
-    "app.c5c1373.css",
-    "app.8edebd0.js"
+    "runtime.e7ebb2b.js",
+    "vendors/commons.a53845b.js",
+    "styles.63c81e6.css",
+    "styles.0fa81db.js",
+    "app.d44e427.css",
+    "app.5e079a7.js"
   ],
   "async": [
-    "6.0d80a6e.js",
-    "pages/_user/index.d6f610e.js",
-    "pages/board/_id/mindmap.87d94ea.js"
+    "6.894d4b8.js",
+    "pages/_user/index.bde11a3.js",
+    "pages/board/_id/mindmap.339cea6.js"
   ],
   "modules": {
     "12941129": [
@@ -111,12 +111,6 @@
     "b9595c88": [
       12
     ],
-    "10321c87": [
-      12
-    ],
-    "4c6e4e1f": [
-      12
-    ],
     "45bfe540": [
       5,
       4
@@ -124,6 +118,12 @@
     "3e1a706f": [
       5,
       4
+    ],
+    "10321c87": [
+      12
+    ],
+    "4c6e4e1f": [
+      12
     ],
     "10c6cfc1": [
       12
@@ -259,9 +259,6 @@
     "73758c34": [
       12
     ],
-    "3ed8c14c": [
-      12
-    ],
     "4bd33b5b": [
       12
     ],
@@ -342,7 +339,7 @@
     "749b1fae": [
       12
     ],
-    "67af42cd": [
+    "3ed8c14c": [
       12
     ],
     "d2d333cc": [
@@ -355,6 +352,9 @@
       12
     ],
     "738246ed": [
+      12
+    ],
+    "67af42cd": [
       12
     ],
     "444644c4": [
@@ -562,10 +562,6 @@
       11,
       10
     ],
-    "b3338984": [
-      11,
-      10
-    ],
     "049c35fb": [
       11,
       10
@@ -645,7 +641,7 @@
       11,
       10
     ],
-    "c9f549a0": [
+    "d211a1fa": [
       11,
       10
     ],
@@ -653,7 +649,7 @@
       11,
       10
     ],
-    "0506a632": [
+    "00f87a05": [
       11,
       10
     ],
@@ -1391,7 +1387,7 @@
       11,
       10
     ],
-    "2612a4e0": [
+    "2f21f4c0": [
       11,
       10
     ],
@@ -1399,7 +1395,7 @@
       11,
       10
     ],
-    "1c079364": [
+    "2516e344": [
       11,
       10
     ],
@@ -1443,7 +1439,7 @@
       11,
       10
     ],
-    "35f345c8": [
+    "3e84cc6e": [
       11,
       10
     ],
@@ -1451,7 +1447,7 @@
       11,
       10
     ],
-    "8266a34c": [
+    "8af829f2": [
       11,
       10
     ],
@@ -1599,7 +1595,7 @@
       11,
       10
     ],
-    "1592776c": [
+    "0de07837": [
       11,
       10
     ],
@@ -1607,7 +1603,7 @@
       11,
       10
     ],
-    "1a98002a": [
+    "12e600f5": [
       11,
       10
     ],
@@ -1943,10 +1939,6 @@
       11,
       10
     ],
-    "6c6f3866": [
-      11,
-      10
-    ],
     "72915e1e": [
       7,
       12,
@@ -2044,7 +2036,7 @@
       11,
       10
     ],
-    "03b4297d": [
+    "486c838a": [
       11,
       10
     ],
@@ -2052,7 +2044,7 @@
       11,
       10
     ],
-    "0353abbb": [
+    "480c05c8": [
       11,
       10
     ],
@@ -2084,7 +2076,7 @@
       11,
       10
     ],
-    "4babe487": [
+    "1dc9f906": [
       11,
       10
     ],
@@ -2092,7 +2084,7 @@
       11,
       10
     ],
-    "47df7c45": [
+    "19fd90c4": [
       11,
       10
     ],
@@ -2132,10 +2124,6 @@
       11,
       10
     ],
-    "c0be3c9a": [
-      11,
-      10
-    ],
     "ab12e3be": [
       11,
       10
@@ -2159,25 +2147,25 @@
   },
   "assetsMapping": {
     "bba68bf6": [
-      "6.0d80a6e.js"
+      "6.894d4b8.js"
     ],
     "1a3ae26b": [
-      "app.8edebd0.js"
+      "app.5e079a7.js"
     ],
     "55a0d02c": [
-      "pages/_user/index.d6f610e.js"
+      "pages/_user/index.bde11a3.js"
     ],
     "7d3ca88b": [
-      "pages/board/_id/mindmap.87d94ea.js"
+      "pages/board/_id/mindmap.339cea6.js"
     ],
     "6fca0322": [
-      "runtime.f89cafe.js"
+      "runtime.e7ebb2b.js"
     ],
     "ed305750": [
-      "styles.060549f.js"
+      "styles.0fa81db.js"
     ],
     "07a97964": [
-      "vendors/commons.add365d.js"
+      "vendors/commons.a53845b.js"
     ]
   }
 }

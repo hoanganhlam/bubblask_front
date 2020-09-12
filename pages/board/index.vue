@@ -1,71 +1,78 @@
 <template>
-    <div>
-        <div class="section">
-            <div class="container">
-                <div class="level is-mobile">
+    <div class="section">
+        <div class="container">
+            <div class="level is-mobile">
+                <div class="level-left">
+                    <h1 class="title is-spaced">Board</h1>
+                </div>
+                <div class="level-right">
+                    <div v-if="currentUser" class="button is-dark" @click="create">
+                        <x-icon name="plus"></x-icon>
+                        <span>Create</span>
+                    </div>
+                </div>
+            </div>
+            <div class="subtitle">Get or sharing template to learn something by expert!</div>
+            <div class="" v-if="query.page === 1">
+                <board-list v-if="currentUser"/>
+            </div>
+            <div class="subsection">
+                <h2 class="title">Template</h2>
+                <div class="level">
                     <div class="level-left">
-                        <h1 class="title is-spaced">Board</h1>
+                        <div class="field">
+                            <div class="control">
+                                <b-input v-model="query.search" @input="on_input"
+                                         icon="search"
+                                         type="search"
+                                         placeholder="Learn something"/>
+                            </div>
+                        </div>
                     </div>
                     <div class="level-right">
-                        <div v-if="currentUser" class="button is-light" @click="create">
-                            <x-icon name="plus"></x-icon>
-                            <span>Create</span>
+                        <div class="buttons" v-if="taxonomies.length">
+                            <a v-for="tax in taxonomies" :key="tax.id" :href="`/board/?tag=${tax.id}`"
+                               v-bind:class="{'is-primary': tag && tag.id === tax.id}"
+                               class="button is-small" @click="clickTag($event, tax)">{{ tax.title }}</a>
                         </div>
                     </div>
                 </div>
-                <div class="subtitle">Get or sharing template to learn something by expert!</div>
-                <div class="" v-if="query.page === 1">
-                    <board-list v-if="currentUser"/>
+                <div class="level is-mobile">
+                    <div class="level-left">
+                        <h4 class="widget_title">List</h4>
+                    </div>
+                    <div class="level-right">
+                        <div class="buttons">
+                            <div class="button is-small" @click="paging(false)"
+                                 v-bind:class="{'is-static': query.page === 1}">
+                                Previous
+                            </div>
+                            <div class="button is-small" @click="paging(true)"
+                                 v-bind:class="{'is-static': response.count / query.page_size <= query.page}">Next
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="subsection">
-                    <h2 class="title has-text-centered">Template</h2>
-                    <div class="field">
-                        <div class="control">
-                            <b-input type="search" placeholder="Learn something"></b-input>
-                        </div>
-                    </div>
-                    <div class="buttons" v-if="taxonomies.length">
-                        <a v-for="tax in taxonomies" :key="tax.id" :href="`/board/?tag=${tax.id}`"
-                           v-bind:class="{'is-primary': tag && tag.id === tax.id}"
-                           class="button is-small" @click="clickTag($event, tax)">{{ tax.title }}</a>
-                    </div>
-                    <div class="level is-mobile">
-                        <div class="level-left">
-                            <h4 class="widget_title">List</h4>
-                        </div>
-                        <div class="level-right">
-                            <div class="buttons">
-                                <div class="button is-small" @click="paging(false)"
-                                     v-bind:class="{'is-static': query.page === 1}">
-                                    Previous
-                                </div>
-                                <div class="button is-small" @click="paging(true)"
-                                     v-bind:class="{'is-static': response.count / query.page_size <= query.page}">Next
-                                </div>
+                <div v-if="response.results.length" class="columns is-variable is-2 is-multiline">
+                    <div v-for="board in response.results" :key="board.id" class="column is-4">
+                        <div class="media box template-board">
+                            <div class="media-left">
+                                <avatar :value="board.media" class="is-48x48"></avatar>
+                            </div>
+                            <div class="media-content">
+                                <h4 class="widget-title">
+                                    <n-link :to="`/board/${board.slug}`">{{ board.title }}</n-link>
+                                </h4>
+                                <p>{{ board.description }}</p>
+                                <small>{{ board['task_count'] }} Tasks</small>
                             </div>
                         </div>
                     </div>
-                    <div v-if="response.results.length" class="columns is-multiline">
-                        <div v-for="board in response.results" :key="board.id" class="column is-4">
-                            <div class="media box clickable template-board" @click="navigate(`/board/${board.slug}`)">
-                                <div class="media-left">
-                                    <avatar :value="board.media" class="is-48x48"></avatar>
-                                </div>
-                                <div class="media-content">
-                                    <h4 class="widget-title">
-                                        <n-link :to="`/board/${board.slug}`">{{ board.title }}</n-link>
-                                    </h4>
-                                    <p>{{ board.description }}</p>
-                                    <small>3 Tasks</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div v-else class="columns is-multiline">
-                        <div v-for="i in query.page_size" :key="i" class="column is-4">
-                            <div class="box">
-                                <div class="skeleton-board"></div>
-                            </div>
+                </div>
+                <div v-else class="columns is-multiline">
+                    <div v-for="i in query.page_size" :key="i" class="column is-4">
+                        <div class="box">
+                            <div class="skeleton-board"></div>
                         </div>
                     </div>
                 </div>
@@ -79,6 +86,7 @@ import Board from "../../components/Board";
 import Avatar from "../../components/Avatar";
 import BoardList from "../../components/BoardList";
 import BInput from "../../components/input/Input";
+import {debounce} from "lodash";
 
 export default {
     name: "Template",
@@ -103,7 +111,8 @@ export default {
             query: {
                 page_size: 9,
                 page: 1,
-                is_interface: true
+                is_interface: true,
+                search: null
             },
             taxonomies: []
         }
@@ -149,7 +158,11 @@ export default {
                 }
             }
             await this.$fetch();
-        }
+        },
+        on_input: debounce(function () {
+            this.query.page = 1;
+            this.$fetch();
+        }, 800)
     }
 }
 </script>

@@ -10,7 +10,7 @@ module.exports = {};
 
 /***/ }),
 
-/***/ 58:
+/***/ 57:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -598,7 +598,7 @@ var Autocomplete_component = Object(componentNormalizer["a" /* default */])(
 
 /* harmony default export */ var Autocomplete = (Autocomplete_component.exports);
 // EXTERNAL MODULE: ./components/utils/config.js
-var config = __webpack_require__(2);
+var config = __webpack_require__(3);
 
 // CONCATENATED MODULE: ./node_modules/babel-loader/lib??ref--2-0!./node_modules/vue-loader/lib??vue-loader-options!./components/taginput/Taginput.vue?vue&type=script&lang=js&
 //
@@ -963,17 +963,17 @@ var Taginput_component = Object(componentNormalizer["a" /* default */])(
 
 /***/ }),
 
-/***/ 59:
+/***/ 58:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./components/TaskBoard.vue?vue&type=template&id=176fe5d6&scoped=true&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"board"},[(!_vm.readonly)?_vm._ssrNode("<div class=\"media\" data-v-176fe5d6>","</div>",[_vm._ssrNode("<div class=\"media-content\" data-v-176fe5d6>","</div>",[_vm._ssrNode("<div class=\"task has-text-centered\" data-v-176fe5d6>","</div>",[_vm._ssrNode("<div class=\"notification\" data-v-176fe5d6>","</div>",[_c('x-icon',{attrs:{"name":"plus"}})],1)])]),_vm._ssrNode(" "),_c('n-link',{staticClass:"media-right",attrs:{"to":"/board/visual"}},[_c('div',{staticClass:"task"},[_c('div',{staticClass:"notification"},[_c('x-icon',{attrs:{"name":"file-tree-outline"}})],1)])])],2):_vm._e(),_vm._ssrNode(" "),(!_vm.loading && _vm.activeTasks.length)?_c('draggable',_vm._b({on:{"change":_vm.handle_order},model:{value:(_vm.activeTasks),callback:function ($$v) {_vm.activeTasks=$$v},expression:"activeTasks"}},'draggable',_vm.dragOptions,false),_vm._l((_vm.activeTasks),function(task,i){return _c('task',{key:i,staticClass:"master",attrs:{"value":task,"readonly":_vm.readonly,"tree":_vm.tree,"board":_vm.board},on:{"add":_vm.handle_add_child,"editing":function($event){_vm.disabledDrag = $event},"deleted":function($event){return _vm.$emit('deleted', $event)}}})}),1):_vm._e(),_vm._ssrNode(" "+((_vm.loading)?("<div class=\"tasks\" data-v-176fe5d6>"+(_vm._ssrList((5),function(i){return ("<div class=\"task\" data-v-176fe5d6><div class=\"notification media\" data-v-176fe5d6><div class=\"skeleton-task\" data-v-176fe5d6></div></div></div>")}))+"</div>"):"<!---->"))],2)}
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./components/TaskBoard.vue?vue&type=template&id=42d170bc&scoped=true&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"board"},[(!_vm.readonly)?_vm._ssrNode("<div class=\"media\" data-v-42d170bc>","</div>",[_vm._ssrNode("<div class=\"media-content\" data-v-42d170bc>","</div>",[_vm._ssrNode("<div class=\"task has-text-centered\" data-v-42d170bc>","</div>",[_vm._ssrNode("<div class=\"notification\" data-v-42d170bc>","</div>",[_c('x-icon',{attrs:{"name":"plus"}})],1)])]),_vm._ssrNode(" "),_c('n-link',{staticClass:"media-right",attrs:{"to":"/board/visual"}},[_c('div',{staticClass:"task"},[_c('div',{staticClass:"notification"},[_c('x-icon',{attrs:{"name":"file-tree-outline"}})],1)])])],2):_vm._e(),_vm._ssrNode(" "),(!_vm.loading && _vm.activeTasks.length)?_c('draggable',_vm._b({on:{"change":_vm.handle_order},model:{value:(_vm.activeTasks),callback:function ($$v) {_vm.activeTasks=$$v},expression:"activeTasks"}},'draggable',_vm.dragOptions,false),_vm._l((_vm.activeTasks),function(task,i){return _c('task',{key:i,staticClass:"master",attrs:{"value":task,"readonly":_vm.readonly,"tree":_vm.tree,"board":_vm.board},on:{"add":_vm.handle_add_child,"editing":function($event){_vm.disabledDrag = $event},"deleted":function($event){return _vm.$emit('deleted', $event)}}})}),1):_vm._e(),_vm._ssrNode(" "+((_vm.loading)?("<div class=\"tasks\" data-v-42d170bc>"+(_vm._ssrList((5),function(i){return ("<div class=\"task\" data-v-42d170bc><div class=\"notification media\" data-v-42d170bc><div class=\"skeleton-task\" data-v-42d170bc></div></div></div>")}))+"</div>"):"<!---->"))],2)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./components/TaskBoard.vue?vue&type=template&id=176fe5d6&scoped=true&
+// CONCATENATED MODULE: ./components/TaskBoard.vue?vue&type=template&id=42d170bc&scoped=true&
 
 // EXTERNAL MODULE: ./plugins/task.js
 var plugins_task = __webpack_require__(5);
@@ -1013,7 +1013,7 @@ var plugins_task = __webpack_require__(5);
 //
 //
 //
-const _ = __webpack_require__(4);
+const _ = __webpack_require__(2);
 
 
 /* harmony default export */ var TaskBoardvue_type_script_lang_js_ = ({
@@ -1073,13 +1073,15 @@ const _ = __webpack_require__(4);
     init_task(val) {
       if (val) {
         this.activeTasks = [];
+        let temp = [];
 
-        let temp = _.cloneDeep(val.filter(x => !['stopped', 'complete'].includes(x.status)));
+        if (this.board) {
+          temp = _.cloneDeep(val);
+        } else {
+          temp = _.cloneDeep(val.filter(x => !['stopped', 'complete'].includes(x.status)));
+        }
 
-        this.activeTasks = this.hierarchy(temp, {
-          idKey: 'id',
-          parentKey: 'parent'
-        });
+        this.activeTasks = temp;
         this.activeTasks.forEach(x => {
           x.order = x.id ? this.taskOrder.indexOf(x.id) : 0;
         });
@@ -1118,7 +1120,7 @@ const _ = __webpack_require__(4);
     async handle_add() {
       let task = new plugins_task["a" /* Task */]({
         tomato: this.timerSetting.tomato,
-        updating: true,
+        update: true,
         board: this.board ? this.board.id : null
       });
       await this.$store.commit('task/ADD_TASK', task);
@@ -1179,7 +1181,7 @@ var component = Object(componentNormalizer["a" /* default */])(
   staticRenderFns,
   false,
   injectStyles,
-  "176fe5d6",
+  "42d170bc",
   "4e1e1079"
   
 )
@@ -1188,7 +1190,7 @@ var component = Object(componentNormalizer["a" /* default */])(
 
 /***/ }),
 
-/***/ 61:
+/***/ 60:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1200,34 +1202,37 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ 69:
+/***/ 67:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./pages/board/_id/index.vue?vue&type=template&id=062db60a&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"board-detail"},[_vm._ssrNode("<div class=\"hero tree-task\">","</div>",[_vm._ssrNode("<div class=\"hero-body\">","</div>",[_vm._ssrNode("<div class=\"container\">","</div>",[_vm._ssrNode("<div class=\"columns\">","</div>",[_vm._ssrNode("<div class=\"column is-4\">","</div>",[_c('n-link',{staticClass:"button is-fullwidth is-light",staticStyle:{"margin-bottom":"1.5rem"},attrs:{"to":"/board"}},[_c('x-icon',{attrs:{"name":"chevron-left"}}),_vm._v(" "),_c('span',[_vm._v("Back")])],1),_vm._ssrNode(" "),_vm._ssrNode("<div class=\"media\" style=\"margin-bottom: 1.5rem\">","</div>",[(_vm.board.media || _vm.updating)?_vm._ssrNode("<div class=\"media-left\">","</div>",[_c('avatar',{attrs:{"can-update":_vm.updating},model:{value:(_vm.board.media),callback:function ($$v) {_vm.$set(_vm.board, "media", $$v)},expression:"board.media"}})],1):_vm._e(),_vm._ssrNode(" "),_vm._ssrNode("<div class=\"media-content\">","</div>",[_c('ce',{staticClass:"title",attrs:{"editable":_vm.updating,"elm":"h1"},model:{value:(_vm.board.title),callback:function ($$v) {_vm.$set(_vm.board, "title", $$v)},expression:"board.title"}})],1)],2),_vm._ssrNode(" "),(_vm.updating || _vm.board.description)?_vm._ssrNode("<div class=\"notification is-light\">","</div>",[_c('ce',{attrs:{"editable":_vm.updating,"elm":"p","placeholder":"Description"},model:{value:(_vm.board.description),callback:function ($$v) {_vm.$set(_vm.board, "description", $$v)},expression:"board.description"}})],1):_vm._e(),_vm._ssrNode(" "),(_vm.currentUser && _vm.currentUser.id === _vm.board.user)?_vm._ssrNode("<div class=\"columns is-variable is-2 is-mobile\">","</div>",[_vm._ssrNode(((!_vm.updating && _vm.board['is_interface'])?("<div class=\"column\"><div class=\"button is-fullwidth is-primary\">Use</div></div>"):"<!---->")+" "+((!_vm.updating && !_vm.board['is_interface'])?("<div class=\"column\"><div class=\"button is-fullwidth is-primary\">Launch</div></div>"):"<!---->")+" "),(_vm.updating)?_vm._ssrNode("<div class=\"column\">","</div>",[_vm._ssrNode("<div class=\"button is-fullwidth\">","</div>",[_c('x-icon',{attrs:{"name":"check"}})],1)]):_vm._e(),_vm._ssrNode(" "),_vm._ssrNode("<div class=\"column\">","</div>",[_vm._ssrNode("<div class=\"button is-fullwidth\">","</div>",[_c('x-icon',{attrs:{"name":!_vm.updating ? 'pen' : 'close'}})],1)])],2):_vm._e()],2),_vm._ssrNode(" "),_vm._ssrNode("<div class=\"column\">","</div>",[(_vm.updating)?_vm._ssrNode("<div class=\"level is-mobile\">","</div>",[_vm._ssrNode("<div class=\"level-left\">","</div>",[(_vm.board.parent === null)?_vm._ssrNode("<div class=\"field\">","</div>",[_c('b-switch',{attrs:{"rounded":false},model:{value:(_vm.board['is_interface']),callback:function ($$v) {_vm.$set(_vm.board, 'is_interface', $$v)},expression:"board['is_interface']"}},[_vm._v("Template")])],1):_vm._e()]),_vm._ssrNode(" "),_vm._ssrNode("<div class=\"level-right\">","</div>",[_c('b-dropdown',{attrs:{"position":"is-bottom-left","trap-focus":true}},[_c('div',{staticClass:"navbar-item clickable",attrs:{"slot":"trigger"},slot:"trigger"},[_c('x-icon',{attrs:{"name":"cogs"}}),_vm._v(" "),_c('span',[_vm._v("Privacy")])],1),_vm._v(" "),_c('b-dropdown-item',{staticStyle:{"min-width":"300px"},attrs:{"custom":""}},[_c('div',{staticClass:"level is-mobile"},[_c('div',{staticClass:"level-left"},[_vm._v("Public")]),_vm._v(" "),_c('div',{staticClass:"level-right"},[_c('b-switch',{attrs:{"rounded":false},model:{value:(_vm.board.settings['is_public']),callback:function ($$v) {_vm.$set(_vm.board.settings, 'is_public', $$v)},expression:"board.settings['is_public']"}})],1)]),_vm._v(" "),_c('div',{staticClass:"level is-mobile"},[_c('div',{staticClass:"level-left"},[_vm._v("Team")]),_vm._v(" "),_c('div',{staticClass:"level-right"},[_c('b-switch',{attrs:{"rounded":false},model:{value:(_vm.board.settings['is_team']),callback:function ($$v) {_vm.$set(_vm.board.settings, 'is_team', $$v)},expression:"board.settings['is_team']"}})],1)]),_vm._v(" "),(!_vm.board.settings['is_public'] && _vm.board.settings['is_team'])?_c('div',{staticClass:"field"},[_c('b-input',{attrs:{"expanded":"","placeholder":"Password"},model:{value:(_vm.board.settings.password),callback:function ($$v) {_vm.$set(_vm.board.settings, "password", $$v)},expression:"board.settings.password"}}),_vm._v(" "),_c('p',{staticClass:"help"},[_vm._v("Use password to join!")])],1):_vm._e(),_vm._v(" "),_c('div',{staticClass:"level is-mobile"},[_c('div',{staticClass:"level-left"},[_vm._v("Readonly")]),_vm._v(" "),_c('div',{staticClass:"level-right"},[_c('b-switch',{attrs:{"rounded":false},model:{value:(_vm.board.settings['is_readonly']),callback:function ($$v) {_vm.$set(_vm.board.settings, 'is_readonly', $$v)},expression:"board.settings['is_readonly']"}})],1)])])],1)],1)],2):_vm._e(),_vm._ssrNode(" "),(_vm.updating)?_vm._ssrNode("<div class=\"field\">","</div>",[_c('b-input',{attrs:{"icon":"label","placeholder":"Board Slug"},model:{value:(_vm.board.slug),callback:function ($$v) {_vm.$set(_vm.board, "slug", $$v)},expression:"board.slug"}})],1):_vm._e(),_vm._ssrNode(" "),(_vm.updating)?_vm._ssrNode("<div class=\"field\">","</div>",[_c('b-tag-input',{attrs:{"icon":"tag","placeholder":"Hash tag"},model:{value:(_vm.board.text_tags),callback:function ($$v) {_vm.$set(_vm.board, "text_tags", $$v)},expression:"board.text_tags"}})],1):_vm._e(),_vm._ssrNode(" "),_c('task-board',{attrs:{"tasks":_vm.flat_tasks,"board":_vm.board,"readonly":_vm.readonly,"tree":""},on:{"deleted":_vm.handleDeleted}})],2)],2)])])])])}
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./pages/board/_id/index.vue?vue&type=template&id=0b4df4aa&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"board-detail"},[_vm._ssrNode("<div class=\"hero tree-task\">","</div>",[_vm._ssrNode("<div class=\"hero-body\">","</div>",[_vm._ssrNode("<div class=\"container\">","</div>",[_vm._ssrNode("<div class=\"columns\">","</div>",[_vm._ssrNode("<div class=\"column is-4\">","</div>",[_c('n-link',{staticClass:"button is-fullwidth is-light",staticStyle:{"margin-bottom":"1.5rem"},attrs:{"to":"/board"}},[_c('x-icon',{attrs:{"name":"chevron-left"}}),_vm._v(" "),_c('span',[_vm._v("Back")])],1),_vm._ssrNode(" "),_vm._ssrNode("<div class=\"media\" style=\"margin-bottom: 1rem\">","</div>",[(_vm.board.media || _vm.updating)?_vm._ssrNode("<div class=\"media-left\">","</div>",[_c('avatar',{staticClass:"is-48x48",attrs:{"can-update":_vm.updating},model:{value:(_vm.board.media),callback:function ($$v) {_vm.$set(_vm.board, "media", $$v)},expression:"board.media"}})],1):_vm._e(),_vm._ssrNode(" "),_vm._ssrNode("<div class=\"media-content\">","</div>",[_c('ce',{staticClass:"title",attrs:{"editable":_vm.updating,"elm":"h1"},model:{value:(_vm.board.title),callback:function ($$v) {_vm.$set(_vm.board, "title", $$v)},expression:"board.title"}})],1)],2),_vm._ssrNode(" "),(_vm.updating || _vm.board.description)?_vm._ssrNode("<div class=\"notification is-light\">","</div>",[_c('ce',{attrs:{"editable":_vm.updating,"elm":"p","placeholder":"Description"},model:{value:(_vm.board.description),callback:function ($$v) {_vm.$set(_vm.board, "description", $$v)},expression:"board.description"}})],1):_vm._e(),_vm._ssrNode(" "),(_vm.currentUser && _vm.currentUser.id === _vm.board.user)?_vm._ssrNode("<div class=\"columns is-variable is-2 is-mobile\">","</div>",[_vm._ssrNode(((!_vm.updating && _vm.board['is_interface'])?("<div class=\"column\"><div class=\"button is-fullwidth is-primary\">Clone</div></div>"):"<!---->")+" "+((!_vm.updating && !_vm.board['is_interface'])?("<div class=\"column\"><div class=\"button is-fullwidth is-primary\">Launch</div></div>"):"<!---->")+" "),(_vm.updating)?_vm._ssrNode("<div class=\"column\">","</div>",[_vm._ssrNode("<div class=\"button is-fullwidth\">","</div>",[_c('x-icon',{attrs:{"name":"check"}})],1)]):_vm._e(),_vm._ssrNode(" "),_vm._ssrNode("<div class=\"column\">","</div>",[_vm._ssrNode("<div class=\"button is-fullwidth\">","</div>",[_c('x-icon',{attrs:{"name":!_vm.updating ? 'pen' : 'close'}})],1)])],2):_vm._e()],2),_vm._ssrNode(" "),_vm._ssrNode("<div class=\"column\">","</div>",[(_vm.updating)?_vm._ssrNode("<div class=\"level is-mobile\">","</div>",[_vm._ssrNode("<div class=\"level-left\">","</div>",[(_vm.board.parent === null)?_vm._ssrNode("<div class=\"field\">","</div>",[_c('b-switch',{attrs:{"rounded":false},model:{value:(_vm.board['is_interface']),callback:function ($$v) {_vm.$set(_vm.board, 'is_interface', $$v)},expression:"board['is_interface']"}},[_vm._v("Template")])],1):_vm._e()]),_vm._ssrNode(" "),_vm._ssrNode("<div class=\"level-right\">","</div>",[_c('b-dropdown',{attrs:{"position":"is-bottom-left","trap-focus":true}},[_c('div',{staticClass:"navbar-item clickable",attrs:{"slot":"trigger"},slot:"trigger"},[_c('x-icon',{attrs:{"name":"cogs"}}),_vm._v(" "),_c('span',[_vm._v("Privacy")])],1),_vm._v(" "),_c('b-dropdown-item',{staticStyle:{"min-width":"300px"},attrs:{"custom":""}},[_c('div',{staticClass:"level is-mobile"},[_c('div',{staticClass:"level-left"},[_vm._v("Public")]),_vm._v(" "),_c('div',{staticClass:"level-right"},[_c('b-switch',{attrs:{"rounded":false},model:{value:(_vm.board.settings['is_public']),callback:function ($$v) {_vm.$set(_vm.board.settings, 'is_public', $$v)},expression:"board.settings['is_public']"}})],1)]),_vm._v(" "),_c('div',{staticClass:"level is-mobile"},[_c('div',{staticClass:"level-left"},[_vm._v("Team")]),_vm._v(" "),_c('div',{staticClass:"level-right"},[_c('b-switch',{attrs:{"rounded":false},model:{value:(_vm.board.settings['is_team']),callback:function ($$v) {_vm.$set(_vm.board.settings, 'is_team', $$v)},expression:"board.settings['is_team']"}})],1)]),_vm._v(" "),(!_vm.board.settings['is_public'] && _vm.board.settings['is_team'])?_c('div',{staticClass:"field"},[_c('b-input',{attrs:{"expanded":"","placeholder":"Password"},model:{value:(_vm.board.settings.password),callback:function ($$v) {_vm.$set(_vm.board.settings, "password", $$v)},expression:"board.settings.password"}}),_vm._v(" "),_c('p',{staticClass:"help"},[_vm._v("Use password to join!")])],1):_vm._e(),_vm._v(" "),_c('div',{staticClass:"level is-mobile"},[_c('div',{staticClass:"level-left"},[_vm._v("Readonly")]),_vm._v(" "),_c('div',{staticClass:"level-right"},[_c('b-switch',{attrs:{"rounded":false},model:{value:(_vm.board.settings['is_readonly']),callback:function ($$v) {_vm.$set(_vm.board.settings, 'is_readonly', $$v)},expression:"board.settings['is_readonly']"}})],1)])])],1)],1)],2):_vm._e(),_vm._ssrNode(" "),(_vm.updating)?_vm._ssrNode("<div class=\"field\">","</div>",[_c('b-input',{attrs:{"icon":"label","placeholder":"Board Slug"},model:{value:(_vm.board.slug),callback:function ($$v) {_vm.$set(_vm.board, "slug", $$v)},expression:"board.slug"}})],1):_vm._e(),_vm._ssrNode(" "),(_vm.updating)?_vm._ssrNode("<div class=\"field\">","</div>",[_c('b-tag-input',{attrs:{"icon":"tag","placeholder":"Hash tag"},model:{value:(_vm.board.text_tags),callback:function ($$v) {_vm.$set(_vm.board, "text_tags", $$v)},expression:"board.text_tags"}})],1):_vm._e(),_vm._ssrNode(" "),_c('task-board',{attrs:{"tasks":_vm.storeTasks,"board":_vm.board,"readonly":_vm.updating}})],2)],2)])])])])}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./pages/board/_id/index.vue?vue&type=template&id=062db60a&
+// CONCATENATED MODULE: ./pages/board/_id/index.vue?vue&type=template&id=0b4df4aa&
 
 // EXTERNAL MODULE: ./components/Avatar.vue + 15 modules
 var Avatar = __webpack_require__(13);
 
 // EXTERNAL MODULE: ./components/taginput/Taginput.vue + 14 modules
-var Taginput = __webpack_require__(58);
+var Taginput = __webpack_require__(57);
 
 // EXTERNAL MODULE: ./components/input/Input.vue + 4 modules
 var Input = __webpack_require__(6);
 
 // EXTERNAL MODULE: ./components/TaskBoard.vue + 4 modules
-var TaskBoard = __webpack_require__(59);
+var TaskBoard = __webpack_require__(58);
 
 // EXTERNAL MODULE: ./components/dropdown/DropdownItem.vue + 4 modules
 var DropdownItem = __webpack_require__(21);
+
+// EXTERNAL MODULE: ./plugins/task.js
+var task = __webpack_require__(5);
 
 // CONCATENATED MODULE: ./node_modules/babel-loader/lib??ref--2-0!./node_modules/vue-loader/lib??vue-loader-options!./pages/board/_id/index.vue?vue&type=script&lang=js&
 //
@@ -1334,7 +1339,7 @@ var DropdownItem = __webpack_require__(21);
 //
 //
 //
-//
+
 
 
 
@@ -1351,17 +1356,17 @@ var DropdownItem = __webpack_require__(21);
   },
 
   async fetch() {
-    let query = {};
-
     if (this.$route.params.id !== 'visual') {
       this.board = await this.$axios.$get(`/task/boards/${this.$route.params.id}/`);
-      query.board = this.board.id;
+      let rp = await this.$axios.$get('/task/tasks/', {
+        params: {
+          board: this.board.id,
+          page_size: 100
+        }
+      });
+      this.board.tasks = rp.results;
     }
 
-    let flat_tasks = await this.$axios.$get('/task/tasks/', {
-      params: query
-    });
-    this.flat_tasks = flat_tasks['results'];
     this.board = { ...this.board,
       text_tags: this.board['hash_tags'] ? this.board['hash_tags'].map(x => x.title) : [],
       settings: this.board.settings ? this.board.settings : {}
@@ -1372,7 +1377,6 @@ var DropdownItem = __webpack_require__(21);
   data() {
     return {
       updating: false,
-      flat_tasks: [],
       board: {
         title: "Your Work",
         description: "Manage your task on a tree!",
@@ -1390,7 +1394,18 @@ var DropdownItem = __webpack_require__(21);
 
   computed: {
     storeTasks() {
-      return this.$store.state.task.tasks.filter(x => {
+      if (true) {
+        return this.board.tasks.map(x => new task["a" /* Task */]({ ...x,
+          board: x['board_id'],
+          parent: x['parent_id'],
+          user: x['user_id']
+        }));
+      }
+
+      return this.hierarchy(this.$store.state.task.tasks, {
+        idKey: 'id',
+        parentKey: 'parent'
+      }).filter(x => {
         if (this.board.id) {
           return x.board === this.board.id && x.id;
         } else {
@@ -1442,11 +1457,6 @@ var DropdownItem = __webpack_require__(21);
       }
     },
 
-    handleDeleted(task) {
-      let index = this.flat_tasks.map(x => x.id).indexOf(task.id);
-      this.flat_tasks.splice(index, 1);
-    },
-
     useBoard() {
       this.$axios.$post(`/task/boards/${this.board.id}/clone/`).then(res => {
         this.$router.replace({
@@ -1455,19 +1465,26 @@ var DropdownItem = __webpack_require__(21);
       }).catch(() => {});
     },
 
-    launchBoard() {}
+    launchBoard() {},
+
+    async syncTask() {
+      if (!this.board.tasks) return;
+
+      for (let i = 0; i < this.board.tasks.length; i++) {
+        await this.$store.commit('task/ADD_TASK', new task["a" /* Task */]({ ...this.board.tasks[i],
+          board: this.board.tasks[i]['board_id'],
+          parent: this.board.tasks[i]['parent_id'],
+          user: this.board.tasks[i]['user_id']
+        }));
+      }
+    }
 
   },
   watch: {
-    storeTasks: {
+    'board.tasks': {
       deep: true,
       handler: function () {
-        let ids = this.flat_tasks.map(x => x.id);
-        this.storeTasks.forEach(item => {
-          if (!ids.includes(item.id)) {
-            this.flat_tasks.unshift(item);
-          }
-        });
+        this.syncTask();
       }
     }
   },
@@ -1488,7 +1505,7 @@ var componentNormalizer = __webpack_require__(1);
 
 function injectStyles (context) {
   
-  var style0 = __webpack_require__(61)
+  var style0 = __webpack_require__(60)
 if (style0.__inject__) style0.__inject__(context)
 
 }

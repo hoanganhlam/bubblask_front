@@ -5,7 +5,7 @@
                 <div class="container pomodoro">
                     <div class="wrap">
                         <div class="timer">
-                            <div class="title uppercase">{{mode}}</div>
+                            <div class="title uppercase">{{ mode }}</div>
                             <div class="timer--clock">
                                 <div class="minutes-group clock-display-grp" ref="minutes">
                                     <div class="first number-grp">
@@ -146,7 +146,7 @@
             <div class="container small" v-if="wsTemp">
                 <div class="notification is-warning">
                     <div class="field">
-                        Join {{wsTemp.name}}
+                        Join {{ wsTemp.name }}
                     </div>
                     <label class="field has-addons">
                         <input v-model="wsPassword" class="input" placeholder="Enter Password"/>
@@ -161,232 +161,169 @@
 </template>
 
 <script>
-    import Avatar from "../components/Avatar";
-    import TaskBoard from "../components/TaskBoard";
+import Avatar from "../components/Avatar";
+import TaskBoard from "../components/TaskBoard";
 
-    const _ = require("lodash");
-    export default {
-        components: {TaskBoard, Avatar},
-        head() {
-            return {
-                title: this.title,
-                meta: [
-                    {
-                        hid: 'description',
-                        name: 'description',
-                        content: 'Bubblask is small application with many features that help you increase productivity by using pomodoro technique.'
-                    }
-                ]
+const _ = require("lodash");
+export default {
+    components: {TaskBoard, Avatar},
+    head() {
+        return {
+            title: this.title,
+            meta: [
+                {
+                    hid: 'description',
+                    name: 'description',
+                    content: 'Bubblask is small application with many features that help you increase productivity by using pomodoro technique.'
+                }
+            ]
+        }
+    },
+    data() {
+        return {
+            timer: 0,
+            mode: "POMODORO TIMER",
+            showNote: false,
+            wsPassword: null,
+            askPassword: false,
+            wsTemp: null
+        }
+    },
+    computed: {
+        title() {
+            if (this.timer) {
+                return this.fancyTimeFormat(this.timer) + " - Bubblask"
+            }
+            return "Bubblask - Online Pomodoro Timer - Best pomodoro tool!"
+        },
+        tasks() {
+            let board = this.ws && this.ws.board ? this.ws.board.id : null;
+            return this.hierarchy(this.$store.state.task.tasks, {idKey: 'id', parentKey: 'parent'}).filter(x => {
+                return x.board === board;
+            });
+        },
+        runningTask() {
+            return this.$store.state.task.running
+        },
+        setting() {
+            return this.$store.state.config.settings.timer
+        },
+        style() {
+            let gSeting = this.$store.state.config.settings;
+            let img = gSeting.color ? gSeting.color.background : null;
+            if (img) {
+                return {
+                    backgroundImage: `url(${img.urls.full})`,
+                    backgroundSize: 'cover'
+                }
+            }
+            return null;
+        },
+        ws() {
+            return this.$store.state.config.ws
+        },
+    },
+    methods: {
+        async task_break(m) {
+            this.mode = m === 5 ? "Short Break" : "Long Break";
+            await this.$store.commit('task/SET_RUNNING', null);
+            if (!this.setting.is_strict) {
+                this.timer = m * 60;
+                this.toTop(41);
             }
         },
-        data() {
-            return {
-                timer: 0,
-                mode: "POMODORO TIMER",
-                showNote: false,
-                wsPassword: null,
-                askPassword: false,
-                wsTemp: null
+        move_text(flag, index, time) {
+            let elm = this.$refs[flag];
+            if (!elm) return;
+            for (let i = 0; i < elm.children.length; i++) {
+                let display = elm.children[i].querySelector(`.number-grp-wrp`);
+                let child = elm.children[i].querySelector(`.num-${time[index + i]}`);
+                display.style.transform = `translate3d(0px, -${child.offsetTop}px, 0px)`;
             }
         },
-        computed: {
-            title() {
-                if (this.timer) {
-                    return this.fancyTimeFormat(this.timer) + " - Bubblask"
-                }
-                return "Bubblask - Online Pomodoro Timer - Best pomodoro tool!"
-            },
-            tasks() {
-                let board = this.ws && this.ws.board ? this.ws.board.id : null;
-                return this.$store.state.task.tasks.filter(x => {
-                    return x.board === board;
-                });
-            },
-            runningTask() {
-                return this.$store.state.task.running
-            },
-            setting() {
-                return this.$store.state.config.settings.timer
-            },
-            style() {
-                let gSeting = this.$store.state.config.settings;
-                let img = gSeting.color ? gSeting.color.background : null;
-                if (img) {
-                    return {
-                        backgroundImage: `url(${img.urls.full})`,
-                        backgroundSize: 'cover'
-                    }
-                }
-                return null;
-            },
-            ws() {
-                return this.$store.state.config.ws
-            },
+        run_timer() {
+            if (this.timer > 0) {
+                let fTime = this.fancyTimeFormat(this.timer);
+                this.move_text('seconds', 6, fTime);
+                this.move_text('minutes', 3, fTime);
+                this.timer = this.timer - 1;
+            } else {
+                this.move_text('seconds', 3, "00:00:00");
+                this.move_text('minutes', 6, "00:00:00");
+            }
         },
-        methods: {
-            async task_break(m) {
-                this.mode = m === 5 ? "Short Break" : "Long Break";
-                await this.$store.commit('task/SET_RUNNING', null);
-                if (!this.setting.is_strict) {
-                    this.timer = m * 60;
-                    this.toTop(41);
+        joinWS(ws) {
+            this.$axios.$post(`/general/workspaces/${ws.id}/join/`, {password: this.wsPassword}).then(res => {
+                if (res.status) {
+                    this.$store.commit('config/SET_WS', ws);
                 }
-            },
-            move_text(flag, index, time) {
-                let elm = this.$refs[flag];
-                if (!elm) return;
-                for (let i = 0; i < elm.children.length; i++) {
-                    let display = elm.children[i].querySelector(`.number-grp-wrp`);
-                    let child = elm.children[i].querySelector(`.num-${time[index + i]}`);
-                    display.style.transform = `translate3d(0px, -${child.offsetTop}px, 0px)`;
-                }
-            },
-            run_timer() {
-                if (this.timer > 0) {
-                    let fTime = this.fancyTimeFormat(this.timer);
-                    this.move_text('seconds', 6, fTime);
-                    this.move_text('minutes', 3, fTime);
-                    this.timer = this.timer - 1;
-                } else {
-                    this.move_text('seconds', 3, "00:00:00");
-                    this.move_text('minutes', 6, "00:00:00");
-                }
-            },
-            joinWS(ws) {
-                this.$axios.$post(`/general/workspaces/${ws.id}/join/`, {password: this.wsPassword}).then(res => {
-                    if (res.status) {
-                        this.$store.commit('config/SET_WS', ws);
+                this.$router.replace({path: '/'});
+                this.askPassword = false;
+            });
+        },
+        async makeDone() {
+            let clone = _.cloneDeep(this.runningTask);
+            await this.$store.commit('task/SET_RUNNING', null);
+            clone.changeStatus('complete');
+            await this.$store.commit('task/UPDATE_TASK', clone);
+
+        }
+    },
+    async mounted() {
+        const _this = this;
+        setInterval(function () {
+            _this.run_timer();
+        }, 1000);
+        if (this.runningTask) {
+            let now = new Date();
+            let due_date = new Date(this.runningTask.dueDate());
+            this.timer = (due_date.getTime() - now.getTime()) / 1000;
+            this.toTop(41);
+        }
+        if (this.$route.query.ws) {
+            if (this.currentUser && this.currentUser.profile.setting.ws !== this.$route.query.ws) {
+                this.$axios.$get(`/general/workspaces/${this.$route.query.ws}/`).then(res => {
+                    if (res.isPrivate) {
+                        this.wsTemp = res;
+                        this.askPassword = true;
+                    } else {
+                        this.joinWS(res);
                     }
+                }).catch(() => {
                     this.$router.replace({path: '/'});
-                    this.askPassword = false;
                 });
-            },
-            async makeDone() {
-                let clone = _.cloneDeep(this.runningTask);
-                await this.$store.commit('task/SET_RUNNING', null);
-                clone.changeStatus('complete');
-                await this.$store.commit('task/UPDATE_TASK', clone);
+            } else {
 
             }
+        }
+        this.toTop();
+    },
+    watch: {
+        timer() {
+            if (this.timer <= 0 && this.runningTask) {
+                this.runningTask.changeStatus('stopping', 0);
+            }
+            if (this.timer === 3) {
+                this.playSource('audio_rang');
+            }
         },
-        async mounted() {
-            const _this = this;
-            setInterval(function () {
-                _this.run_timer();
-            }, 1000);
+        runningTask() {
+            // Lay timer cua running task
             if (this.runningTask) {
+                this.mode = this.runningTask.title;
                 let now = new Date();
                 let due_date = new Date(this.runningTask.dueDate());
                 this.timer = (due_date.getTime() - now.getTime()) / 1000;
                 this.toTop(41);
+            } else {
+                this.timer = 0;
+                this.mode = "POMODORO TIMER";
             }
-            if (this.$route.query.ws) {
-                if (this.currentUser && this.currentUser.profile.setting.ws !== this.$route.query.ws) {
-                    this.$axios.$get(`/general/workspaces/${this.$route.query.ws}/`).then(res => {
-                        if (res.isPrivate) {
-                            this.wsTemp = res;
-                            this.askPassword = true;
-                        } else {
-                            this.joinWS(res);
-                        }
-                    }).catch(() => {
-                        this.$router.replace({path: '/'});
-                    });
-                } else {
-
-                }
-            }
-            this.toTop();
-        },
-        watch: {
-            timer() {
-                if (this.timer <= 0 && this.runningTask) {
-                    this.runningTask.changeStatus('stopping', 0);
-                }
-                if (this.timer === 3) {
-                    this.playSource('audio_rang');
-                }
-            },
-            runningTask() {
-                // Lay timer cua running task
-                if (this.runningTask) {
-                    this.mode = this.runningTask.title;
-                    let now = new Date();
-                    let due_date = new Date(this.runningTask.dueDate());
-                    this.timer = (due_date.getTime() - now.getTime()) / 1000;
-                    this.toTop(41);
-                } else {
-                    this.timer = 0;
-                    this.mode = "POMODORO TIMER";
-                }
-                this.showNote = false;
-            }
+            this.showNote = false;
         }
     }
+}
 </script>
 
 <style lang="scss">
-    .timer-control {
-        transition: visibility 0s, opacity 0.1s linear;
-        opacity: 1;
-
-        &.hidden {
-            opacity: 0;
-        }
-    }
-
-    /* bounce */
-    .bounce-enter-active {
-        animation: moveUp .25s;
-    }
-
-    .bounce-leave-active {
-        animation: moveUp .25s reverse;
-    }
-
-    @keyframes moveUp {
-        0% {
-            top: 100px;
-        }
-        100% {
-            bottom: 0;
-        }
-    }
-
-    .feature {
-        border: 1px #EEEEEE solid;
-        padding: .5rem .75rem;
-        margin-bottom: .5rem;
-        background: #FFFFFF;
-    }
-
-    .boards {
-        margin-top: 1rem;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-
-        .board {
-            min-width: 500px;
-            max-width: 600px;
-            margin: 0 .5rem;
-
-            .media-right {
-                margin-left: .5rem;
-            }
-        }
-    }
-
-    .task.master {
-        position: relative;
-
-        .task {
-            position: unset;
-
-            .card {
-                top: 5%;
-            }
-        }
-    }
 </style>

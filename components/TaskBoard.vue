@@ -18,8 +18,8 @@
         </div>
         <draggable v-if="!loading && activeTasks.length" v-model="activeTasks" v-bind="dragOptions"
                    @change="handle_order">
-            <task class="master" v-for="(task, i) in activeTasks" :key="i" :value="task" :readonly="readonly"
-                  :tree="tree" :board="board"
+            <task class="master" v-for="(task, i) in activeTasks" :key="i"
+                  :value="task" :readonly="readonly" :tree="tree" :board="board"
                   @add="handle_add_child" @editing="disabledDrag = $event" @deleted="$emit('deleted', $event)"/>
         </draggable>
         <div v-if="loading" class="tasks">
@@ -88,8 +88,13 @@ export default {
         init_task(val) {
             if (val) {
                 this.activeTasks = [];
-                let temp = _.cloneDeep(val.filter(x => !['stopped', 'complete'].includes(x.status)));
-                this.activeTasks = this.hierarchy(temp, {idKey: 'id', parentKey: 'parent'});
+                let temp = [];
+                if (this.board) {
+                    temp = _.cloneDeep(val);
+                } else {
+                    temp = _.cloneDeep(val.filter(x => !['stopped', 'complete'].includes(x.status)));
+                }
+                this.activeTasks = temp;
                 this.activeTasks.forEach(x => {
                     x.order = x.id ? this.taskOrder.indexOf(x.id) : 0
                 });
@@ -123,7 +128,7 @@ export default {
         async handle_add() {
             let task = new Task({
                 tomato: this.timerSetting.tomato,
-                updating: true,
+                update: true,
                 board: this.board ? this.board.id : null
             });
             await this.$store.commit('task/ADD_TASK', task);

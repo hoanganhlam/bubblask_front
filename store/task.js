@@ -39,14 +39,17 @@ export default {
             state.tasks = tasks;
         },
         ['ADD_TASK'](state, task) {
-            state.tasks.unshift(task);
-            task.check();
-            if (task.isRunning()) {
-                state.running = task;
+            let index = state.tasks.map(x => x.id).indexOf(task.id);
+            if (index === -1) {
+                state.tasks.unshift(task);
+                task.check();
+                if (task.isRunning()) {
+                    state.running = task;
+                }
             }
         },
         ['UPDATE_TASK'](state, task) {
-            task.updating = !task.force;
+            task.update = !task.force;
             delete task.force;
             let index = state.tasks.map(x => x.uid).indexOf(task.uid);
             if (index >= 0) {

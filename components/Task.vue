@@ -1,5 +1,5 @@
 <template>
-    <div class="task" v-bind:class="{'is-active': updateTree}">
+    <div class="task" v-if="task" v-bind:class="{'is-active': updateTree}">
         <div :id="`task-${task.id}`">
             <transition name="fade">
                 <div class="notification media"
@@ -61,9 +61,9 @@
                             v-model="task.description"
                             :editable="!task.isRunning() && !readonly"></ce>
                         <draggable :list="children" @change="re_order" class="tasks" v-bind="dragOptions">
-                            <task v-for="child in children" :key="child.id" :value="child"
-                                  :readonly="readonly" :board="board"
-                                  @add="handle_add" @deleted="$emit('deleted', $event)" :tree="tree"/>
+                            <task v-for="child in children"
+                                  :key="child.id" :value="child" :readonly="readonly" :board="board" :tree="tree"
+                                  @add="handle_add" @deleted="$emit('deleted', $event)"/>
                         </draggable>
                         <div class="field" v-if="task.id && (!tree || updateTree) && !readonly">
                             <div class="button is-text is-small is-fullwidth" @click="task_add">
@@ -89,7 +89,7 @@
                         </div>
                     </div>
                     <div v-if="(!tree || updateTree)" class="close" @click="close()">
-                        <x-icon name="close"></x-icon>
+                        <x-icon name="minimize"></x-icon>
                     </div>
                 </div>
             </transition>
@@ -194,7 +194,7 @@ export default {
                 params: {
                     board: this.task.board,
                     page_size: 100,
-                    statuses: this.board['is_interface'] ? undefined : ['pending', 'running', 'stopping'].toString(),
+                    statuses: this.board && this.board['is_interface'] ? undefined : ['pending', 'running', 'stopping'].toString(),
                     parent: this.value.id,
                     user: this.currentUser ? this.currentUser.id : undefined
                 }
@@ -202,6 +202,7 @@ export default {
                 for (let i = 0; i < res.results.length; i++) {
                     await this.$store.commit('task/ADD_TASK', new Task({
                         ...res.results[i],
+                        board: res.results[i]['board_id'],
                         parent: res.results[i]['parent_id'],
                         user: res.results[i]['user_id'],
                     }));
@@ -223,14 +224,11 @@ export default {
             }
         },
         close() {
-            if (this.tree) {
-                this.updateTree = false;
-            } else {
-                this.editing = false;
-            }
+            this.updateTree = false;
+            this.editing = false;
         },
         on_input: _.debounce(function () {
-            if (this.task.id) {
+            if (this.task) {
                 this.sendUpdate();
             }
         }, 500),
@@ -254,9 +252,9 @@ export default {
             let st = this.$store.state.config.settings.timer;
             let task = new Task({
                 tomato: st.tomato,
-                updating: true,
+                update: true,
                 parent: this.task.id !== 0 ? this.task.id : undefined,
-                board: this.task.board
+                board: this.board.id
             });
             this.$emit('add', task);
         },
@@ -278,7 +276,7 @@ export default {
             this.sendUpdate();
         },
         async sendUpdate() {
-            this.task.updating = true;
+            this.task.update = true;
             await this.$store.commit('task/UPDATE_TASK', _.cloneDeep(this.task));
         }
     }

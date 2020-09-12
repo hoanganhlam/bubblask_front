@@ -34,7 +34,7 @@
             </nav>
         </header>
         <div v-bind:class="{'main-content': !isRunning}">
-            <div class="sidebar" v-if="!isRunning">
+            <div class="sidebar" v-if="!isRunning" v-bind:class="{'active': forceSidebar}">
                 <aside class="menu">
                     <div class="menu-child">
                         <ul class="menu-list">
@@ -170,6 +170,9 @@
                         </ul>
                     </div>
                 </aside>
+                <div class="button sidebar-control" @click="forceSidebar = !forceSidebar">
+                    <x-icon :name="forceSidebar ? 'chevron-left' : 'chevron-right'"></x-icon>
+                </div>
             </div>
             <main class="main">
                 <nuxt class="main-body"/>
@@ -190,7 +193,7 @@
                 </footer>
             </main>
         </div>
-        <div class="ws-members" v-bind:style="{height: wsMinimize ? undefined : '300px'}">
+        <div class="ws-members" v-bind:style="{height: wsMinimize ? undefined : '50vh'}">
             <div class="header">
                 <div class="media" v-if="currentUser">
                     <div class="media-content">
@@ -211,7 +214,7 @@
                         </div>
                     </div>
                 </div>
-                <div @click="openLogin(true)" class="button is-fullwidth" v-else>Login to join Workspace</div>
+                <div @click="openLogin(true)" class="button is-text is-fullwidth" v-else>Login to join Workspace</div>
             </div>
             <transition name="fade">
                 <div v-if="!wsMinimize && ws" class="members">
@@ -424,7 +427,8 @@ export default {
             loadingMember: false,
             cloneReport: {},
             is_online: true,
-            strictTemp: false
+            strictTemp: false,
+            forceSidebar: false
         }
     },
     methods: {
@@ -555,6 +559,7 @@ export default {
                     for (let i = 0; i < res.results.length; i++) {
                         await this.$store.commit('task/ADD_TASK', new Task({
                             ...res.results[i],
+                            board: res.results[i]['board_id'],
                             parent: res.results[i]['parent_id'],
                             user: res.results[i]['user_id'],
                         }));
@@ -587,8 +592,12 @@ export default {
             }
         },
         async push_late() {
-            let needUpdate = this.$store.state.task.tasks.filter(x => x.updating);
+            let needUpdate = this.$store.state.task.tasks.filter(x => x.update && !x.updating);
             for (let i = 0; i < needUpdate.length; i++) {
+                await this.$store.commit('task/UPDATE_TASK', {
+                    ...needUpdate[i],
+                    updating: true
+                });
                 let res = null;
                 let task = _.cloneDeep(needUpdate[i]);
                 if (this.ws) {
@@ -614,6 +623,8 @@ export default {
                 if (res) {
                     task.id = res.id;
                     task.force = true;
+                    task.update = false;
+                    task.updating = false;
                     if (res.parent === null) {
                         res.parent = 0
                     }
@@ -831,7 +842,7 @@ export default {
     position: fixed;
     right: .75rem;
     bottom: 0;
-    min-width: 280px;
+    min-width: 320px;
     background: #FFFFFF;
     padding: .375rem;
     box-shadow: 0 1px 5px 0 rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.02);
@@ -906,6 +917,10 @@ export default {
         background-size: cover;
         background: var(--bg-color-primary);
         color: var(--bg-color-primary-text);
+
+        &:not(.is-fullheight) {
+            min-height: calc(50vh - 49px);
+        }
 
         .button.is-text,
         .subtitle,
