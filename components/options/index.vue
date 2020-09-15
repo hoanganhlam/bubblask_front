@@ -87,7 +87,6 @@
 
 <script>
     import {Chrome} from 'vue-color'
-    import BDropdownItem from "../dropdown/DropdownItem";
     import Unsplash from "../Unsplash"
     import * as config from "../../helpers/configs";
     import {cloneDeep} from 'lodash'
@@ -102,7 +101,6 @@
             }
         },
         components: {
-            BDropdownItem,
             'color-picker': Chrome,
             Unsplash
         },

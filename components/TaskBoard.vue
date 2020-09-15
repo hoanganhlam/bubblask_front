@@ -1,6 +1,6 @@
 <template>
     <div class="board">
-        <div class="media" v-if="!readonly">
+        <div class="media" v-if="!readonly && authorised">
             <div class="media-content">
                 <div class="task has-text-centered" @click="handle_add">
                     <div class="notification">
@@ -54,7 +54,7 @@ export default {
         tree: {
             default: false,
             type: Boolean
-        }
+        },
     },
     data() {
         return {
@@ -83,6 +83,9 @@ export default {
         timerSetting() {
             return this.$store.state.config.settings.timer
         },
+        authorised() {
+            return !(Boolean(this.board) && this.board.settings && !this.board.settings['collaborate']);
+        }
     },
     methods: {
         init_task(val) {
@@ -160,7 +163,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-
-</style>

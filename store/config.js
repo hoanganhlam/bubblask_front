@@ -5,7 +5,7 @@ export default {
     state: () => ({
         contentTypes: null,
         settings: config.settings,
-        ws: false
+        board: null
     }),
     mutations: {
         ['SET_CONTENT_TYPE'](state, ct) {
@@ -39,8 +39,8 @@ export default {
                 state.settings = config.settings
             }
         },
-        ['SET_WS'](state, ct) {
-            state.ws = ct
+        ['SET_BOARD'](state, ct) {
+            state.board = ct
         },
     },
     actions: {

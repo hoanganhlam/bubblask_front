@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import {Task} from "./task";
+import {SnackbarProgrammatic as Snackbar} from 'buefy';
 
 Vue.mixin({
     methods: {
@@ -9,50 +10,14 @@ Vue.mixin({
             }
             return null
         },
-        cleanURL(str) {
-            return str.replace(/^https?:\/\//, '').replace(/\/+$/, '')
-        },
-        timeSince(date) {
-            let seconds = moment().diff(this.momentTime(date), 'seconds', false);
-            return this.convertTime(seconds)
-        },
-        convertTime(seconds) {
-            var interval = Math.floor(seconds / 31536000);
-            if (interval > 1) {
-                return interval + " years";
-            }
-            interval = Math.floor(seconds / 2592000);
-            if (interval > 1) {
-                return interval + " month";
-            }
-            interval = Math.floor(seconds / 86400);
-            if (interval > 1) {
-                return interval + " day";
-            }
-            interval = Math.floor(seconds / 3600);
-            if (interval > 1) {
-                return interval + " hours";
-            }
-            interval = Math.floor(seconds / 60);
-            if (interval > 1) {
-                return interval + " minutes";
-            }
-            return Math.floor(seconds) + " seconds";
-        },
-        capitalizeFirst(string) {
-            return string.charAt(0).toUpperCase() + string.slice(1);
-        },
         convertName(user) {
-            if (user.profile && user.profile.nick) {
-                return user.profile.nick
+            if (user.profile && user.profile['nick']) {
+                return user.profile['nick']
             }
             if (user.first_name || user.last_name) {
                 return user.first_name + ' ' + user.last_name
             }
             return user.username
-        },
-        formatDate(dateStr) {
-            return dateStr
         },
         cleanData(data, fields) {
             let out = {};
@@ -62,7 +27,7 @@ Vue.mixin({
             fields.forEach(i => {
                 if (typeof data[i] !== 'undefined') {
                     if (['created', 'updated', 'start_date', 'due_date'].includes(i)) {
-                        out[i] = this.momentTime(data[i]).format('YYYY-MM-DD HH:mm')
+                        out[i] = out[i];
                     } else if (Array.isArray(data[i])) {
                         out[i] = data[i].map(x => {
                             return x.id ? x.id : x
@@ -102,18 +67,6 @@ Vue.mixin({
             });
             return out;
         },
-        convertDate(date) {
-            if (date) {
-                return new Date(date + ' UTC')
-            }
-            return null
-        },
-        momentTime(date) {
-            return moment(date, 'YYYY-MM-DDTHH:mm').utc()
-        },
-        formatMomentTime(m) {
-            return m.format('YYYY-MM-DD HH:mm:ss')
-        },
         fancyTimeFormat(time) {
             let h = ~~(time / 3600);
             let m = ~~((time % 3600) / 60);
@@ -148,22 +101,12 @@ Vue.mixin({
                 this[flag].play()
             }
         },
-        getAngle(p1, p2, p3) {
-            let p12 = Math.sqrt(Math.pow((p1.x - p2.x), 2) + Math.pow((p1.y - p2.y), 2));
-            let p13 = Math.sqrt(Math.pow((p1.x - p3.x), 2) + Math.pow((p1.y - p3.y), 2));
-            let p23 = Math.sqrt(Math.pow((p2.x - p3.x), 2) + Math.pow((p2.y - p3.y), 2));
-            let de = Math.acos(((Math.pow(p12, 2)) + (Math.pow(p13, 2)) - (Math.pow(p23, 2))) / (2 * p12 * p13)) * 180 / Math.PI;
-            if (p3.x < p1.x) {
-                de = 360 - de
-            }
-            return de
-        },
         hierarchy(data = [], {idKey = 'id', parentKey = 'parentId', childrenKey = 'children'} = {}) {
             const tree = [];
             const childrenOf = {};
             data.forEach((item) => {
                 item = new Task(item);
-                if (typeof item.id === 'undefined') item.id = 0;
+                if (typeof item.id === 'undefined') item['id'] = 0;
                 const {[idKey]: id, [parentKey]: parentId = 0} = item;
                 childrenOf[id] = childrenOf[id] || [];
                 item[childrenKey] = childrenOf[id];
@@ -231,8 +174,37 @@ Vue.mixin({
             }
         },
         navigate(url) {
-            this.$router.replace({path: url});
-        }
+            this.$router.replace({path: url}).then(() => {
+            });
+        },
+        kind2Icon(kind) {
+            const mapping = {
+                "DEFAULT": "users",
+                "GHOST": "earth"
+            }
+            return mapping[kind];
+        },
+        async join(board, password, force_out) {
+            await this.$axios.$post(`/task/boards/${board.id}/join/`, {password: password, force_out}).then(res => {
+                if (res.status) {
+                    let gb = this.$store.state.config.board;
+                    if (gb && gb.id === board.id) {
+                        this.$store.commit('config/SET_BOARD', null);
+                    } else {
+                        this.$store.commit('config/SET_BOARD', board);
+                        Snackbar.open({
+                            message: res.msg,
+                            type: 'is-success',
+                        });
+                    }
+                } else {
+                    Snackbar.open({
+                        message: res.msg,
+                        type: 'is-warning',
+                    });
+                }
+            });
+        },
     },
     computed: {
         currentUser: {

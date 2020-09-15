@@ -67,11 +67,12 @@ $modal-card-foot-radius: 2px;
 $modal-card-head-background-color: #FFF;
 $modal-card-head-border-bottom: 1px solid #EEE;
 $modal-card-foot-border-top: 1px solid #EEE;
+$modal-card-head-padding: 1rem 20px;
 $modal-background-background-color: rgba(10, 10, 10, 0.3);
 $hero-body-padding: 3rem 0;
 $card-shadow: $box-shadow;
 $card-content-padding: 1rem;
-$box-padding: .5rem;
+$box-padding: .75rem 0.5rem;
 $notification-padding: 1rem;
 $notification-padding-ltr: 1rem;
 $notification-padding-rtl: 1rem;
@@ -134,7 +135,7 @@ body {
     max-width: 828px;
 
     &.small {
-        max-width: 500px;
+        max-width: 550px;
     }
 
     &.is-fullwidth {
@@ -147,16 +148,15 @@ body {
 }
 
 .logo {
-    font-size: 20px;
+    font-size: 18px;
 
     .primary {
-        color: #cd2653;
-        font-weight: bold;
+        color: $primary;
     }
 
     .second {
         font-weight: normal;
-        font-size: 1rem;
+        font-size: 12px;
     }
 }
 
@@ -281,6 +281,12 @@ header.header {
 
         .icon {
             height: 1rem;
+        }
+    }
+
+    .level {
+        &:not(:last-child) {
+            margin-bottom: 1rem;
         }
     }
 }
@@ -696,6 +702,10 @@ header.header {
     border-bottom: 0 !important;
 }
 
+.fuh-embed {
+    z-index: 99999;
+}
+
 .sidebar-control {
     position: absolute;
     top: calc(50% - 70px);
@@ -824,4 +834,12 @@ header.header {
     [contenteditable] {
         font-size: 1rem !important;
     }
+}
+
+.switch .control-label:empty {
+    padding-left: 0;
+}
+
+.dropdown-content:empty {
+    display: none;
 }

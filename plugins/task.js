@@ -30,7 +30,7 @@ function totalTimeLeft(task) {
 }
 
 export class Task {
-    constructor({update, uid, title = null, description = null, interval = 1, tomato, times, status, id, parent, board = null, temp_setting, settings = {}, order = 0, user = 0}) {
+    constructor({update, uid, title = null, description = null, interval = 1, tomato, times, status, id, parent, board = null, temp_setting, settings = {}, order = 0, user = 0, has_child, assignee}) {
         this.uid = typeof uid === 'undefined' ? generateId() : uid;
         this.title = title;
         this.description = description;
@@ -47,6 +47,8 @@ export class Task {
         this.order = order;
         this.user = user;
         this.updating = false;
+        this.has_child = has_child;
+        this.assignee = assignee;
     }
 
     changeStatus(status, timer) {

@@ -7,7 +7,6 @@ const getLocalTZ = () => {
 };
 
 export default async function (context, inject) {
-
     const $auth = {};
     const logout = async () => {
         await setToken(null);
@@ -58,13 +57,13 @@ export default async function (context, inject) {
         if (user) {
             await context.store.commit('config/SET_SETTING', user.profile.setting);
             await context.store.commit('auth/SET_USER', user);
-            let ws = user.profile.setting ? user.profile.setting.ws : null;
-            if (ws) {
-                await context.$axios.$get(`/general/workspaces/${ws}/`).then(res => {
-                    context.store.commit('config/SET_WS', res);
+            let board = user.profile.setting ? user.profile.setting.board : null;
+            if (board) {
+                await context.$axios.$get(`/task/boards/${board}/`).then(res => {
+                    context.store.commit('config/SET_BOARD', res);
                 });
             } else {
-                context.store.commit('config/SET_WS', null);
+                context.store.commit('config/SET_BOARD', null);
             }
             if (process.client) {
                 let tz = user.profile.time_zone;

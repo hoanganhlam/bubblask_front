@@ -53,7 +53,7 @@
                         </div>
                     </div>
                 </div>
-                <div v-if="response.results.length" class="columns is-variable is-2 is-multiline">
+                <div v-if="!loading" class="columns is-variable is-2 is-multiline">
                     <div v-for="board in response.results" :key="board.id" class="column is-4">
                         <div class="media box template-board">
                             <div class="media-left">
@@ -92,6 +92,7 @@ export default {
     name: "Template",
     components: {BInput, BoardList, Avatar, Board},
     async fetch() {
+        this.loading = true;
         let tag = await this.$axios.$get(`/general/hash-tags/?for_model=board`);
         this.taxonomies = tag.results;
         this.query.page = this.$route.query.page ? Number.parseInt(this.$route.query.page) : 1;
@@ -99,6 +100,7 @@ export default {
         this.response = await this.$axios.$get('/task/boards/', {
             params: this.query,
         });
+        this.loading = false;
     },
     data() {
         return {
@@ -111,10 +113,11 @@ export default {
             query: {
                 page_size: 9,
                 page: 1,
-                is_interface: true,
-                search: null
+                search: null,
+                kinds: "TEMPLATE"
             },
-            taxonomies: []
+            taxonomies: [],
+            loading: false
         }
     },
     methods: {

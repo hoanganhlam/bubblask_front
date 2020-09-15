@@ -19,24 +19,35 @@
                     <div class="column is-4">
                         <div class="media" style="margin-bottom: 1rem">
                             <div class="media-left" v-if="board.media || updating">
-                                <avatar class="is-96x96" v-model="board.media" :can-update="updating"/>
+                                <b-skeleton width="96px" height="96px" active v-if="loading"></b-skeleton>
+                                <avatar v-else class="is-96x96" v-model="board.media" :can-update="updating"/>
                             </div>
                             <div class="media-content">
-                                <ce :editable="updating" class="title" elm="h1" v-model="board.title"></ce>
+                                <div v-if="loading">
+                                    <b-skeleton width="100%" height="1rem" active/>
+                                    <b-skeleton width="96px" height="1rem" active/>
+                                    <b-skeleton width="96px" height="1rem" active/>
+                                </div>
+                                <ce v-else :editable="updating" class="title" elm="h1" v-model="board.title"/>
                             </div>
                         </div>
-                        <div class="notification is-light" v-if="updating || board.description">
-                            <ce :editable="updating" elm="p"
+                        <div class="content" v-if="updating || board.description">
+                            <div v-if="loading">
+                                <b-skeleton width="100%" height="1rem" active/>
+                                <b-skeleton width="80%" height="1rem" active/>
+                                <b-skeleton width="70%" height="1rem" active/>
+                            </div>
+                            <ce v-else :editable="updating" elm="p"
                                 v-model="board.description"
                                 placeholder="Description"/>
                         </div>
                         <div class="columns is-variable is-2 is-mobile"
-                             v-if="currentUser && currentUser.id === board.user">
-                            <div class="column" v-if="!updating && board['is_interface']">
+                             v-if="board && board.user && currentUser && currentUser.id === board.user.id">
+                            <div class="column" v-if="!updating && board.kind === 'TEMPLATE'">
                                 <div class="button is-fullwidth is-primary" @click="useBoard">Clone</div>
                             </div>
-                            <div class="column" v-if="!updating && !board['is_interface']">
-                                <div class="button is-fullwidth is-primary" @click="launchBoard">Launch</div>
+                            <div class="column" v-if="!updating && ['DEFAULT', 'GHOST'].includes(board.kind)">
+                                <div class="button is-fullwidth is-primary" @click="launchBoard()">Launch</div>
                             </div>
                             <div class="column" v-if="updating">
                                 <div class="button is-fullwidth" @click="handleUpdate">
@@ -101,7 +112,7 @@
                         <div class="field" v-if="updating">
                             <b-tag-input icon="tag" placeholder="Hash tag" v-model="board.text_tags"/>
                         </div>
-                        <task-board :tasks="storeTasks" :board="board" :readonly="updating"/>
+                        <task-board :tasks="storeTasks" :board="board" :readonly="!updating"/>
                     </div>
                 </div>
             </div>
@@ -114,29 +125,36 @@ import Avatar from "../../../components/Avatar";
 import BTagInput from "../../../components/taginput/Taginput";
 import BInput from "../../../components/input/Input";
 import TaskBoard from "../../../components/TaskBoard";
-import BDropdownItem from "../../../components/dropdown/DropdownItem";
 import {Task} from "@/plugins/task";
 
 export default {
     name: "TemplateDetail",
-    components: {BDropdownItem, TaskBoard, BInput, BTagInput, Avatar},
+    components: {TaskBoard, BInput, BTagInput, Avatar},
     async fetch() {
+        this.loading = true;
         if (this.$route.params.id !== 'visual') {
             this.board = await this.$axios.$get(`/task/boards/${this.$route.params.id}/`);
-            let rp = await this.$axios.$get('/task/tasks/', {
-                params: {
-                    board: this.board.id,
-                    page_size: 100
-                }
-            });
-            this.board.tasks = rp.results;
+        } else {
+            this.board = {
+                title: "Your Work",
+                description: "Manage your task on a tree!",
+                slug: null
+            };
         }
+        let rp = await this.$axios.$get('/task/tasks/', {
+            params: {
+                board: this.board ? this.board.id : null,
+                page_size: 100
+            }
+        });
+        this.board.tasks = rp.results;
         this.board = {
             ...this.board,
             text_tags: this.board['hash_tags'] ? this.board['hash_tags'].map(x => x.title) : [],
             settings: this.board.settings ? this.board.settings : {}
         }
         this.boardSlug = this.board['slug'];
+        this.loading = false;
     },
     data() {
         return {
@@ -147,6 +165,7 @@ export default {
                 slug: null
             },
             boardSlug: null,
+            loading: false
         }
     },
     head() {
@@ -217,6 +236,9 @@ export default {
             })
         },
         launchBoard() {
+            this.join(this.board).then(() => {
+                this.$router.replace({path: '/'})
+            })
         },
         async syncTask() {
             if (!this.board.tasks) return;
@@ -225,7 +247,8 @@ export default {
                     ...this.board.tasks[i],
                     board: this.board.tasks[i]['board_id'],
                     parent: this.board.tasks[i]['parent_id'],
-                    user: this.board.tasks[i]['user_id'],
+                    user: this.board.tasks[i]['user'],
+                    assignee: this.board.tasks[i]['assignee'],
                 }));
             }
         }
@@ -302,6 +325,10 @@ export default {
 
         .field .label {
             padding: 0 .5rem;
+        }
+
+        .level {
+            padding: 0 .75rem .25rem;
         }
     }
 }

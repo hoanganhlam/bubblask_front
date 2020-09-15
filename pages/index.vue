@@ -105,7 +105,7 @@
                     </div>
                 </div>
                 <div class="boards">
-                    <task-board :tasks="tasks" :board="ws ? ws.board : null"/>
+                    <task-board :tasks="tasks" :board="gb && gb.kind !== 'GHOST' ? gb : null"/>
                 </div>
             </div>
         </div>
@@ -197,7 +197,9 @@ export default {
             return "Bubblask - Online Pomodoro Timer - Best pomodoro tool!"
         },
         tasks() {
-            let board = this.ws && this.ws.board ? this.ws.board.id : null;
+            let board = this.gb && this.gb.kind !== 'GHOST' ? this.gb.id : null;
+            console.log(board);
+            console.log(this.$store.state.task.tasks);
             return this.hierarchy(this.$store.state.task.tasks, {idKey: 'id', parentKey: 'parent'}).filter(x => {
                 return x.board === board;
             });
@@ -219,8 +221,8 @@ export default {
             }
             return null;
         },
-        ws() {
-            return this.$store.state.config.ws
+        gb() {
+            return this.$store.state.config.board
         },
     },
     methods: {
@@ -266,7 +268,6 @@ export default {
             await this.$store.commit('task/SET_RUNNING', null);
             clone.changeStatus('complete');
             await this.$store.commit('task/UPDATE_TASK', clone);
-
         }
     },
     async mounted() {

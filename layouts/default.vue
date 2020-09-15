@@ -79,9 +79,9 @@
                                 </b-tooltip>
                             </li>
                             <li v-if="!Boolean(currentUser)">
-                                <b-dropdown :can-close="['escape']" class="elm" position="is-top-right"
+                                <x-dropdown :can-close="['escape']" class="elm" position="is-top-right"
                                             :force-active="openAuth" @active-change="openLogin($event)">
-                                    <div slot="trigger">
+                                    <div slot="trigger" ref="lgButton">
                                         <x-icon name="account"/>
                                     </div>
                                     <div class="dropdown-item" style="min-width: 335px">
@@ -151,7 +151,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </b-dropdown>
+                                </x-dropdown>
                             </li>
                             <li v-else>
                                 <b-tooltip position="is-right" label="Report">
@@ -193,208 +193,21 @@
                 </footer>
             </main>
         </div>
-        <div class="ws-members" v-bind:style="{height: wsMinimize ? undefined : '50vh'}">
-            <div class="header">
-                <div class="media" v-if="currentUser">
-                    <div class="media-content">
-                        <div class="buttons has-addons">
-                            <button class="button is-text" @click="onOpenSelect">
-                                <x-icon name="chevron-down"></x-icon>
-                            </button>
-                            <button class="button is-text is-selected" @click="openGroupForm(false)">
-                                <b class="clickable">{{ ws ? ws.name : 'Create Workspace' }}</b>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="media-right">
-                        <div class="buttons">
-                            <div class="button is-text" @click="wsMinimize = !wsMinimize">
-                                <x-icon :name="wsMinimize ? 'maximize': 'minimize'"></x-icon>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div @click="openLogin(true)" class="button is-text is-fullwidth" v-else>Login to join Workspace</div>
-            </div>
-            <transition name="fade">
-                <div v-if="!wsMinimize && ws" class="members">
-                    <div class="wrapper" v-if="wsMembers.length">
-                        <div class="level is-mobile" v-for="user in wsMembers" :key="user.id">
-                            <div class="level-left">
-                                <div class="media">
-                                    <div class="media-left">
-                                        <avatar :class="user.profile.extra.status" class="is-24x24"
-                                                :value="user.profile.media"/>
-                                    </div>
-                                    <div class="media-content">
-                                        <b>{{ convertName(user) }}</b>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="level-right">
-                                <small>{{ getScore(user).toFixed(2) }}m</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="wrapper" v-if="loadingMember">
-                        <div class="level" v-for="i in 5" :key="i">
-                            <div class="skeleton-user"></div>
-                        </div>
-                    </div>
-                </div>
-            </transition>
-        </div>
-        <b-modal :active.sync="wsActive" scroll="keep">
-            <div class="container small">
-                <div class="group-selector has-background-white">
-                    <div class="header">
-                        <div>
-                            <p class="notification is-warning">Focus to work of meeting with others</p>
-                        </div>
-                        <div class="media">
-                            <b-input expanded @input="searchWS()" v-model="wsSearch" placeholder="Enter keyword..."/>
-                        </div>
-                    </div>
-                    <div class="list">
-                        <div class="media" v-for="i in 5" :key="i" v-if="wsResponse.results[i - 1]"
-                             v-bind:class="{'is-active': ws && ws.id === wsResponse.results[i - 1].id}">
-                            <div class="media-content">
-                                <div>
-                                    <x-icon v-if="wsResponse.results[i - 1].board" name="board"
-                                            class="is-small"></x-icon>
-                                    <b>{{ wsResponse.results[i - 1].name }}</b>
-                                </div>
-                                <small>By {{ convertName(wsResponse.results[i - 1].user) }}</small>
-                            </div>
-                            <div class="media-right" v-if="ws && ws.id === wsResponse.results[i - 1].id">
-                                <div class="button is-small" @click="joinWS(wsResponse.results[i - 1])">
-                                    <span>Left</span>
-                                    <x-icon name="logout"></x-icon>
-                                </div>
-                            </div>
-                            <div class="media-right" v-else>
-                                <b-dropdown v-if="wsResponse.results[i - 1].isPrivate" position="is-bottom-left"
-                                            append-to-body aria-role="menu" trap-focus>
-                                    <div class="button is-small" slot="trigger">
-                                        <span>Join</span>
-                                        <x-icon name="shield-lock"></x-icon>
-                                    </div>
-                                    <b-dropdown-item aria-role="menu-item" :focusable="false" custom>
-                                        <div class="field has-addons" style="min-width: 280px;">
-                                            <b-input v-model="wsPassword" expanded placeholder="Enter Password"/>
-                                            <div class="control">
-                                                <div class="button is-primary"
-                                                     @click="joinWS(wsResponse.results[i - 1])">Join
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </b-dropdown-item>
-                                </b-dropdown>
-                                <div v-else class="button is-small" @click="joinWS(wsResponse.results[i - 1])">
-                                    <span>Join</span>
-                                    <x-icon name="shield-open"></x-icon>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="has-background-light">
-                        <div class="media">
-                            <div class="media-left">
-                                <div class="button is-static">OR</div>
-                            </div>
-                            <div class="media-content">
-                                <b-input @input="searchCode" v-model="wsCode" placeholder="Enter Code"></b-input>
-                            </div>
-                        </div>
-                        <div class="media">
-                            <div class="media-left">
-                                <div class="button is-static">OR</div>
-                            </div>
-                            <div class="media-content">
-                                <div class="button is-fullwidth" @click="openGroupForm(true)">Create
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </b-modal>
-        <b-modal :active.sync="isActive" scroll="keep">
-            <div class="container small">
-                <div class="modal-card" style="width: auto">
-                    <header class="modal-card-head">
-                        <div class="level is-mobile" style="width: 100%">
-                            <h4 class="level-left"><b>Create new workspace</b></h4>
-                            <div class="level-right">
-                                <div class="buttons">
-                                    <div class="button is-text is-small" @click="isActive = false">
-                                        <x-icon name="close"/>
-                                    </div>
-                                    <div v-if="ws" class="button is-danger is-small" @click="joinWS(ws)">Left</div>
-                                </div>
-                            </div>
-                        </div>
-                    </header>
-                    <section class="modal-card-body">
-                        <div v-if="!formWS.isDone">
-                            <ce v-model="formWS.name" elm="h1" class="title" placeholder="Workspace name"></ce>
-                            <div class="columns">
-                                <div class="column">
-                                    <div class="field">
-                                        <b-switch :rounded="false" v-model="formWS.isPrivate">Is private
-                                        </b-switch>
-                                    </div>
-                                    <div class="field" v-if="formWS.isPrivate">
-                                        <b-input expanded v-model="formWS.password" type="password" password-reveal
-                                                 placeholder="Password to access workspace"/>
-                                    </div>
-                                </div>
-                                <div class="column" v-if="!formWS.id">
-                                    <div class="field">
-                                        <b-switch :rounded="false" v-model="formWS.hasBoard">Create a board</b-switch>
-                                    </div>
-                                    <div class="field" v-if="formWS.hasBoard">
-                                        <b-input expanded v-model="formWS['boardName']" placeholder="Board name"/>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div v-if="formWS.isDone && wsURI" class="notification is-warning content">
-                            <p>Share with your friends</p>
-                            <b-input :value="wsURI"></b-input>
-                        </div>
-                    </section>
-                    <footer class="modal-card-foot" v-if="canUpdateWS">
-                        <button v-if="!formWS.isDone" class="button is-primary is-fullwidth" @click="saveWS">Save
-                        </button>
-                    </footer>
-                </div>
-            </div>
-        </b-modal>
+        <board-bar/>
     </div>
 </template>
 
 <script>
-import BDropdownItem from "../components/dropdown/DropdownItem";
 import Avatar from "../components/Avatar";
 import BInput from "../components/input/Input";
 import Options from "../components/options";
 import {debounce, cloneDeep} from "lodash"
 import {Task} from "~/plugins/task";
 import Template from "../pages/board/index";
-
-const DEFAULT_FORM = {
-    name: null,
-    isPrivate: false,
-    password: null,
-    isDone: false,
-    hasBoard: false,
-    boardName: null
-};
+import BoardBar from "@/components/BoardBar";
 
 export default {
-    components: {Template, BInput, BDropdownItem, Avatar, Options},
+    components: {BoardBar, Template, BInput, Avatar, Options},
     data() {
         return {
             colors: [],
@@ -407,41 +220,17 @@ export default {
                 first_name: null,
                 last_name: null
             },
-            formWS: DEFAULT_FORM,
-            isActive: false,
-            wsURI: null,
-            wsResponse: {
-                results: [],
-                count: 0
-            },
-            wsSearch: '',
-            wsCode: null,
-            wsLoading: true,
-            wsActive: false,
-            wsMinimize: true,
-            wsPassword: null,
-            wsMembers: [],
             settings: null,
             notify: {
                 msg: null,
                 ssf: true
             },
-            loadingMember: false,
-            cloneReport: {},
             is_online: true,
             strictTemp: false,
-            forceSidebar: false
+            forceSidebar: true
         }
     },
     methods: {
-        initForm(data) {
-            if (data) {
-                this.formWS = cloneDeep(data);
-            } else {
-                this.formWS = this.formWS = DEFAULT_FORM;
-            }
-            this.formWS.isDone = false;
-        },
         async logout() {
             await this.$auth.logout();
             await this.$router.replace({path: '/'});
@@ -488,56 +277,6 @@ export default {
                 _this.notify = {msg: null, ssf: true}
             }, 2000)
         },
-        openGroupForm(flag) {
-            if (flag) {
-                this.initForm();
-            } else {
-                this.initForm(this.ws);
-            }
-            if (this.canUpdateWS) {
-                this.isActive = true;
-            }
-        },
-        saveWS() {
-            if (typeof this.formWS.id === "undefined") {
-                this.$axios.$post('/general/workspaces/', this.formWS).then(res => {
-                    this.formWS = DEFAULT_FORM;
-                    this.formWS.isDone = true;
-                    this.wsURI = `https://bubblask.com?ws=${res.id}`;
-                    this.joinWS(res);
-                });
-            } else {
-                this.$axios.$put(`/general/workspaces/${this.formWS.id}/`, this.formWS).then(res => {
-                    this.formWS = DEFAULT_FORM;
-                    this.formWS.isDone = true;
-                    this.wsURI = `https://bubblask.com?ws=${res.id}`;
-                });
-            }
-        },
-        async fetchWS() {
-            this.wsLoading = true;
-            this.wsResponse = await this.$axios.$get('/general/workspaces/', {
-                params: {
-                    search: this.wsSearch ? this.wsSearch : undefined,
-                    code: this.wsCode ? this.wsCode : undefined,
-                    page_size: 5
-                }
-            });
-            this.wsLoading = false;
-        },
-        searchCode: debounce(function () {
-            this.wsSearch = null;
-            this.fetchWS();
-        }, 500),
-        searchWS: debounce(function () {
-            this.fetchWS();
-        }, 500),
-        onOpenSelect() {
-            if (!this.wsActive) {
-                this.fetchWS();
-            }
-            this.wsActive = true;
-        },
         async setStrict(val) {
             if (this.currentUser) {
                 await this.$axios.$put(`/auth/users/${this.currentUser.username}/`, {
@@ -552,7 +291,7 @@ export default {
             if (this.currentUser) {
                 await this.$axios.$get('/task/tasks/', {
                     params: {
-                        board: this.ws && this.ws.board ? this.ws.board.id : undefined,
+                        board: this.gb && this.gb.kind !== 'GHOST' ? this.gb.id : undefined,
                         page_size: 100,
                         statuses: ['pending', 'running', 'stopping'].toString(),
                         user: this.currentUser.id
@@ -563,7 +302,8 @@ export default {
                             ...res.results[i],
                             board: res.results[i]['board_id'],
                             parent: res.results[i]['parent_id'],
-                            user: res.results[i]['user_id'],
+                            user: res.results[i]['user'],
+                            assignee: res.results[i]['assignee'],
                         }));
                     }
                 })
@@ -584,15 +324,6 @@ export default {
                     }, "title", "uid", []);
             }
         },
-        async fetchMembers() {
-            if (this.ws) {
-                this.loadingMember = true;
-                this.wsMembers = await this.$axios.$get(`/general/workspaces/${this.ws.id}/members/`);
-                this.loadingMember = false;
-            } else {
-                this.wsMembers = [];
-            }
-        },
         async push_late() {
             let needUpdate = this.$store.state.task.tasks.filter(x => x.update && !x.updating);
             for (let i = 0; i < needUpdate.length; i++) {
@@ -602,19 +333,19 @@ export default {
                 });
                 let res = null;
                 let task = _.cloneDeep(needUpdate[i]);
-                if (this.ws) {
-                    task.ws = this.ws.id;
+                if (this.gb && this.gb.kind !== "GHOST") {
+                    task.board = this.gb;
                 }
                 if (this.currentUser) {
                     if (task.parent === 0) {
                         task.parent = null;
                     }
                     if (task.id) {
-                        if (this.currentUser.id === task.user) {
-                            res = await this.$axios.$put(`/task/tasks/${task.id}/`, task);
+                        if (this.currentUser.id === task.user.id || (task.board && task.assignee && this.currentUser.id === task.assignee.id)) {
+                            res = await this.$axios.$put(`/task/tasks/${task.id}/`, this.cleanData(task));
                         }
                     } else {
-                        res = await this.$axios.$post("/task/tasks/", task);
+                        res = await this.$axios.$post("/task/tasks/", this.cleanData(task));
                     }
                 } else {
                     await this.$indexedDB.put(task);
@@ -631,50 +362,11 @@ export default {
                         res.parent = 0
                     }
                     task.user = res['user'];
+                    if (this.gb && this.gb.kind !== "GHOST") {
+                        task.board = this.gb.id;
+                    }
                     await this.$store.commit('task/UPDATE_TASK', task);
                 }
-            }
-        },
-        joinWS(ws) {
-            this.$axios.$post(`/general/workspaces/${ws.id}/join/`, {password: this.wsPassword}).then(res => {
-                if (res.status) {
-                    if (this.ws && this.ws.id === ws.id) {
-                        this.$store.commit('config/SET_WS', null);
-                        this.wsMinimize = true;
-                    } else {
-                        this.$store.commit('config/SET_WS', ws);
-                        this.wsMinimize = false;
-                    }
-                    this.wsActive = false;
-                    this.isActive = false;
-                }
-            });
-        },
-        getScore(user) {
-            if (user && this.ws && this.cloneReport) {
-                return this.cloneReport[user.id] / 60;
-            }
-            return 0;
-        },
-        connectSocket() {
-            if (this.ws && typeof Pusher === 'object') {
-                let pusher = new Pusher('eccf1067acf541fbc5d4', {
-                    cluster: 'ap1'
-                });
-                let channel = pusher.subscribe(`ws_${this.ws.id}`);
-                channel.bind('change-user-score', function (data) {
-                    if (data) {
-                        this.cloneReport[data.user] = data.score;
-                    }
-                }.bind(this));
-                channel.bind('change-user-status', function (data) {
-                    if (data) {
-                        let index = this.wsMembers.map(u => u.id).indexOf(data.user);
-                        if (index >= 0) {
-                            this.wsMembers[index].profile.extra.status = data.status;
-                        }
-                    }
-                }.bind(this));
             }
         },
         awakeMe() {
@@ -714,18 +406,11 @@ export default {
             }
             return out;
         },
-        ws() {
-            return this.$store.state.config.ws
+        gb() {
+            return this.$store.state.config.board
         },
         isRunning() {
             return Boolean(this.$store.state.task.running);
-        },
-        canUpdateWS() {
-            if (typeof this.formWS.id === "undefined") {
-                return true;
-            } else {
-                return this.currentUser && this.currentUser.id === this.formWS.user.id;
-            }
         },
         openAuth() {
             return this.$store.state.auth.openAuth
@@ -736,21 +421,8 @@ export default {
             this.settings = cloneDeep(this.$store.state.config.settings);
             this.fetchTasks();
         },
-        'formWS.isPrivate'() {
-            if (this.formWS.isPrivate === false) {
-                this.formWS.password = null
-            }
-        },
-        async ws() {
-            if (this.ws) {
-                this.wsMinimize = false;
-                this.cloneReport = cloneDeep(this.ws.report);
-            } else {
-                this.cloneReport = {};
-            }
+        async gb() {
             await this.fetchTasks();
-            await this.fetchMembers();
-            this.connectSocket();
         },
         is_online() {
             if (this.is_online) {
@@ -761,7 +433,7 @@ export default {
         },
         strictTemp() {
             this.setStrict(this.strictTemp);
-        }
+        },
     },
     async mounted() {
         if (process['client']) {
@@ -771,7 +443,6 @@ export default {
                 _this.push_late();
                 _this.awakeMe();
             }, 800);
-            this.connectSocket();
             window.onmousemove = debounce(function () {
                 _this.is_online = true;
                 let oldDateObj = new Date();
@@ -779,7 +450,6 @@ export default {
                 newDateObj.setTime(oldDateObj.getTime() + (5 * 60 * 1000));
                 localStorage.setItem('time_off', newDateObj.toISOString());
             }, 1000);
-
             // Track
             window.fhApp = 'bubblask';
             window.fhStyle = {

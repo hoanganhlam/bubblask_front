@@ -1,17 +1,17 @@
 exports.ids = [4];
 exports.modules = {
 
-/***/ 58:
+/***/ 61:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./components/TaskBoard.vue?vue&type=template&id=42d170bc&scoped=true&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"board"},[(!_vm.readonly)?_vm._ssrNode("<div class=\"media\" data-v-42d170bc>","</div>",[_vm._ssrNode("<div class=\"media-content\" data-v-42d170bc>","</div>",[_vm._ssrNode("<div class=\"task has-text-centered\" data-v-42d170bc>","</div>",[_vm._ssrNode("<div class=\"notification\" data-v-42d170bc>","</div>",[_c('x-icon',{attrs:{"name":"plus"}})],1)])]),_vm._ssrNode(" "),_c('n-link',{staticClass:"media-right",attrs:{"to":"/board/visual"}},[_c('div',{staticClass:"task"},[_c('div',{staticClass:"notification"},[_c('x-icon',{attrs:{"name":"file-tree-outline"}})],1)])])],2):_vm._e(),_vm._ssrNode(" "),(!_vm.loading && _vm.activeTasks.length)?_c('draggable',_vm._b({on:{"change":_vm.handle_order},model:{value:(_vm.activeTasks),callback:function ($$v) {_vm.activeTasks=$$v},expression:"activeTasks"}},'draggable',_vm.dragOptions,false),_vm._l((_vm.activeTasks),function(task,i){return _c('task',{key:i,staticClass:"master",attrs:{"value":task,"readonly":_vm.readonly,"tree":_vm.tree,"board":_vm.board},on:{"add":_vm.handle_add_child,"editing":function($event){_vm.disabledDrag = $event},"deleted":function($event){return _vm.$emit('deleted', $event)}}})}),1):_vm._e(),_vm._ssrNode(" "+((_vm.loading)?("<div class=\"tasks\" data-v-42d170bc>"+(_vm._ssrList((5),function(i){return ("<div class=\"task\" data-v-42d170bc><div class=\"notification media\" data-v-42d170bc><div class=\"skeleton-task\" data-v-42d170bc></div></div></div>")}))+"</div>"):"<!---->"))],2)}
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./components/TaskBoard.vue?vue&type=template&id=c3815e9e&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"board"},[(!_vm.readonly && _vm.authorised)?_vm._ssrNode("<div class=\"media\">","</div>",[_vm._ssrNode("<div class=\"media-content\">","</div>",[_vm._ssrNode("<div class=\"task has-text-centered\">","</div>",[_vm._ssrNode("<div class=\"notification\">","</div>",[_c('x-icon',{attrs:{"name":"plus"}})],1)])]),_vm._ssrNode(" "),_c('n-link',{staticClass:"media-right",attrs:{"to":"/board/visual"}},[_c('div',{staticClass:"task"},[_c('div',{staticClass:"notification"},[_c('x-icon',{attrs:{"name":"file-tree-outline"}})],1)])])],2):_vm._e(),_vm._ssrNode(" "),(!_vm.loading && _vm.activeTasks.length)?_c('draggable',_vm._b({on:{"change":_vm.handle_order},model:{value:(_vm.activeTasks),callback:function ($$v) {_vm.activeTasks=$$v},expression:"activeTasks"}},'draggable',_vm.dragOptions,false),_vm._l((_vm.activeTasks),function(task,i){return _c('task',{key:i,staticClass:"master",attrs:{"value":task,"readonly":_vm.readonly,"tree":_vm.tree,"board":_vm.board},on:{"add":_vm.handle_add_child,"editing":function($event){_vm.disabledDrag = $event},"deleted":function($event){return _vm.$emit('deleted', $event)}}})}),1):_vm._e(),_vm._ssrNode(" "+((_vm.loading)?("<div class=\"tasks\">"+(_vm._ssrList((5),function(i){return ("<div class=\"task\"><div class=\"notification media\"><div class=\"skeleton-task\"></div></div></div>")}))+"</div>"):"<!---->"))],2)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./components/TaskBoard.vue?vue&type=template&id=42d170bc&scoped=true&
+// CONCATENATED MODULE: ./components/TaskBoard.vue?vue&type=template&id=c3815e9e&
 
 // EXTERNAL MODULE: ./plugins/task.js
 var plugins_task = __webpack_require__(5);
@@ -104,6 +104,10 @@ const _ = __webpack_require__(2);
 
     timerSetting() {
       return this.$store.state.config.settings.timer;
+    },
+
+    authorised() {
+      return !(Boolean(this.board) && this.board.settings && !this.board.settings['collaborate']);
     }
 
   },
@@ -206,10 +210,7 @@ var componentNormalizer = __webpack_require__(1);
 
 
 
-function injectStyles (context) {
-  
-  
-}
+
 
 /* normalize component */
 
@@ -218,8 +219,8 @@ var component = Object(componentNormalizer["a" /* default */])(
   render,
   staticRenderFns,
   false,
-  injectStyles,
-  "42d170bc",
+  null,
+  null,
   "4e1e1079"
   
 )
@@ -228,25 +229,25 @@ var component = Object(componentNormalizer["a" /* default */])(
 
 /***/ }),
 
-/***/ 69:
+/***/ 72:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./pages/index.vue?vue&type=template&id=163b5469&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._ssrNode("<div"+(_vm._ssrClass("hero is-primary",{'is-fullheight': _vm.timer > 0}))+(_vm._ssrStyle(null,_vm.style, null))+">","</div>",[_vm._ssrNode("<div class=\"hero-body\">","</div>",[_vm._ssrNode("<div class=\"container pomodoro\">","</div>",[_vm._ssrNode("<div class=\"wrap\"><div class=\"timer\"><div class=\"title uppercase\">"+_vm._ssrEscape(_vm._s(_vm.mode))+"</div> <div class=\"timer--clock\"><div class=\"minutes-group clock-display-grp\"><div class=\"first number-grp\"><div class=\"number-grp-wrp\"><div class=\"num num-0\"><p>0</p></div> <div class=\"num num-1\"><p>1</p></div> <div class=\"num num-2\"><p>2</p></div> <div class=\"num num-3\"><p>3</p></div> <div class=\"num num-4\"><p>4</p></div> <div class=\"num num-5\"><p>5</p></div> <div class=\"num num-6\"><p>6</p></div> <div class=\"num num-7\"><p>7</p></div> <div class=\"num num-8\"><p>8</p></div> <div class=\"num num-9\"><p>9</p></div></div></div> <div class=\"second number-grp\"><div class=\"number-grp-wrp\"><div class=\"num num-0\"><p>0</p></div> <div class=\"num num-1\"><p>1</p></div> <div class=\"num num-2\"><p>2</p></div> <div class=\"num num-3\"><p>3</p></div> <div class=\"num num-4\"><p>4</p></div> <div class=\"num num-5\"><p>5</p></div> <div class=\"num num-6\"><p>6</p></div> <div class=\"num num-7\"><p>7</p></div> <div class=\"num num-8\"><p>8</p></div> <div class=\"num num-9\"><p>9</p></div></div></div></div> <div class=\"clock-separator\"><p>:</p></div> <div class=\"seconds-group clock-display-grp\"><div class=\"first number-grp\"><div class=\"number-grp-wrp\"><div class=\"num num-0\"><p>0</p></div> <div class=\"num num-1\"><p>1</p></div> <div class=\"num num-2\"><p>2</p></div> <div class=\"num num-3\"><p>3</p></div> <div class=\"num num-4\"><p>4</p></div> <div class=\"num num-5\"><p>5</p></div> <div class=\"num num-6\"><p>6</p></div> <div class=\"num num-7\"><p>7</p></div> <div class=\"num num-8\"><p>8</p></div> <div class=\"num num-9\"><p>9</p></div></div></div> <div class=\"second number-grp\"><div class=\"number-grp-wrp\"><div class=\"num num-0\"><p>0</p></div> <div class=\"num num-1\"><p>1</p></div> <div class=\"num num-2\"><p>2</p></div> <div class=\"num num-3\"><p>3</p></div> <div class=\"num num-4\"><p>4</p></div> <div class=\"num num-5\"><p>5</p></div> <div class=\"num num-6\"><p>6</p></div> <div class=\"num num-7\"><p>7</p></div> <div class=\"num num-8\"><p>8</p></div> <div class=\"num num-9\"><p>9</p></div></div></div></div></div> <h4>A SIMPLE HACK FOR DEEP WORK</h4></div></div> "),_vm._ssrNode("<div class=\"buttons timer-control\">","</div>",[_vm._ssrNode((((_vm.runningTask === null || !_vm.setting.is_strict))?("<div class=\"button is-primary\">Short Break\n                    </div>"):"<!---->")+" "+(((_vm.runningTask === null || !_vm.setting.is_strict))?("<div class=\"button is-primary\">Long Break\n                    </div>"):"<!---->")+" "),(_vm.runningTask && !_vm.setting.is_strict)?_vm._ssrNode("<div class=\"button is-primary\">","</div>",[_c('x-icon',{attrs:{"name":"pause"}})],1):_vm._e(),_vm._ssrNode(" "),(_vm.runningTask)?_vm._ssrNode("<div class=\"button is-primary\">","</div>",[_c('x-icon',{attrs:{"name":"check"}})],1):_vm._e()],2),_vm._ssrNode(" "+((_vm.runningTask && !_vm.showNote && _vm.runningTask.description)?("<div class=\"button is-text\">Show Note\n                </div>"):"<!---->"))],2)])]),_vm._ssrNode(" "),(!_vm.runningTask)?_vm._ssrNode("<div class=\"hero is-secondary is-small\" style=\"min-height: 50vh\">","</div>",[_vm._ssrNode("<div class=\"hero-body\">","</div>",[_vm._ssrNode(((_vm.setting.is_strict)?("<div class=\"container small\"><div class=\"notification is-warning content\"><b>Strict mode</b> <ul><li>You can't stop timer when working</li> <li>You can't update running task</li></ul></div></div>"):"<!---->")+" "),_vm._ssrNode("<div class=\"boards\">","</div>",[_c('task-board',{attrs:{"tasks":_vm.tasks,"board":_vm.ws ? _vm.ws.board : null}})],1)],2)]):_vm._e(),_vm._ssrNode(" "),_c('transition',{attrs:{"name":"fade"}},[(!(_vm.runningTask || _vm.currentUser))?_c('div',{staticClass:"hero"},[_c('div',{staticClass:"hero-body"},[_c('div',{staticClass:"container small content"},[_c('h1',{staticClass:"title"},[_vm._v("Bublask")]),_vm._v(" "),_c('p',[_vm._v("Bubblask is small application with many features that help you increase productivity by using\n                        pomodoro technique.")]),_vm._v(" "),_c('p',[_vm._v("Pomodoro technique divides your total working/studying time into sessions of 25 minutes.")]),_vm._v(" "),_c('ul',[_c('li',[_vm._v("You have to just set the timer of 25 minutes and start studying. In these 25 minutes,\n                            you\n                            should focus only on whatever you have decided to study/work. Take care of that nothing\n                            should interrupt you.\n                        ")]),_vm._v(" "),_c('li',[_vm._v("After 25 minutes you have to take a break of 5 minutes. In these 5 minutes, you can do\n                            anything. You can attend calls you missed in those 25 minutes or you can take a small\n                            walk.\n                            You can just relax!\n                        ")]),_vm._v(" "),_c('li',[_vm._v("After 5 minutes you have to again start studying for 25 minutes.")]),_vm._v(" "),_c('li',[_vm._v("After 4 sessions of 25 minutes, you can take a break of 15–20 minutes.")])])])])]):_vm._e()]),_vm._ssrNode(" "),_c('b-modal',{attrs:{"active":_vm.showNote,"scroll":"keep"},on:{"update:active":function($event){_vm.showNote=$event}}},[(_vm.runningTask)?_c('div',{staticClass:"container small"},[_c('div',{staticClass:"notification is-warning"},[_c('div',{domProps:{"innerHTML":_vm._s(_vm.runningTask.description)}})])]):_vm._e()]),_vm._ssrNode(" "),_c('b-modal',{attrs:{"active":_vm.askPassword,"scroll":"keep"},on:{"update:active":function($event){_vm.askPassword=$event}}},[(_vm.wsTemp)?_c('div',{staticClass:"container small"},[_c('div',{staticClass:"notification is-warning"},[_c('div',{staticClass:"field"},[_vm._v("\n                    Join "+_vm._s(_vm.wsTemp.name)+"\n                ")]),_vm._v(" "),_c('label',{staticClass:"field has-addons"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.wsPassword),expression:"wsPassword"}],staticClass:"input",attrs:{"placeholder":"Enter Password"},domProps:{"value":(_vm.wsPassword)},on:{"input":function($event){if($event.target.composing){ return; }_vm.wsPassword=$event.target.value}}}),_vm._v(" "),_c('span',{staticClass:"control"},[_c('span',{staticClass:"button is-primary",on:{"click":function($event){return _vm.joinWS(_vm.wsTemp)}}},[_vm._v("Join")])])])])]):_vm._e()])],2)}
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./pages/index.vue?vue&type=template&id=11d37056&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._ssrNode("<div"+(_vm._ssrClass("hero is-primary",{'is-fullheight': _vm.timer > 0}))+(_vm._ssrStyle(null,_vm.style, null))+">","</div>",[_vm._ssrNode("<div class=\"hero-body\">","</div>",[_vm._ssrNode("<div class=\"container pomodoro\">","</div>",[_vm._ssrNode("<div class=\"wrap\"><div class=\"timer\"><div class=\"title uppercase\">"+_vm._ssrEscape(_vm._s(_vm.mode))+"</div> <div class=\"timer--clock\"><div class=\"minutes-group clock-display-grp\"><div class=\"first number-grp\"><div class=\"number-grp-wrp\"><div class=\"num num-0\"><p>0</p></div> <div class=\"num num-1\"><p>1</p></div> <div class=\"num num-2\"><p>2</p></div> <div class=\"num num-3\"><p>3</p></div> <div class=\"num num-4\"><p>4</p></div> <div class=\"num num-5\"><p>5</p></div> <div class=\"num num-6\"><p>6</p></div> <div class=\"num num-7\"><p>7</p></div> <div class=\"num num-8\"><p>8</p></div> <div class=\"num num-9\"><p>9</p></div></div></div> <div class=\"second number-grp\"><div class=\"number-grp-wrp\"><div class=\"num num-0\"><p>0</p></div> <div class=\"num num-1\"><p>1</p></div> <div class=\"num num-2\"><p>2</p></div> <div class=\"num num-3\"><p>3</p></div> <div class=\"num num-4\"><p>4</p></div> <div class=\"num num-5\"><p>5</p></div> <div class=\"num num-6\"><p>6</p></div> <div class=\"num num-7\"><p>7</p></div> <div class=\"num num-8\"><p>8</p></div> <div class=\"num num-9\"><p>9</p></div></div></div></div> <div class=\"clock-separator\"><p>:</p></div> <div class=\"seconds-group clock-display-grp\"><div class=\"first number-grp\"><div class=\"number-grp-wrp\"><div class=\"num num-0\"><p>0</p></div> <div class=\"num num-1\"><p>1</p></div> <div class=\"num num-2\"><p>2</p></div> <div class=\"num num-3\"><p>3</p></div> <div class=\"num num-4\"><p>4</p></div> <div class=\"num num-5\"><p>5</p></div> <div class=\"num num-6\"><p>6</p></div> <div class=\"num num-7\"><p>7</p></div> <div class=\"num num-8\"><p>8</p></div> <div class=\"num num-9\"><p>9</p></div></div></div> <div class=\"second number-grp\"><div class=\"number-grp-wrp\"><div class=\"num num-0\"><p>0</p></div> <div class=\"num num-1\"><p>1</p></div> <div class=\"num num-2\"><p>2</p></div> <div class=\"num num-3\"><p>3</p></div> <div class=\"num num-4\"><p>4</p></div> <div class=\"num num-5\"><p>5</p></div> <div class=\"num num-6\"><p>6</p></div> <div class=\"num num-7\"><p>7</p></div> <div class=\"num num-8\"><p>8</p></div> <div class=\"num num-9\"><p>9</p></div></div></div></div></div> <h4>A SIMPLE HACK FOR DEEP WORK</h4></div></div> "),_vm._ssrNode("<div class=\"buttons timer-control\">","</div>",[_vm._ssrNode((((_vm.runningTask === null || !_vm.setting.is_strict))?("<div class=\"button is-primary\">Short Break\n                    </div>"):"<!---->")+" "+(((_vm.runningTask === null || !_vm.setting.is_strict))?("<div class=\"button is-primary\">Long Break\n                    </div>"):"<!---->")+" "),(_vm.runningTask && !_vm.setting.is_strict)?_vm._ssrNode("<div class=\"button is-primary\">","</div>",[_c('x-icon',{attrs:{"name":"pause"}})],1):_vm._e(),_vm._ssrNode(" "),(_vm.runningTask)?_vm._ssrNode("<div class=\"button is-primary\">","</div>",[_c('x-icon',{attrs:{"name":"check"}})],1):_vm._e()],2),_vm._ssrNode(" "+((_vm.runningTask && !_vm.showNote && _vm.runningTask.description)?("<div class=\"button is-text\">Show Note\n                </div>"):"<!---->"))],2)])]),_vm._ssrNode(" "),(!_vm.runningTask)?_vm._ssrNode("<div class=\"hero is-secondary is-small\" style=\"min-height: 50vh\">","</div>",[_vm._ssrNode("<div class=\"hero-body\">","</div>",[_vm._ssrNode(((_vm.setting.is_strict)?("<div class=\"container small\"><div class=\"notification is-warning content\"><b>Strict mode</b> <ul><li>You can't stop timer when working</li> <li>You can't update running task</li></ul></div></div>"):"<!---->")+" "),_vm._ssrNode("<div class=\"boards\">","</div>",[_c('task-board',{attrs:{"tasks":_vm.tasks,"board":_vm.gb && _vm.gb.kind !== 'GHOST' ? _vm.gb : null}})],1)],2)]):_vm._e(),_vm._ssrNode(" "),_c('transition',{attrs:{"name":"fade"}},[(!(_vm.runningTask || _vm.currentUser))?_c('div',{staticClass:"hero"},[_c('div',{staticClass:"hero-body"},[_c('div',{staticClass:"container small content"},[_c('h1',{staticClass:"title"},[_vm._v("Bublask")]),_vm._v(" "),_c('p',[_vm._v("Bubblask is small application with many features that help you increase productivity by using\n                        pomodoro technique.")]),_vm._v(" "),_c('p',[_vm._v("Pomodoro technique divides your total working/studying time into sessions of 25 minutes.")]),_vm._v(" "),_c('ul',[_c('li',[_vm._v("You have to just set the timer of 25 minutes and start studying. In these 25 minutes,\n                            you\n                            should focus only on whatever you have decided to study/work. Take care of that nothing\n                            should interrupt you.\n                        ")]),_vm._v(" "),_c('li',[_vm._v("After 25 minutes you have to take a break of 5 minutes. In these 5 minutes, you can do\n                            anything. You can attend calls you missed in those 25 minutes or you can take a small\n                            walk.\n                            You can just relax!\n                        ")]),_vm._v(" "),_c('li',[_vm._v("After 5 minutes you have to again start studying for 25 minutes.")]),_vm._v(" "),_c('li',[_vm._v("After 4 sessions of 25 minutes, you can take a break of 15–20 minutes.")])])])])]):_vm._e()]),_vm._ssrNode(" "),_c('b-modal',{attrs:{"active":_vm.showNote,"scroll":"keep"},on:{"update:active":function($event){_vm.showNote=$event}}},[(_vm.runningTask)?_c('div',{staticClass:"container small"},[_c('div',{staticClass:"notification is-warning"},[_c('div',{domProps:{"innerHTML":_vm._s(_vm.runningTask.description)}})])]):_vm._e()]),_vm._ssrNode(" "),_c('b-modal',{attrs:{"active":_vm.askPassword,"scroll":"keep"},on:{"update:active":function($event){_vm.askPassword=$event}}},[(_vm.wsTemp)?_c('div',{staticClass:"container small"},[_c('div',{staticClass:"notification is-warning"},[_c('div',{staticClass:"field"},[_vm._v("\n                    Join "+_vm._s(_vm.wsTemp.name)+"\n                ")]),_vm._v(" "),_c('label',{staticClass:"field has-addons"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.wsPassword),expression:"wsPassword"}],staticClass:"input",attrs:{"placeholder":"Enter Password"},domProps:{"value":(_vm.wsPassword)},on:{"input":function($event){if($event.target.composing){ return; }_vm.wsPassword=$event.target.value}}}),_vm._v(" "),_c('span',{staticClass:"control"},[_c('span',{staticClass:"button is-primary",on:{"click":function($event){return _vm.joinWS(_vm.wsTemp)}}},[_vm._v("Join")])])])])]):_vm._e()])],2)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./pages/index.vue?vue&type=template&id=163b5469&
+// CONCATENATED MODULE: ./pages/index.vue?vue&type=template&id=11d37056&
 
 // EXTERNAL MODULE: ./components/Avatar.vue + 15 modules
-var Avatar = __webpack_require__(13);
+var Avatar = __webpack_require__(7);
 
 // EXTERNAL MODULE: ./components/TaskBoard.vue + 4 modules
-var TaskBoard = __webpack_require__(58);
+var TaskBoard = __webpack_require__(61);
 
 // CONCATENATED MODULE: ./node_modules/babel-loader/lib??ref--2-0!./node_modules/vue-loader/lib??vue-loader-options!./pages/index.vue?vue&type=script&lang=js&
 //
@@ -454,7 +455,9 @@ const _ = __webpack_require__(2);
     },
 
     tasks() {
-      let board = this.ws && this.ws.board ? this.ws.board.id : null;
+      let board = this.gb && this.gb.kind !== 'GHOST' ? this.gb.id : null;
+      console.log(board);
+      console.log(this.$store.state.task.tasks);
       return this.hierarchy(this.$store.state.task.tasks, {
         idKey: 'id',
         parentKey: 'parent'
@@ -485,8 +488,8 @@ const _ = __webpack_require__(2);
       return null;
     },
 
-    ws() {
-      return this.$store.state.config.ws;
+    gb() {
+      return this.$store.state.config.board;
     }
 
   },
