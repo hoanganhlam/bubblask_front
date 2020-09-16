@@ -437,10 +437,10 @@ var component = Object(componentNormalizer["a" /* default */])(
 
 /* harmony default export */ var components_CalendarHeatMap = (component.exports);
 // EXTERNAL MODULE: ./components/Avatar.vue + 15 modules
-var Avatar = __webpack_require__(7);
+var Avatar = __webpack_require__(8);
 
 // EXTERNAL MODULE: ./components/input/Input.vue + 4 modules
-var Input = __webpack_require__(6);
+var Input = __webpack_require__(7);
 
 // CONCATENATED MODULE: ./node_modules/babel-loader/lib??ref--2-0!./node_modules/vue-loader/lib??vue-loader-options!./pages/_user/index.vue?vue&type=script&lang=js&
 //

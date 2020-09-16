@@ -235,7 +235,7 @@ var Autocompletevue_type_template_id_2e994ce8_staticRenderFns = []
 var FormElementMixin = __webpack_require__(9);
 
 // EXTERNAL MODULE: ./components/input/Input.vue + 4 modules
-var Input = __webpack_require__(6);
+var Input = __webpack_require__(7);
 
 // CONCATENATED MODULE: ./node_modules/babel-loader/lib??ref--2-0!./node_modules/vue-loader/lib??vue-loader-options!./components/autocomplete/Autocomplete.vue?vue&type=script&lang=js&
 //
@@ -1093,7 +1093,7 @@ var svg_js_ = __webpack_require__(54);
 var plugins_task = __webpack_require__(5);
 
 // EXTERNAL MODULE: ./components/input/Input.vue + 4 modules
-var Input = __webpack_require__(6);
+var Input = __webpack_require__(7);
 
 // EXTERNAL MODULE: ./components/taginput/Taginput.vue + 15 modules
 var Taginput = __webpack_require__(60);

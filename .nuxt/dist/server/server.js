@@ -505,6 +505,12 @@ class Task {
 
 /***/ }),
 /* 6 */
+/***/ (function(module, exports) {
+
+module.exports = require("buefy");
+
+/***/ }),
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -776,7 +782,7 @@ var component = Object(componentNormalizer["a" /* default */])(
 /* harmony default export */ var Input = __webpack_exports__["a"] = (component.exports);
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1228,12 +1234,6 @@ var Avatar_component = Object(componentNormalizer["a" /* default */])(
 /* harmony default export */ var Avatar = __webpack_exports__["a"] = (Avatar_component.exports);
 
 /***/ }),
-/* 8 */
-/***/ (function(module, exports) {
-
-module.exports = require("buefy");
-
-/***/ }),
 /* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1403,12 +1403,12 @@ module.exports = require("buefy");
 
 "use strict";
 
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./components/Icon.vue?vue&type=template&id=27a3cf60&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('span',{staticClass:"icon"},[_vm._ssrNode("<svg viewBox=\"0 0 24 24\"><path"+(_vm._ssrAttr("d",_vm.path))+(_vm._ssrAttr("transform",_vm.transform))+"></path></svg>")])}
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./components/Icon.vue?vue&type=template&id=574e6928&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.path)?_c('span',{staticClass:"icon"},[_vm._ssrNode("<svg viewBox=\"0 0 24 24\"><path"+(_vm._ssrAttr("d",_vm.path))+(_vm._ssrAttr("transform",_vm.transform))+"></path></svg>")]):_vm._e()}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./components/Icon.vue?vue&type=template&id=27a3cf60&
+// CONCATENATED MODULE: ./components/Icon.vue?vue&type=template&id=574e6928&
 
 // EXTERNAL MODULE: ./components/Icon.json
 var Icon = __webpack_require__(11);
@@ -1430,6 +1430,7 @@ var Icon = __webpack_require__(11);
   },
   computed: {
     path() {
+      if (!this.name) return null;
       return typeof Icon[this.name] === "string" ? Icon[this.name] : Icon[this.name].path;
     },
 
@@ -1700,7 +1701,7 @@ var component = Object(componentNormalizer["a" /* default */])(
 
 /* harmony default export */ var Board = (component.exports);
 // EXTERNAL MODULE: ./components/Avatar.vue + 15 modules
-var Avatar = __webpack_require__(7);
+var Avatar = __webpack_require__(8);
 
 // CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./components/BoardList.vue?vue&type=template&id=f388f3b0&
 var BoardListvue_type_template_id_f388f3b0_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"subsection"},[_vm._ssrNode("<div class=\"level is-mobile\">","</div>",[_vm._ssrNode("<div class=\"level-left\"><h4 class=\"widget_title\">Your Board</h4></div> "),_vm._ssrNode("<div class=\"level-right\">","</div>",[_vm._ssrNode("<div class=\"buttons\">","</div>",[(_vm.page > 1)?_vm._ssrNode("<div class=\"button is-small previous\">","</div>",[_c('x-icon',{attrs:{"name":"chevron-left"}})],1):_vm._e(),_vm._ssrNode(" "),(_vm.page < _vm.total)?_vm._ssrNode("<div class=\"button is-small next\">","</div>",[_c('x-icon',{attrs:{"name":"chevron-right"}})],1):_vm._e()],2)])],2),_vm._ssrNode(" "),(_vm.response.results.length)?_vm._ssrNode("<div class=\"columns is-multiline\">","</div>",_vm._l((_vm.response.results),function(board){return _vm._ssrNode("<div class=\"column is-3\">","</div>",[_c('board',{attrs:{"value":board}})],1)}),0):_vm._e(),_vm._ssrNode(" "+((_vm.loading)?("<div class=\"columns is-multiline\">"+(_vm._ssrList((4),function(i){return ("<div class=\"column is-3\"><div class=\"card\"><div class=\"card-content\"><div class=\"skeleton-line\"></div></div></div></div>")}))+"</div>"):"<!---->"))],2)}
@@ -1823,7 +1824,7 @@ var BoardList_component = Object(componentNormalizer["a" /* default */])(
 
 /* harmony default export */ var BoardList = (BoardList_component.exports);
 // EXTERNAL MODULE: ./components/input/Input.vue + 4 modules
-var Input = __webpack_require__(6);
+var Input = __webpack_require__(7);
 
 // EXTERNAL MODULE: external "lodash"
 var external_lodash_ = __webpack_require__(2);
@@ -3760,18 +3761,18 @@ var nuxt_loading_component = Object(componentNormalizer["a" /* default */])(
 // EXTERNAL MODULE: ./style/app.scss
 var style_app = __webpack_require__(37);
 
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./layouts/default.vue?vue&type=template&id=aded225a&
-var defaultvue_type_template_id_aded225a_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:{'has-custom': _vm.$route.path === '/'},style:(_vm.settings.color)},[(!_vm.isRunning && !_vm.$route.path.includes('/workspace'))?_vm._ssrNode("<header class=\"header\">","</header>",[_vm._ssrNode("<nav role=\"navigation\" aria-label=\"main navigation\" class=\"navbar\">","</nav>",[_vm._ssrNode("<div class=\"navbar-brand\">","</div>",[_c('n-link',{staticClass:"navbar-item logo",attrs:{"to":"/"}},[_c('img',{attrs:{"src":"/logo.svg","alt":"Bubblask"}}),_vm._v(" "),_c('span',{staticClass:"primary"},[_vm._v("BUBBLASK")]),_vm._v(" "),_c('span',{staticClass:"second"},[_vm._v(".com")])]),_vm._ssrNode(" <a role=\"button\" aria-label=\"menu\" aria-expanded=\"false\" class=\"navbar-burger burger\"><span aria-hidden=\"true\"></span> <span aria-hidden=\"true\"></span> <span aria-hidden=\"true\"></span></a>")],2),_vm._ssrNode(" <div"+(_vm._ssrClass("navbar-menu",{'is-active' : _vm.burgerActive}))+"><div class=\"navbar-end\"><div class=\"navbar-item\"><div><span class=\"field\">Total: </span> <span class=\"value\">"+_vm._ssrEscape(_vm._s(_vm.displayTasks.length))+"</span></div></div> <div class=\"navbar-item\"><div><span class=\"field\">Time: </span> <span class=\"value\">"+_vm._ssrEscape(_vm._s(_vm.totalTime)+"m")+"</span></div></div></div></div>")],2)]):_vm._e(),_vm._ssrNode(" "),_vm._ssrNode("<div"+(_vm._ssrClass(null,{'main-content': !_vm.isRunning}))+">","</div>",[(!_vm.isRunning)?_vm._ssrNode("<div"+(_vm._ssrClass("sidebar",{'active': _vm.forceSidebar}))+">","</div>",[_vm._ssrNode("<aside class=\"menu\">","</aside>",[_vm._ssrNode("<div class=\"menu-child\">","</div>",[_vm._ssrNode("<ul class=\"menu-list\">","</ul>",[_vm._ssrNode("<li>","</li>",[_c('b-tooltip',{attrs:{"position":"is-right","label":"Leader board"}},[_c('n-link',{class:{'is-active': _vm.$route.path === '/leaderboard'},attrs:{"to":"/leaderboard"}},[_c('x-icon',{attrs:{"name":"poll"}})],1)],1)],1),_vm._ssrNode(" "),_vm._ssrNode("<li>","</li>",[_c('b-tooltip',{attrs:{"position":"is-right","label":"Board"}},[_c('n-link',{class:{'is-active': _vm.$route.path === '/board'},attrs:{"to":"/board"}},[_c('x-icon',{attrs:{"name":"board"}})],1)],1)],1)],2)]),_vm._ssrNode(" "),_vm._ssrNode("<div class=\"menu-child\">","</div>",[_vm._ssrNode("<ul class=\"menu-list\">","</ul>",[(_vm.currentUser)?_vm._ssrNode("<li>","</li>",[_c('b-tooltip',{attrs:{"position":"is-right","label":"Setting"}},[_c('client-only',[_c('b-dropdown',{staticClass:"elm",attrs:{"position":"is-top-right","trap-focus":true}},[_c('template',{staticClass:"clickable",slot:"trigger"},[_c('x-icon',{attrs:{"name":"cogs"}})],1),_vm._v(" "),_c('b-dropdown-item',{attrs:{"custom":""}},[_c('Options',{model:{value:(_vm.settings),callback:function ($$v) {_vm.settings=$$v},expression:"settings"}})],1)],2)],1)],1)],1):_vm._e(),_vm._ssrNode(" "),_vm._ssrNode("<li>","</li>",[_c('b-tooltip',{attrs:{"position":"is-right","label":"Strict Mode"}},[_c('label',{staticClass:"elm b-checkbox checkbox"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.strictTemp),expression:"strictTemp"}],attrs:{"type":"checkbox"},domProps:{"checked":Array.isArray(_vm.strictTemp)?_vm._i(_vm.strictTemp,null)>-1:(_vm.strictTemp)},on:{"change":function($event){var $$a=_vm.strictTemp,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=null,$$i=_vm._i($$a,$$v);if($$el.checked){$$i<0&&(_vm.strictTemp=$$a.concat([$$v]))}else{$$i>-1&&(_vm.strictTemp=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{_vm.strictTemp=$$c}}}})])])],1),_vm._ssrNode(" "),(!Boolean(_vm.currentUser))?_vm._ssrNode("<li>","</li>",[_c('x-dropdown',{staticClass:"elm",attrs:{"can-close":['escape'],"position":"is-top-right","force-active":_vm.openAuth},on:{"active-change":function($event){return _vm.openLogin($event)}}},[_c('div',{ref:"lgButton",attrs:{"slot":"trigger"},slot:"trigger"},[_c('x-icon',{attrs:{"name":"account"}})],1),_vm._v(" "),_c('div',{staticClass:"dropdown-item",staticStyle:{"min-width":"335px"}},[_c('div',{staticClass:"notification is-warning"},[_vm._v("Login to manage and track your work!")]),_vm._v(" "),(!_vm.logging)?_c('div',{staticClass:"field"},[_c('label',{staticClass:"label"},[_vm._v("Username")]),_vm._v(" "),_c('div',{staticClass:"control"},[_c('label',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.form.username),expression:"form.username"}],staticClass:"input",attrs:{"type":"text","placeholder":"Username"},domProps:{"value":(_vm.form.username)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.form, "username", $event.target.value)}}})])])]):_vm._e(),_vm._v(" "),(!_vm.logging)?_c('div',{staticClass:"field"},[_c('div',{staticClass:"field-body"},[_c('div',{staticClass:"field"},[_c('label',{staticClass:"label"},[_vm._v("Firstname")]),_vm._v(" "),_c('b-input',{attrs:{"type":"text","placeholder":"John"},model:{value:(_vm.form.first_name),callback:function ($$v) {_vm.$set(_vm.form, "first_name", $$v)},expression:"form.first_name"}})],1),_vm._v(" "),_c('div',{staticClass:"field"},[_c('label',{staticClass:"label"},[_vm._v("Lastname")]),_vm._v(" "),_c('b-input',{attrs:{"type":"text","placeholder":"Due"},model:{value:(_vm.form.last_name),callback:function ($$v) {_vm.$set(_vm.form, "last_name", $$v)},expression:"form.last_name"}})],1)])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"field"},[_c('label',{staticClass:"label"},[_vm._v("Email")]),_vm._v(" "),_c('div',{staticClass:"control has-icons-right"},[_c('b-input',{attrs:{"type":"email","placeholder":"Email"},model:{value:(_vm.form.email),callback:function ($$v) {_vm.$set(_vm.form, "email", $$v)},expression:"form.email"}})],1)]),_vm._v(" "),_c('div',{staticClass:"field"},[_c('label',{staticClass:"label"},[_vm._v("Password")]),_vm._v(" "),_c('div',{staticClass:"control has-icons-right"},[_c('b-input',{attrs:{"type":"password","password-reveal":"","placeholder":"Password"},model:{value:(_vm.form.password),callback:function ($$v) {_vm.$set(_vm.form, "password", $$v)},expression:"form.password"}})],1)]),_vm._v(" "),_c('div',{staticClass:"field"},[_c('div',{staticClass:"level is-mobile"},[_c('div',[_c('div',{staticClass:"field has-addons"},[_c('div',{staticClass:"control"},[_c('div',{staticClass:"button",on:{"click":function($event){return _vm.openLogin(false)}}},[_c('x-icon',{attrs:{"name":"close"}})],1)]),_vm._v(" "),_c('div',{staticClass:"control"},[_c('div',{staticClass:"button",on:{"click":function($event){_vm.logging = !_vm.logging}}},[_c('span',[_vm._v(_vm._s(_vm.logging ? 'Register' : 'Login'))])])])])]),_vm._v(" "),_c('div',{staticClass:"button is-primary",on:{"click":_vm.handleSubmit}},[_c('span',[_vm._v(_vm._s(_vm.logging ? 'Login' : 'Register'))])])])]),_vm._v(" "),(_vm.notify.msg)?_c('div',{staticClass:"field"},[_c('div',{class:("content notification " + (_vm.notify.ssf ? 'is-light': 'is-danger'))},[(typeof _vm.notify.msg === 'string')?_c('p',[_vm._v(_vm._s(_vm.notify.msg))]):_c('ul',_vm._l((_vm.notify.msg),function(m){return _c('li',[_vm._v(_vm._s(m))])}),0)])]):_vm._e()])])],1):_vm._ssrNode("<li>","</li>",[_c('b-tooltip',{attrs:{"position":"is-right","label":"Report"}},[_c('n-link',{attrs:{"to":"/me"}},[_c('x-icon',{attrs:{"name":"report"}})],1)],1)],1),_vm._ssrNode(" "),(_vm.currentUser && _vm.$route.path === '/me')?_vm._ssrNode("<li>","</li>",[_c('b-tooltip',{attrs:{"position":"is-right","label":"Logout"}},[_c('div',{staticClass:"elm",on:{"click":function($event){return _vm.logout()}}},[_c('x-icon',{attrs:{"name":"logout"}})],1)])],1):_vm._e()],2)])],2),_vm._ssrNode(" "),_vm._ssrNode("<div class=\"button sidebar-control\">","</div>",[_c('x-icon',{attrs:{"name":_vm.forceSidebar ? 'chevron-left' : 'chevron-right'}})],1)],2):_vm._e(),_vm._ssrNode(" "),_vm._ssrNode("<main class=\"main\">","</main>",[_c('nuxt',{staticClass:"main-body"}),_vm._ssrNode(" "),(!_vm.isRunning)?_vm._ssrNode("<footer class=\"footer\">","</footer>",[_vm._ssrNode("<div class=\"container small\">","</div>",[_vm._ssrNode("<div class=\"level is-mobile\">","</div>",[_vm._ssrNode("<div class=\"level-left\">","</div>",[_vm._ssrNode("<div class=\"buttons\">","</div>",[_vm._ssrNode("<div class=\"button is-text\">About</div> "),_c('n-link',{staticClass:"button is-text",attrs:{"to":"/privacy"}},[_vm._v("Privacy")])],2)]),_vm._ssrNode(" <div class=\"level-right\"><p><strong>Made</strong> with ❤️</p></div>")],2)])]):_vm._e()],2)],2),_vm._ssrNode(" "),_c('board-bar')],2)}
-var defaultvue_type_template_id_aded225a_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./layouts/default.vue?vue&type=template&id=f98197f4&
+var defaultvue_type_template_id_f98197f4_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:{'has-custom': _vm.$route.path === '/'},style:(_vm.settings.color)},[_vm._ssrNode("<header class=\"header\">","</header>",[_vm._ssrNode("<nav role=\"navigation\" aria-label=\"main navigation\" class=\"navbar\">","</nav>",[_vm._ssrNode("<div class=\"navbar-brand\">","</div>",[_c('n-link',{staticClass:"navbar-item logo",attrs:{"to":"/"}},[_c('img',{attrs:{"src":"/logo.svg","alt":"Bubblask"}}),_vm._v(" "),_c('span',{staticClass:"primary"},[_vm._v("BUBBLASK")]),_vm._v(" "),_c('span',{staticClass:"second"},[_vm._v(".com")])]),_vm._ssrNode(" <a role=\"button\" aria-label=\"menu\" aria-expanded=\"false\" class=\"navbar-burger burger\"><span aria-hidden=\"true\"></span> <span aria-hidden=\"true\"></span> <span aria-hidden=\"true\"></span></a>")],2),_vm._ssrNode(" "),_vm._ssrNode("<div"+(_vm._ssrClass("navbar-menu",{'is-active' : _vm.burgerActive}))+">","</div>",[_vm._ssrNode("<div class=\"navbar-end\">","</div>",[_vm._ssrNode("<div class=\"sound-bar navbar-item clickable\">","</div>",[_vm._ssrNode(((_vm.playing)?("<div class=\"bars\"><div class=\"bar\"></div> <div class=\"bar\"></div> <div class=\"bar\"></div> <div class=\"bar\"></div> <div class=\"bar\"></div> <div class=\"bar\"></div> <div class=\"bar\"></div> <div class=\"bar\"></div> <div class=\"bar\"></div> <div class=\"bar\"></div></div>"):"<!---->")+" "),_c('x-icon',{attrs:{"name":_vm.playing ? 'pause' : 'play'}})],2),_vm._ssrNode(" <div class=\"navbar-item\"><div><span class=\"field\">Total: </span> <span class=\"value\">"+_vm._ssrEscape(_vm._s(_vm.displayTasks.length))+"</span></div></div> <div class=\"navbar-item\"><div><span class=\"field\">Time: </span> <span class=\"value\">"+_vm._ssrEscape(_vm._s(_vm.totalTime)+"m")+"</span></div></div>")],2)])],2)]),_vm._ssrNode(" "),_vm._ssrNode("<div"+(_vm._ssrClass(null,{'main-content': !_vm.isRunning}))+">","</div>",[(!_vm.isRunning)?_vm._ssrNode("<div"+(_vm._ssrClass("sidebar",{'active': _vm.forceSidebar}))+">","</div>",[_vm._ssrNode("<aside class=\"menu\">","</aside>",[_vm._ssrNode("<div class=\"menu-child\">","</div>",[_vm._ssrNode("<ul class=\"menu-list\">","</ul>",[_vm._ssrNode("<li>","</li>",[_c('b-tooltip',{attrs:{"position":"is-right","label":"Leader board"}},[_c('n-link',{class:{'is-active': _vm.$route.path === '/leaderboard'},attrs:{"to":"/leaderboard"}},[_c('x-icon',{attrs:{"name":"poll"}})],1)],1)],1),_vm._ssrNode(" "),_vm._ssrNode("<li>","</li>",[_c('b-tooltip',{attrs:{"position":"is-right","label":"Board"}},[_c('n-link',{class:{'is-active': _vm.$route.path === '/board'},attrs:{"to":"/board"}},[_c('x-icon',{attrs:{"name":"board"}})],1)],1)],1)],2)]),_vm._ssrNode(" "),_vm._ssrNode("<div class=\"menu-child\">","</div>",[_vm._ssrNode("<ul class=\"menu-list\">","</ul>",[(_vm.currentUser)?_vm._ssrNode("<li>","</li>",[_c('b-tooltip',{attrs:{"position":"is-right","label":"Setting"}},[_c('client-only',[_c('b-dropdown',{staticClass:"elm",attrs:{"position":"is-top-right","trap-focus":true}},[_c('template',{staticClass:"clickable",slot:"trigger"},[_c('x-icon',{attrs:{"name":"cogs"}})],1),_vm._v(" "),_c('b-dropdown-item',{attrs:{"custom":""}},[_c('Options',{model:{value:(_vm.settings),callback:function ($$v) {_vm.settings=$$v},expression:"settings"}})],1)],2)],1)],1)],1):_vm._e(),_vm._ssrNode(" "),_vm._ssrNode("<li>","</li>",[_c('b-tooltip',{attrs:{"position":"is-right","label":"Strict Mode"}},[_c('label',{staticClass:"elm b-checkbox checkbox"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.strictTemp),expression:"strictTemp"}],attrs:{"type":"checkbox"},domProps:{"checked":Array.isArray(_vm.strictTemp)?_vm._i(_vm.strictTemp,null)>-1:(_vm.strictTemp)},on:{"change":function($event){var $$a=_vm.strictTemp,$$el=$event.target,$$c=$$el.checked?(true):(false);if(Array.isArray($$a)){var $$v=null,$$i=_vm._i($$a,$$v);if($$el.checked){$$i<0&&(_vm.strictTemp=$$a.concat([$$v]))}else{$$i>-1&&(_vm.strictTemp=$$a.slice(0,$$i).concat($$a.slice($$i+1)))}}else{_vm.strictTemp=$$c}}}})])])],1),_vm._ssrNode(" "),(!Boolean(_vm.currentUser))?_vm._ssrNode("<li>","</li>",[_c('x-dropdown',{staticClass:"elm",attrs:{"can-close":['escape'],"position":"is-top-right","force-active":_vm.openAuth},on:{"active-change":function($event){return _vm.openLogin($event)}}},[_c('div',{ref:"lgButton",attrs:{"slot":"trigger"},slot:"trigger"},[_c('x-icon',{attrs:{"name":"account"}})],1),_vm._v(" "),_c('div',{staticClass:"dropdown-item",staticStyle:{"min-width":"335px"}},[_c('div',{staticClass:"notification is-warning"},[_vm._v("Login to manage and track your work!")]),_vm._v(" "),(!_vm.logging)?_c('div',{staticClass:"field"},[_c('label',{staticClass:"label"},[_vm._v("Username")]),_vm._v(" "),_c('div',{staticClass:"control"},[_c('label',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.form.username),expression:"form.username"}],staticClass:"input",attrs:{"type":"text","placeholder":"Username"},domProps:{"value":(_vm.form.username)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.form, "username", $event.target.value)}}})])])]):_vm._e(),_vm._v(" "),(!_vm.logging)?_c('div',{staticClass:"field"},[_c('div',{staticClass:"field-body"},[_c('div',{staticClass:"field"},[_c('label',{staticClass:"label"},[_vm._v("Firstname")]),_vm._v(" "),_c('b-input',{attrs:{"type":"text","placeholder":"John"},model:{value:(_vm.form.first_name),callback:function ($$v) {_vm.$set(_vm.form, "first_name", $$v)},expression:"form.first_name"}})],1),_vm._v(" "),_c('div',{staticClass:"field"},[_c('label',{staticClass:"label"},[_vm._v("Lastname")]),_vm._v(" "),_c('b-input',{attrs:{"type":"text","placeholder":"Due"},model:{value:(_vm.form.last_name),callback:function ($$v) {_vm.$set(_vm.form, "last_name", $$v)},expression:"form.last_name"}})],1)])]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"field"},[_c('label',{staticClass:"label"},[_vm._v("Email")]),_vm._v(" "),_c('div',{staticClass:"control has-icons-right"},[_c('b-input',{attrs:{"type":"email","placeholder":"Email"},model:{value:(_vm.form.email),callback:function ($$v) {_vm.$set(_vm.form, "email", $$v)},expression:"form.email"}})],1)]),_vm._v(" "),_c('div',{staticClass:"field"},[_c('label',{staticClass:"label"},[_vm._v("Password")]),_vm._v(" "),_c('div',{staticClass:"control has-icons-right"},[_c('b-input',{attrs:{"type":"password","password-reveal":"","placeholder":"Password"},model:{value:(_vm.form.password),callback:function ($$v) {_vm.$set(_vm.form, "password", $$v)},expression:"form.password"}})],1)]),_vm._v(" "),_c('div',{staticClass:"field"},[_c('div',{staticClass:"level is-mobile"},[_c('div',[_c('div',{staticClass:"field has-addons"},[_c('div',{staticClass:"control"},[_c('div',{staticClass:"button",on:{"click":function($event){return _vm.openLogin(false)}}},[_c('x-icon',{attrs:{"name":"close"}})],1)]),_vm._v(" "),_c('div',{staticClass:"control"},[_c('div',{staticClass:"button",on:{"click":function($event){_vm.logging = !_vm.logging}}},[_c('span',[_vm._v(_vm._s(_vm.logging ? 'Register' : 'Login'))])])])])]),_vm._v(" "),_c('div',{staticClass:"button is-primary",on:{"click":_vm.handleSubmit}},[_c('span',[_vm._v(_vm._s(_vm.logging ? 'Login' : 'Register'))])])])])])])],1):_vm._ssrNode("<li>","</li>",[_c('b-tooltip',{attrs:{"position":"is-right","label":"Report"}},[_c('n-link',{attrs:{"to":"/me"}},[_c('x-icon',{attrs:{"name":"report"}})],1)],1)],1),_vm._ssrNode(" "),(_vm.currentUser && _vm.$route.path === '/me')?_vm._ssrNode("<li>","</li>",[_c('b-tooltip',{attrs:{"position":"is-right","label":"Logout"}},[_c('div',{staticClass:"elm",on:{"click":function($event){return _vm.logout()}}},[_c('x-icon',{attrs:{"name":"logout"}})],1)])],1):_vm._e()],2)])],2),_vm._ssrNode(" "),_vm._ssrNode("<div class=\"button sidebar-control\">","</div>",[_c('x-icon',{attrs:{"name":_vm.forceSidebar ? 'chevron-left' : 'chevron-right'}})],1)],2):_vm._e(),_vm._ssrNode(" "),_vm._ssrNode("<main class=\"main\">","</main>",[_c('nuxt',{staticClass:"main-body"}),_vm._ssrNode(" "),(!_vm.isRunning)?_vm._ssrNode("<footer class=\"footer\">","</footer>",[_vm._ssrNode("<div class=\"container small\">","</div>",[_vm._ssrNode("<div class=\"level is-mobile\">","</div>",[_vm._ssrNode("<div class=\"level-left\">","</div>",[_vm._ssrNode("<div class=\"buttons\">","</div>",[_vm._ssrNode("<div class=\"button is-text\">About</div> "),_c('n-link',{staticClass:"button is-text",attrs:{"to":"/privacy"}},[_vm._v("Privacy")])],2)]),_vm._ssrNode(" <div class=\"level-right\"><p><strong>Made</strong> with ❤️</p></div>")],2)])]):_vm._e()],2)],2),_vm._ssrNode(" "),_c('board-bar'),_vm._ssrNode(" <div id=\"music_list\"><audio controls=\"controls\" autoplay=\"autoplay\"></audio></div>")],2)}
+var defaultvue_type_template_id_f98197f4_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./layouts/default.vue?vue&type=template&id=aded225a&
+// CONCATENATED MODULE: ./layouts/default.vue?vue&type=template&id=f98197f4&
 
 // EXTERNAL MODULE: ./components/Avatar.vue + 15 modules
-var Avatar = __webpack_require__(7);
+var Avatar = __webpack_require__(8);
 
 // EXTERNAL MODULE: ./components/input/Input.vue + 4 modules
-var Input = __webpack_require__(6);
+var Input = __webpack_require__(7);
 
 // CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./components/options/index.vue?vue&type=template&id=2a2217f0&
 var optionsvue_type_template_id_2a2217f0_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"options"},[_vm._ssrNode("<div class=\"tabs is-boxed\"><ul><li"+(_vm._ssrClass(null,{'is-active': _vm.activeTab === 'c'}))+"><a>Customize</a></li> <li"+(_vm._ssrClass(null,{'is-active': _vm.activeTab === 'n'}))+"><a>Notification</a></li> <li"+(_vm._ssrClass(null,{'is-active': _vm.activeTab === 't'}))+"><a>Timer</a></li></ul></div> "),(_vm.activeTab === 'c')?_vm._ssrNode("<div class=\"color-picker\">","</div>",[_vm._l((_vm.fieldColors),function(c){return _vm._ssrNode("<div class=\"level is-mobile\">","</div>",[_vm._ssrNode("<div class=\"level-left\">"+_vm._ssrEscape("\n                "+_vm._s(c.label)+"\n            ")+"</div> "),_vm._ssrNode("<div class=\"level-right\">","</div>",[_c('b-dropdown',[_c('div',{staticClass:"button is-square",style:({background: _vm.data['color'][c.field]}),attrs:{"slot":"trigger"},slot:"trigger"}),_vm._v(" "),_c('b-dropdown-item',{attrs:{"paddingless":"","custom":""}},[_c('color-picker',{attrs:{"value":_vm.data['color'][c.field],"preset-colors":['#f00', '#00ff00', '#00ff0055', 'rgb(201, 76, 76)', 'rgba(0,0,255,1)', 'hsl(89, 43%, 51%)', 'hsla(89, 43%, 51%, 0.6)']},on:{"input":function($event){return _vm.updateColor(c.field, $event)}}})],1)],1)],1)],2)}),_vm._ssrNode(" "),_c('b-dropdown',{staticClass:"is-fullwidth",attrs:{"aria-role":"list"}},[_c('div',{staticClass:"button is-fullwidth",attrs:{"slot":"trigger"},slot:"trigger"},[_vm._v("Set Background")]),_vm._v(" "),_c('b-dropdown-item',{attrs:{"custom":"","aria-role":"listitem"}},[_c('Unsplash',{model:{value:(_vm.data['color']['background']),callback:function ($$v) {_vm.$set(_vm.data['color'], 'background', $$v)},expression:"data['color']['background']"}})],1)],1)],2):_vm._e(),_vm._ssrNode(" "),(_vm.activeTab === 'n')?_vm._ssrNode("<div>","</div>",[_vm._ssrNode("<div class=\"columns is-mobile\">","</div>",[_vm._ssrNode("<div class=\"column\">Wake me in(m)</div> "),_vm._ssrNode("<div class=\"column\">","</div>",[_vm._ssrNode("<div class=\"field is-grouped\">","</div>",[_c('b-number-input',{attrs:{"size":"is-small","min":5,"type":"is-primary","controls-position":"compact"},model:{value:(_vm.data.notification.wake_me),callback:function ($$v) {_vm.$set(_vm.data.notification, "wake_me", $$v)},expression:"data.notification.wake_me"}})],1)])],2)]):_vm._e(),_vm._ssrNode(" "),(_vm.activeTab === 't')?_vm._ssrNode("<div>","</div>",[_vm._ssrNode("<div class=\"columns is-mobile\">","</div>",[_vm._ssrNode("<div class=\"column\">Pomodoro</div> "),_vm._ssrNode("<div class=\"column\">","</div>",[_c('b-number-input',{attrs:{"size":"is-small","min":25,"type":"is-primary","controls-position":"compact"},model:{value:(_vm.data.timer.tomato),callback:function ($$v) {_vm.$set(_vm.data.timer, "tomato", $$v)},expression:"data.timer.tomato"}})],1)],2),_vm._ssrNode(" "),_vm._ssrNode("<div class=\"columns is-mobile\">","</div>",[_vm._ssrNode("<div class=\"column\">Short Break</div> "),_vm._ssrNode("<div class=\"column\">","</div>",[_c('b-number-input',{attrs:{"size":"is-small","min":5,"type":"is-primary","controls-position":"compact"},model:{value:(_vm.data.timer.short_break),callback:function ($$v) {_vm.$set(_vm.data.timer, "short_break", $$v)},expression:"data.timer.short_break"}})],1)],2),_vm._ssrNode(" "),_vm._ssrNode("<div class=\"columns is-mobile\">","</div>",[_vm._ssrNode("<div class=\"column\">Long Break</div> "),_vm._ssrNode("<div class=\"column\">","</div>",[_c('b-number-input',{attrs:{"size":"is-small","min":10,"type":"is-primary","controls-position":"compact"},model:{value:(_vm.data.timer.long_break),callback:function ($$v) {_vm.$set(_vm.data.timer, "long_break", $$v)},expression:"data.timer.long_break"}})],1)],2)],2):_vm._e(),_vm._ssrNode(" <div class=\"level is-mobile\" style=\"margin-top: 1rem\"><div class=\"level-left\"><div class=\"button is-small is-fullwidth\">Reset</div></div> <div class=\"level-right\"><div class=\"button is-primary is-small is-fullwidth\">Save</div></div></div>")],2)}
@@ -4111,14 +4112,22 @@ var plugins_task = __webpack_require__(5);
 // EXTERNAL MODULE: ./pages/board/index.vue + 14 modules
 var pages_board = __webpack_require__(33);
 
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./components/BoardBar.vue?vue&type=template&id=359eabb2&
-var BoardBarvue_type_template_id_359eabb2_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"board-bar"},[_vm._ssrNode("<div class=\"ws-members\""+(_vm._ssrStyle(null,{height: _vm.minimize ? undefined : '50vh'}, null))+">","</div>",[_vm._ssrNode("<div class=\"header\">","</div>",[(_vm.currentUser)?_vm._ssrNode("<div class=\"media\">","</div>",[_vm._ssrNode("<div class=\"media-content\">","</div>",[_vm._ssrNode("<button class=\"button is-text is-selected\">","</button>",[(_vm.gb)?_c('x-icon',{attrs:{"name":_vm.kind2Icon(_vm.gb.kind)}}):_vm._e(),_vm._ssrNode(" <b class=\"clickable\">"+_vm._ssrEscape(_vm._s(_vm.gb ? _vm.gb.title : 'Create workspace'))+"</b>")],2)]),_vm._ssrNode(" "),_vm._ssrNode("<div class=\"media-right\">","</div>",[_vm._ssrNode("<div class=\"buttons\">","</div>",[_vm._ssrNode("<div class=\"button is-text\">","</div>",[_c('x-icon',{attrs:{"name":_vm.minimize ? 'maximize': 'minimize'}})],1)])])],2):_vm._ssrNode(("<div class=\"button is-text is-fullwidth\">Login to join Workspace</div>"))]),_vm._ssrNode(" "),_c('transition',{attrs:{"name":"fade"}},[(!_vm.minimize && _vm.gb)?_c('div',{staticClass:"members"},[(_vm.members.length)?_c('div',{staticClass:"wrapper"},_vm._l((_vm.members),function(user){return _c('div',{key:user.id,staticClass:"level is-mobile"},[_c('div',{staticClass:"level-left"},[_c('div',{staticClass:"media"},[_c('div',{staticClass:"media-left"},[_c('avatar',{staticClass:"is-24x24",class:user.profile.extra && user.profile.extra.status,attrs:{"value":user.profile.media}})],1),_vm._v(" "),_c('div',{staticClass:"media-content"},[_c('b',[_vm._v(_vm._s(_vm.convertName(user)))])])])]),_vm._v(" "),_c('div',{staticClass:"level-right"},[_c('small',[_vm._v(_vm._s(_vm.getScore(user).toFixed(2))+"m")])])])}),0):_vm._e(),_vm._v(" "),(_vm.loading.member)?_c('div',{staticClass:"wrapper"},_vm._l((5),function(i){return _c('div',{key:i,staticClass:"level"},[_c('div',{staticClass:"skeleton-user"})])}),0):_vm._e()]):_vm._e()])],2),_vm._ssrNode(" "),_c('b-modal',{attrs:{"can-cancel":false,"active":_vm.isActive,"scroll":"keep"},on:{"update:active":function($event){_vm.isActive=$event}}},[_c('div',{staticClass:"modal-card"},[_c('header',{staticClass:"modal-card-head"},[_c('div',{staticClass:"modal-card-title uppercase"},[_vm._v(_vm._s(_vm.form.title ? _vm.form.title : 'Create new workspace'))]),_vm._v(" "),_c('div',{staticClass:"modal-card-icon"},[_c('div',{staticClass:"buttons"},[(_vm.gb)?_c('div',{staticClass:"button is-danger is-small",on:{"click":function($event){return _vm.join(_vm.gb)}}},[_vm._v("Left")]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"button is-text is-small",on:{"click":function($event){_vm.isActive = false}}},[_c('x-icon',{attrs:{"name":"close"}})],1)])])]),_vm._v(" "),_c('section',{staticClass:"modal-card-body"},[_c('div',[_c('p',{staticClass:"notification is-warning"},[_vm._v("Focus to work of meeting with others")]),_vm._v(" "),_c('div',{staticClass:"field"},[_c('b-input',{attrs:{"disabled":!_vm.authorised,"size":"is-medium","placeholder":"Workspace name"},model:{value:(_vm.form.title),callback:function ($$v) {_vm.$set(_vm.form, "title", $$v)},expression:"form.title"}})],1),_vm._v(" "),(_vm.authorised)?_c('div',{staticClass:"field is-floating-label"},[_c('label',{staticClass:"label"},[_vm._v("Options")]),_vm._v(" "),_c('div',{staticClass:"control is-clearfix"},[_c('div',{staticClass:"card"},[_c('div',{staticClass:"card-content"},[_c('div',{staticClass:"level"},[_c('div',{staticClass:"level-left"},[_c('span',{staticClass:"label"},[_vm._v("Kind")])]),_vm._v(" "),_c('div',{staticClass:"level-right"},[_c('b-dropdown',{attrs:{"append-to-body":"","aria-role":"list"},model:{value:(_vm.form.kind),callback:function ($$v) {_vm.$set(_vm.form, "kind", $$v)},expression:"form.kind"}},[_c('button',{staticClass:"button is-small",attrs:{"slot":"trigger","type":"button"},slot:"trigger"},[[_c('span',[_vm._v(_vm._s(_vm.kinds[_vm.form.kind].title))])],_vm._v(" "),_c('x-icon',{attrs:{"name":"chevron-down"}})],2),_vm._v(" "),_vm._l((Object.keys(_vm.kinds)),function(val){return _c('b-dropdown-item',{key:val,attrs:{"value":val,"aria-role":"listitem"}},[_c('div',{staticClass:"media"},[_c('div',{staticClass:"media-content"},[_c('h3',[_vm._v(_vm._s(_vm.kinds[val].title))]),_vm._v(" "),_c('small',[_vm._v(_vm._s(_vm.kinds[val].help))])])])])})],2)],1)]),_vm._v(" "),_c('div',{staticClass:"level"},[_c('div',{staticClass:"level-left"},[_c('span',{staticClass:"label"},[_vm._v("Private")])]),_vm._v(" "),_c('div',{staticClass:"level-right"},[_c('b-switch',{attrs:{"rounded":false},model:{value:(_vm.form.is_private),callback:function ($$v) {_vm.$set(_vm.form, "is_private", $$v)},expression:"form.is_private"}})],1)]),_vm._v(" "),(_vm.form.is_private)?_c('div',{staticClass:"field"},[_c('b-input',{attrs:{"icon":"pound","expanded":"","type":"password","password-reveal":"","placeholder":"Password to access workspace"},model:{value:(_vm.form.password),callback:function ($$v) {_vm.$set(_vm.form, "password", $$v)},expression:"form.password"}})],1):_vm._e(),_vm._v(" "),_c('div',{staticClass:"level"},[_c('div',{staticClass:"level-left"},[_c('span',{staticClass:"label"},[_vm._v("Collaborate")])]),_vm._v(" "),_c('div',{staticClass:"level-right"},[_c('b-switch',{attrs:{"rounded":false},model:{value:(_vm.form.settings.collaborate),callback:function ($$v) {_vm.$set(_vm.form.settings, "collaborate", $$v)},expression:"form.settings.collaborate"}})],1)])])])])]):_vm._e(),_vm._v(" "),(_vm.authorised)?_c('div',{staticClass:"columns"},[_c('div',{staticClass:"column"},[_c('b-switch',{attrs:{"size":"is-medium","rounded":false},model:{value:(_vm.form.settings.allow_search),callback:function ($$v) {_vm.$set(_vm.form.settings, "allow_search", $$v)},expression:"form.settings.allow_search"}},[_vm._v("Allow\n                                search\n                            ")])],1),_vm._v(" "),_c('div',{staticClass:"column"},[(_vm.authorised)?_c('button',{staticClass:"button is-primary is-fullwidth",on:{"click":_vm.save}},[_vm._v("\n                                Save\n                            ")]):_vm._e()])]):_vm._e()])]),_vm._v(" "),(_vm.form.id && _vm.uri)?_c('div',{staticClass:"notification is-warning content"},[_c('p',[_vm._v("Share with your friends")]),_vm._v(" "),_c('b-input',{attrs:{"value":_vm.uri}})],1):_vm._e(),_vm._v(" "),(!Boolean(_vm.form.id))?_c('div',{staticClass:"group-selector has-background-white"},[_c('hr',{staticStyle:{"margin":"0"}}),_vm._v(" "),_c('div',{staticClass:"header"},[_c('div',{staticClass:"media"},[_c('b-input',{attrs:{"icon":"search","expanded":"","placeholder":"Enter keyword..."},on:{"input":_vm.search}})],1)]),_vm._v(" "),_c('div',{staticClass:"list"},_vm._l((_vm.response.results),function(b){return _c('div',{key:b.id,staticClass:"media",class:{'is-active': _vm.gb && _vm.gb.id === b.id}},[_c('div',{staticClass:"media-left"},[_c('x-icon',{attrs:{"name":_vm.kind2Icon(b.kind)}})],1),_vm._v(" "),_c('div',{staticClass:"media-content"},[_c('div',[_c('b',[_vm._v(_vm._s(b.title))])]),_vm._v(" "),_c('small',[_vm._v("By "+_vm._s(_vm.convertName(b.user)))])]),_vm._v(" "),(_vm.gb && _vm.gb.id === b.id)?_c('div',{staticClass:"media-right"},[_c('div',{staticClass:"button is-small",on:{"click":function($event){return _vm.join(b)}}},[_c('span',[_vm._v("Left")]),_vm._v(" "),_c('x-icon',{attrs:{"name":"logout"}})],1)]):_c('div',{staticClass:"media-right"},[(b.is_private)?_c('b-dropdown',{attrs:{"position":"is-bottom-left","append-to-body":"","aria-role":"menu","trap-focus":""}},[_c('div',{staticClass:"button is-small",attrs:{"slot":"trigger"},slot:"trigger"},[_c('span',[_vm._v("Join")]),_vm._v(" "),_c('x-icon',{attrs:{"name":"shield-lock"}})],1),_vm._v(" "),_c('b-dropdown-item',{attrs:{"aria-role":"menu-item","focusable":false,"custom":""}},[_c('div',{staticClass:"field has-addons",staticStyle:{"min-width":"280px"}},[_c('b-input',{attrs:{"icon":"pound","type":"password","expanded":"","placeholder":"Enter Password"},model:{value:(_vm.password),callback:function ($$v) {_vm.password=$$v},expression:"password"}}),_vm._v(" "),_c('div',{staticClass:"control"},[_c('div',{staticClass:"button is-primary",on:{"click":function($event){return _vm.join(b, _vm.password)}}},[_vm._v("Join")])])],1)])],1):_c('div',{staticClass:"button is-small",on:{"click":function($event){return _vm.join(b)}}},[_c('span',[_vm._v("Join")]),_vm._v(" "),_c('x-icon',{attrs:{"name":"shield-open"}})],1)],1)])}),0),_vm._v(" "),_c('div',{staticClass:"has-background-light"},[_c('div',{staticClass:"media"},[_c('div',{staticClass:"media-left"},[_c('div',{staticClass:"button is-static"},[_vm._v("OR")])]),_vm._v(" "),_c('div',{staticClass:"media-content"},[_c('b-input',{attrs:{"icon":"pound","placeholder":"Enter Code"},model:{value:(_vm.code),callback:function ($$v) {_vm.code=$$v},expression:"code"}})],1),_vm._v(" "),_c('div',{staticClass:"media-right"},[_c('div',{staticClass:"button",on:{"click":_vm.enterCode}},[_vm._v("Enter")])])])])]):_vm._e()])])],2)}
-var BoardBarvue_type_template_id_359eabb2_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./components/BoardBar.vue?vue&type=template&id=3091ba01&
+var BoardBarvue_type_template_id_3091ba01_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"board-bar"},[_vm._ssrNode("<div class=\"ws-members\""+(_vm._ssrStyle(null,{height: _vm.minimize ? undefined : '50vh'}, null))+">","</div>",[_vm._ssrNode("<div class=\"header\">","</div>",[(_vm.currentUser)?_vm._ssrNode("<div class=\"media\">","</div>",[_vm._ssrNode("<div class=\"media-content\">","</div>",[_c('b-tooltip',{attrs:{"label":"Focus to work of meeting with others"}},[_c('button',{staticClass:"button is-text is-selected",on:{"click":function($event){_vm.isActive = true}}},[(_vm.gb)?_c('x-icon',{attrs:{"name":_vm.kind2Icon(_vm.gb.kind)}}):_vm._e(),_vm._v(" "),_c('b',{staticClass:"clickable"},[_vm._v(_vm._s(_vm.gb ? _vm.gb.title : 'Create workspace'))])],1)])],1),_vm._ssrNode(" "),_vm._ssrNode("<div class=\"media-right\">","</div>",[_vm._ssrNode("<div class=\"buttons\">","</div>",[_vm._ssrNode("<div class=\"button is-text\">","</div>",[_c('x-icon',{attrs:{"name":_vm.minimize ? 'maximize': 'minimize'}})],1)])])],2):_vm._ssrNode(("<div class=\"button is-text is-fullwidth\">Login to join Workspace</div>"))]),_vm._ssrNode(" "),_c('transition',{attrs:{"name":"fade"}},[(!_vm.minimize && _vm.gb)?_c('div',{staticClass:"members"},[(_vm.members.length)?_c('div',{staticClass:"wrapper"},[_c('div',{staticClass:"member"},[_c('div',{staticClass:"columns is-gapless"},_vm._l((_vm.members),function(user){return _c('div',{key:user.id,staticClass:"column is-1"},[_c('avatar',{staticClass:"is-24x24",class:user.profile.extra && user.profile.extra.status,attrs:{"value":user.profile.media}})],1)}),0)]),_vm._v(" "),_c('div',{staticClass:"chat-box"},[_c('div',{ref:"chat-box",staticClass:"wrapper",attrs:{"id":"chat-box"}},_vm._l((_vm.chat.results),function(c){return _c('div',{key:c.id,staticClass:"media"},[_c('div',{staticClass:"media-left"},[_c('avatar',{staticClass:"is-24x24",class:c.user.profile.extra && c.user.profile.extra.status,attrs:{"value":c.user.profile.media}})],1),_vm._v(" "),_c('div',{staticClass:"media-content"},[_c('b',[_c('small',[_vm._v(_vm._s(_vm.convertName(c.user)))])]),_vm._v(" "),_c('span',[_vm._v(_vm._s(c.msg))])])])}),0)]),_vm._v(" "),_c('div',{staticClass:"chat-form"},[_c('b-input',{attrs:{"placeholder":"Message"},nativeOn:{"keyup":function($event){if(!$event.type.indexOf('key')&&_vm._k($event.keyCode,"enter",13,$event.key,"Enter")){ return null; }return _vm.send($event)}},model:{value:(_vm.newMessage),callback:function ($$v) {_vm.newMessage=$$v},expression:"newMessage"}})],1)]):_vm._e()]):_vm._e()])],2),_vm._ssrNode(" "),_c('b-modal',{attrs:{"can-cancel":false,"active":_vm.isActive,"scroll":"keep"},on:{"update:active":function($event){_vm.isActive=$event}}},[_c('div',{staticClass:"modal-card"},[_c('header',{staticClass:"modal-card-head"},[_c('div',{staticClass:"modal-card-title uppercase"},[_vm._v("\n                    "+_vm._s(_vm.form.title ? _vm.form.title : 'Create new workspace')+"\n                ")]),_vm._v(" "),_c('div',{staticClass:"modal-card-icon"},[_c('div',{staticClass:"buttons"},[(_vm.gb)?_c('div',{staticClass:"button is-danger is-small",on:{"click":function($event){return _vm.join(_vm.gb)}}},[_vm._v("Left")]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"button is-text is-small",on:{"click":function($event){_vm.isActive = false}}},[_c('x-icon',{attrs:{"name":"close"}})],1)])])]),_vm._v(" "),_c('section',{staticClass:"modal-card-body"},[_c('div',[_c('div',{staticClass:"field is-floating-label"},[_c('label',{staticClass:"label"},[_vm._v("Name")]),_vm._v(" "),_c('div',{staticClass:"control is-clearfix"},[_c('b-input',{attrs:{"disabled":!_vm.authorised,"size":"is-medium","placeholder":"Workspace name"},model:{value:(_vm.form.title),callback:function ($$v) {_vm.$set(_vm.form, "title", $$v)},expression:"form.title"}})],1)]),_vm._v(" "),(_vm.authorised)?_c('div',{staticClass:"field is-floating-label"},[_c('label',{staticClass:"label"},[_vm._v("Options")]),_vm._v(" "),_c('div',{staticClass:"control is-clearfix"},[_c('div',{staticClass:"card"},[_c('div',{staticClass:"card-content"},[_c('div',{staticClass:"level is-mobile"},[_c('div',{staticClass:"level-left"},[_vm._v("Enable to search")]),_vm._v(" "),_c('div',{staticClass:"level-right"},[_c('b-switch',{attrs:{"rounded":false},model:{value:(_vm.form.settings.allow_search),callback:function ($$v) {_vm.$set(_vm.form.settings, "allow_search", $$v)},expression:"form.settings.allow_search"}})],1)]),_vm._v(" "),_c('div',{staticClass:"level is-mobile"},[_c('div',{staticClass:"level-left"},[_vm._v("Private")]),_vm._v(" "),_c('div',{staticClass:"level-right"},[_c('b-switch',{attrs:{"rounded":false},model:{value:(_vm.form.is_private),callback:function ($$v) {_vm.$set(_vm.form, "is_private", $$v)},expression:"form.is_private"}})],1)]),_vm._v(" "),(_vm.form.is_private)?_c('div',{staticClass:"field"},[_c('b-input',{attrs:{"icon":"pound","expanded":"","type":"password","password-reveal":"","placeholder":"Password to access workspace"},model:{value:(_vm.form.password),callback:function ($$v) {_vm.$set(_vm.form, "password", $$v)},expression:"form.password"}})],1):_vm._e(),_vm._v(" "),_c('div',{staticClass:"level is-mobile"},[_c('div',{staticClass:"level-left"},[_vm._v("Collaborate")]),_vm._v(" "),_c('div',{staticClass:"level-right"},[_c('b-switch',{attrs:{"rounded":false},model:{value:(_vm.form.settings.collaborate),callback:function ($$v) {_vm.$set(_vm.form.settings, "collaborate", $$v)},expression:"form.settings.collaborate"}})],1)])])])])]):_vm._e(),_vm._v(" "),(_vm.authorised)?_c('div',{staticClass:"columns"},[_c('div',{staticClass:"column"},[_c('b-dropdown',{attrs:{"append-to-body":"","aria-role":"list"},model:{value:(_vm.form.kind),callback:function ($$v) {_vm.$set(_vm.form, "kind", $$v)},expression:"form.kind"}},[_c('button',{staticClass:"button is-small",attrs:{"slot":"trigger","type":"button"},slot:"trigger"},[[_c('span',[_vm._v(_vm._s(_vm.kinds[_vm.form.kind].title))])],_vm._v(" "),_c('x-icon',{attrs:{"name":"chevron-down"}})],2),_vm._v(" "),_vm._l((Object.keys(_vm.kinds)),function(val){return _c('b-dropdown-item',{key:val,attrs:{"value":val,"aria-role":"listitem"}},[_c('div',{staticClass:"media"},[_c('div',{staticClass:"media-content"},[_c('h3',[_vm._v(_vm._s(_vm.kinds[val].title))]),_vm._v(" "),_c('small',[_vm._v(_vm._s(_vm.kinds[val].help))])])])])})],2)],1),_vm._v(" "),_c('div',{staticClass:"column"},[(_vm.authorised)?_c('button',{staticClass:"button is-primary is-fullwidth",on:{"click":_vm.save}},[_vm._v("\n                                Save\n                            ")]):_vm._e()])]):_vm._e()])]),_vm._v(" "),(_vm.form.id && _vm.uri)?_c('div',{staticClass:"notification is-warning content"},[_c('p',[_vm._v("Share with your friends")]),_vm._v(" "),_c('b-input',{attrs:{"value":_vm.uri}})],1):_vm._e(),_vm._v(" "),(!Boolean(_vm.form.id))?_c('div',{staticClass:"group-selector has-background-white"},[_c('hr',{staticStyle:{"margin":"0"}}),_vm._v(" "),_c('div',{staticClass:"header"},[_c('div',{staticClass:"media"},[_c('b-input',{attrs:{"icon":"search","expanded":"","placeholder":"Enter keyword..."},on:{"input":_vm.search}})],1)]),_vm._v(" "),_c('div',{staticClass:"list"},_vm._l((_vm.response.results),function(b){return _c('div',{key:b.id,staticClass:"media",class:{'is-active': _vm.gb && _vm.gb.id === b.id}},[_c('div',{staticClass:"media-left"},[_c('x-icon',{attrs:{"name":_vm.kind2Icon(b.kind)}})],1),_vm._v(" "),_c('div',{staticClass:"media-content"},[_c('div',[_c('b',[_vm._v(_vm._s(b.title))])]),_vm._v(" "),_c('small',[_vm._v("By "+_vm._s(_vm.convertName(b.user)))])]),_vm._v(" "),(_vm.gb && _vm.gb.id === b.id)?_c('div',{staticClass:"media-right"},[_c('div',{staticClass:"button is-small",on:{"click":function($event){return _vm.join(b)}}},[_c('span',[_vm._v("Left")]),_vm._v(" "),_c('x-icon',{attrs:{"name":"logout"}})],1)]):_c('div',{staticClass:"media-right"},[(b.is_private)?_c('b-dropdown',{attrs:{"position":"is-bottom-left","append-to-body":"","aria-role":"menu","trap-focus":""}},[_c('div',{staticClass:"button is-small",attrs:{"slot":"trigger"},slot:"trigger"},[_c('span',[_vm._v("Join")]),_vm._v(" "),_c('x-icon',{attrs:{"name":"shield-lock"}})],1),_vm._v(" "),_c('b-dropdown-item',{attrs:{"aria-role":"menu-item","focusable":false,"custom":""}},[_c('div',{staticClass:"field has-addons",staticStyle:{"min-width":"280px"}},[_c('b-input',{attrs:{"icon":"pound","type":"password","expanded":"","placeholder":"Enter Password"},model:{value:(_vm.password),callback:function ($$v) {_vm.password=$$v},expression:"password"}}),_vm._v(" "),_c('div',{staticClass:"control"},[_c('div',{staticClass:"button is-primary",on:{"click":function($event){return _vm.join(b, _vm.password)}}},[_vm._v("Join")])])],1)])],1):_c('div',{staticClass:"button is-small",on:{"click":function($event){return _vm.join(b)}}},[_c('span',[_vm._v("Join")]),_vm._v(" "),_c('x-icon',{attrs:{"name":"shield-open"}})],1)],1)])}),0),_vm._v(" "),_c('div',{staticClass:"has-background-light"},[_c('div',{staticClass:"media"},[_c('div',{staticClass:"media-left"},[_c('div',{staticClass:"button is-static"},[_vm._v("OR")])]),_vm._v(" "),_c('div',{staticClass:"media-content"},[_c('b-input',{attrs:{"icon":"pound","placeholder":"Enter Code"},model:{value:(_vm.code),callback:function ($$v) {_vm.code=$$v},expression:"code"}})],1),_vm._v(" "),_c('div',{staticClass:"media-right"},[_c('div',{staticClass:"button",on:{"click":_vm.enterCode}},[_vm._v("Enter")])])])])]):_vm._e()])])],2)}
+var BoardBarvue_type_template_id_3091ba01_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./components/BoardBar.vue?vue&type=template&id=359eabb2&
+// CONCATENATED MODULE: ./components/BoardBar.vue?vue&type=template&id=3091ba01&
 
 // CONCATENATED MODULE: ./node_modules/babel-loader/lib??ref--2-0!./node_modules/vue-loader/lib??vue-loader-options!./components/BoardBar.vue?vue&type=script&lang=js&
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -4361,8 +4370,18 @@ const DEFAULT = {
         "DEFAULT": {
           title: "Default",
           help: "Anyone can add and run workspace's tasks"
+        },
+        "TEMPLATE": {
+          title: "Template",
+          help: "Anyone can add and run workspace's tasks"
         }
-      }
+      },
+      chat: {
+        results: [],
+        count: 0
+      },
+      newMessage: null,
+      channel: null
     };
   },
 
@@ -4409,21 +4428,28 @@ const DEFAULT = {
     },
 
     connectSocket() {
-      if (this.gb && Pusher && typeof Pusher === 'object') {
+      if (this.gb && Pusher && typeof Pusher === 'function') {
+        this.channel = null;
         let pusher = new Pusher('eccf1067acf541fbc5d4', {
           cluster: 'ap1'
         });
-        let channel = pusher.subscribe(`board_${this.gb.id}`);
-        channel.bind('change-user-score', function (data) {
+        this.channel = pusher.subscribe(`board_${this.gb.id}`);
+        this.channel.bind('change-user-score', function (data) {
           if (data) {}
         }.bind(this));
-        channel.bind('change-user-status', function (data) {
+        this.channel.bind('change-user-status', function (data) {
           if (data) {
             let index = this.members.map(u => u.id).indexOf(data.user);
 
             if (index >= 0) {
               this.members[index].profile.extra.status = data.status;
             }
+          }
+        }.bind(this));
+        this.channel.bind('new_message', function (data) {
+          if (data) {
+            this.chat.results.push(data);
+            this.toBottom();
           }
         }.bind(this));
       }
@@ -4446,8 +4472,35 @@ const DEFAULT = {
       }
     },
 
-    getScore(user) {
-      return 0;
+    async fetchMessages() {
+      if (this.gb) {
+        this.loading.message = true;
+        this.chat = await this.$axios.$get(`/task/boards/${this.gb.id}/messages/`, {
+          params: {
+            room: `BOARD_${this.gb.id}`
+          }
+        }).then(res => {
+          return {
+            "count": res.count,
+            "results": res.results.reverse()
+          };
+        });
+        this.loading.message = false;
+        this.toBottom();
+      }
+    },
+
+    send() {
+      if (this.gb && this.newMessage && this.newMessage.length >= 2) this.$axios.$post('/general/messages/', {
+        msg: this.newMessage,
+        room: `board_${this.gb.id}`
+      }).then(() => {
+        this.newMessage = null;
+      });
+    },
+
+    toBottom() {
+      if (false) {}
     }
 
   },
@@ -4474,9 +4527,12 @@ const DEFAULT = {
       if (this.gb) {
         this.minimize = false;
         this.init(this.gb);
+        this.connectSocket();
         this.fetchMembers();
+        this.fetchMessages();
       } else {
         this.init();
+        this.minimize = true;
       }
     },
 
@@ -4496,9 +4552,11 @@ const DEFAULT = {
     if (this.gb) {
       this.init(this.gb);
       this.fetchMembers();
+      this.fetchMessages();
       this.minimize = false;
     } else {
       this.init();
+      this.minimize = true;
     }
   }
 
@@ -4520,8 +4578,8 @@ if (style0.__inject__) style0.__inject__(context)
 
 var BoardBar_component = Object(componentNormalizer["a" /* default */])(
   components_BoardBarvue_type_script_lang_js_,
-  BoardBarvue_type_template_id_359eabb2_render,
-  BoardBarvue_type_template_id_359eabb2_staticRenderFns,
+  BoardBarvue_type_template_id_3091ba01_render,
+  BoardBarvue_type_template_id_3091ba01_staticRenderFns,
   false,
   BoardBar_injectStyles,
   null,
@@ -4530,6 +4588,9 @@ var BoardBar_component = Object(componentNormalizer["a" /* default */])(
 )
 
 /* harmony default export */ var BoardBar = (BoardBar_component.exports);
+// EXTERNAL MODULE: external "buefy"
+var external_buefy_ = __webpack_require__(6);
+
 // CONCATENATED MODULE: ./node_modules/babel-loader/lib??ref--2-0!./node_modules/vue-loader/lib??vue-loader-options!./layouts/default.vue?vue&type=script&lang=js&
 //
 //
@@ -4730,6 +4791,16 @@ var BoardBar_component = Object(componentNormalizer["a" /* default */])(
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -4765,7 +4836,8 @@ var BoardBar_component = Object(componentNormalizer["a" /* default */])(
       },
       is_online: true,
       strictTemp: false,
-      forceSidebar: true
+      forceSidebar: true,
+      playing: false
     };
   },
 
@@ -4779,6 +4851,11 @@ var BoardBar_component = Object(componentNormalizer["a" /* default */])(
     },
 
     async handleSubmit() {
+      this.notify = {
+        msg: null,
+        ssf: true
+      };
+
       if (this.logging) {
         await this.$auth.login({
           email: this.form.email,
@@ -4786,11 +4863,14 @@ var BoardBar_component = Object(componentNormalizer["a" /* default */])(
         }).then(res => {
           if (res) {
             this.fetchTasks();
-            this.notify.msg = "Login successfully :D";
+            this.notify.msg = "LOGIN_SUCCESS";
           } else {
-            this.notify.msg = "Login Failed :(";
+            this.notify.msg = "LOGIN_FAIL";
             this.notify.ssf = false;
           }
+        }).catch(() => {
+          this.notify.msg = "LOGIN_FAIL";
+          this.notify.ssf = false;
         });
       } else {
         this.$axios.post('/auth/rest-auth/registration/', { ...this.form,
@@ -4799,29 +4879,22 @@ var BoardBar_component = Object(componentNormalizer["a" /* default */])(
         }).then(res => {
           if (res) {
             this.logging = true;
-            this.notify.msg = "Register successfully, please login!";
+            this.notify.msg = "REGISTER_SUCCESS";
           } else {
-            this.notify.msg = "Register Failed :(";
+            this.notify.msg = "REGISTER_FAILED";
             this.notify.ssf = false;
           }
         }).catch(error => {
+          this.notify.msg = "REGISTER_FAILED";
+          this.notify.ssf = false;
           let fields = Object.keys(error.response.data);
-          this.notify.msg = [];
+          this.notify.fields = [];
           fields.forEach(field => {
-            this.notify.msg.push(`${field} - ${error.response.data[field][0]}`);
+            this.notify.fields.push(`${field}_${error.response.data[field][0]}`);
           });
           this.notify.ssf = false;
         });
       }
-
-      let _this = this;
-
-      setTimeout(function () {
-        _this.notify = {
-          msg: null,
-          ssf: true
-        };
-      }, 2000);
     },
 
     async setStrict(val) {
@@ -4946,6 +5019,36 @@ var BoardBar_component = Object(componentNormalizer["a" /* default */])(
           });
         }
       }
+    },
+
+    initAudio() {
+      const files = ["1vo-SrAf-cd_61Cf9gA4OTGwmQLqTcTm-", "17CrXGkzHXul_m3fBUj1TRI1Q6ARitLhb", "1hmaOuM-xv0mUl1bgDdEqJLxwpOwIdQuc", "144D2pyG8d-QcJ_zcZdfpmeTgkLtMVQSz", "18sYxO-y-tbJpzoGmFukg9qRozMcDv62o", "1ANCvTOiSTALtZKe9IYx4MIcQMQJ8f-fE", "1Hmo8dQ0W0PVKtn9DxdiPyLugbu2jnSFv", "1N-kmHus4ZReAb8E14K2-TWczLy34pd6H"]; // Current index of the files array
+
+      let i = 0; // Get the audio element
+
+      this.music_player = document.querySelector("#music_list audio"); // function for moving to next audio file
+
+      function next() {
+        // Check for last audio file in the playlist
+        if (i === files.length - 1) {
+          i = 0;
+        } else {
+          i++;
+        } // Change the audio element source
+
+
+        this.music_player.src = `https://docs.google.com/uc?export=download&id=${files[i]}`;
+      } // Check if the player is selected
+
+
+      if (!this.music_player) {
+        throw "Playlist Player does not exists ...";
+      } else {
+        // Start the player
+        this.music_player.src = `https://docs.google.com/uc?export=download&id=${files[i]}`; // Listen for the music ended event, to play the next audio file
+
+        this.music_player.addEventListener('ended', next, false);
+      }
     }
 
   },
@@ -5005,6 +5108,27 @@ var BoardBar_component = Object(componentNormalizer["a" /* default */])(
 
     strictTemp() {
       this.setStrict(this.strictTemp);
+    },
+
+    notify: {
+      deep: true,
+      handler: function () {
+        if (this.notify.msg) {
+          external_buefy_["SnackbarProgrammatic"].open({
+            duration: 10000,
+            message: this.notify.msg,
+            type: this.notify.ssf ? 'is-success' : 'is-warning'
+          });
+        }
+      }
+    },
+
+    playing() {
+      if (this.playing) {
+        this.music_player.play();
+      } else {
+        this.music_player.pause();
+      }
     }
 
   },
@@ -5031,8 +5155,8 @@ if (style0.__inject__) style0.__inject__(context)
 
 var default_component = Object(componentNormalizer["a" /* default */])(
   layouts_defaultvue_type_script_lang_js_,
-  defaultvue_type_template_id_aded225a_render,
-  defaultvue_type_template_id_aded225a_staticRenderFns,
+  defaultvue_type_template_id_f98197f4_render,
+  defaultvue_type_template_id_f98197f4_staticRenderFns,
   false,
   default_injectStyles,
   null,
@@ -6236,12 +6360,12 @@ var Rate_component = Object(componentNormalizer["a" /* default */])(
 )
 
 /* harmony default export */ var Rate = (Rate_component.exports);
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./components/Task.vue?vue&type=template&id=44f0b7d4&
-var Taskvue_type_template_id_44f0b7d4_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.task && _vm.task.settings)?_c('div',{staticClass:"task",class:{'is-active': _vm.updateTree}},[_vm._ssrNode("<div"+(_vm._ssrAttr("id",("task-" + (_vm.task.id))))+">","</div>",[_c('transition',{attrs:{"name":"fade"}},[_c('div',{staticClass:"notification media",class:{'is-warning': _vm.task.status === 'running'}},[_c('div',{staticClass:"media-left"},[(_vm.tree)?_c('div',{staticClass:"button",class:{'is-static': !_vm.children || _vm.children.length === 0},on:{"click":function($event){_vm.editing = !_vm.editing; _vm.updateTree = false}}},[_c('x-icon',{attrs:{"name":"tree"}})],1):_c('div',{staticClass:"button is-small",class:{'is-static': !_vm.isAuthorised || ['stopped', 'complete'].includes(_vm.task.status)},on:{"click":function($event){return _vm.task_done()}}},[_c('x-icon',{attrs:{"name":"check"}})],1)]),_vm._v(" "),_c('div',{staticClass:"media-content",on:{"click":_vm.dblClick}},[_c('ce',{staticClass:"title",attrs:{"placeholder":"Untitled","elm":"h4","editable":Boolean(_vm.isAuthorised) && _vm.task.status !== 'running' && !_vm.readonly},on:{"input":function($event){return _vm.on_input()}},model:{value:(_vm.task.title),callback:function ($$v) {_vm.$set(_vm.task, "title", $$v)},expression:"task.title"}}),_vm._v(" "),(_vm.tree)?_c('small',{staticClass:"field"},[_vm._v(_vm._s(_vm.task.interval * _vm.task.tomato)+"m")]):_c('div',{staticClass:"level is-mobile"},[_c('div',{staticClass:"level-left"},[(Boolean(_vm.board) && _vm.task.assignee)?_c('div',{staticClass:"level-item"},[_c('b-tooltip',{attrs:{"label":("Assigned to " + (_vm.convertName(_vm.task.assignee)))}},[_c('avatar',{staticClass:"is-16x16",attrs:{"value":_vm.task.assignee.profile.media}})],1)],1):_vm._e(),_vm._v(" "),_c('div',{staticClass:"level-item"},[_c('b-rate',{staticClass:"is-small",attrs:{"disabled":!_vm.editing || _vm.readonly},on:{"input":_vm.setPriority},model:{value:(_vm.task.settings.priority),callback:function ($$v) {_vm.$set(_vm.task.settings, "priority", $$v)},expression:"task.settings.priority"}})],1)])])],1),_vm._v(" "),(!['stopped', 'complete'].includes(_vm.task.status) && !_vm.tree)?_c('div',{staticClass:"media-right clickable"},[(!_vm.readonly)?_c('div',{staticClass:"buttons"},[_c('div',{staticClass:"button is-hidden-mobile is-text"},[_vm._v("\n                            "+_vm._s(_vm.task.times.length)+" / "+_vm._s(_vm.task.interval)+"\n                        ")]),_vm._v(" "),(_vm.task.status !== 'running')?_c('div',{staticClass:"button is-text is-hidden-mobile"},[_vm._v("\n                            "+_vm._s(_vm.fancyTimeFormat(_vm.task.totalTimeLeft()))+"\n                        ")]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"button",class:{'is-static': !_vm.isAuthorised},on:{"click":function($event){return _vm.task_run()}}},[_c('x-icon',{staticClass:"is-medium",attrs:{"name":_vm.task.status ===  'running' ? 'pause' : 'play'}})],1)]):_vm._e()]):(_vm.tree)?_c('div',{staticClass:"media-right"},[_c('b-rate',{attrs:{"disabled":_vm.readonly,"value":_vm.task.settings.priority},on:{"input":_vm.setPriority}})],1):_vm._e()])]),_vm._ssrNode(" "),_c('transition',{attrs:{"name":"bounce"}},[(_vm.editing)?_c('div',{staticClass:"card"},[(_vm.task.parent && !_vm.tree)?_c('div',{staticClass:"card-header"},[_c('ce',{staticClass:"card-header-title title",attrs:{"placeholder":"Untitled","elm":"h4","editable":_vm.isAuthorised && _vm.task.status !== 'running' && !_vm.readonly},on:{"input":function($event){return _vm.on_input()}},model:{value:(_vm.task.title),callback:function ($$v) {_vm.$set(_vm.task, "title", $$v)},expression:"task.title"}})],1):_vm._e(),_vm._v(" "),(_vm.task.parent && !_vm.tree)?_c('div',{staticClass:"card-content"},[_c('b-rate',{staticClass:"is-small",attrs:{"custom-text":"Priority","disabled":!_vm.isAuthorised || !_vm.editing},on:{"input":_vm.setPriority},model:{value:(_vm.task.settings.priority),callback:function ($$v) {_vm.$set(_vm.task.settings, "priority", $$v)},expression:"task.settings.priority"}})],1):_vm._e(),_vm._v(" "),_c('div',{staticClass:"card-content"},[(!_vm.tree || _vm.updateTree)?_c('ce',{staticClass:"note",attrs:{"elm":"div","placeholder":"Note","allow-paste-html":"","editable":_vm.isAuthorised && !_vm.task.isRunning() && !_vm.readonly},on:{"input":function($event){return _vm.on_input()}},model:{value:(_vm.task.description),callback:function ($$v) {_vm.$set(_vm.task, "description", $$v)},expression:"task.description"}}):_vm._e(),_vm._v(" "),(_vm.currentUser && Boolean(_vm.board) && _vm.task.user.id === _vm.currentUser.id)?_c('div',{staticClass:"level is-mobile"},[_c('div',{staticClass:"level-left"},[_c('b-switch',{attrs:{"disabled":!_vm.isAuthorised,"rounded":false},on:{"input":function($event){return _vm.on_input()}},model:{value:(_vm.task.settings['collaborate']),callback:function ($$v) {_vm.$set(_vm.task.settings, 'collaborate', $$v)},expression:"task.settings['collaborate']"}},[_vm._v("\n                                Allow collaborate\n                            ")])],1),_vm._v(" "),_c('div',{staticClass:"level-right"},[_c('user-selector',{attrs:{"disabled":!_vm.isAuthorised},on:{"input":function($event){return _vm.on_input()}},model:{value:(_vm.task.assignee),callback:function ($$v) {_vm.$set(_vm.task, "assignee", $$v)},expression:"task.assignee"}})],1)]):_vm._e(),_vm._v(" "),_c('draggable',_vm._b({staticClass:"tasks",attrs:{"list":_vm.children},on:{"change":_vm.re_order}},'draggable',_vm.dragOptions,false),_vm._l((_vm.children),function(child){return _c('task',{key:child.id,attrs:{"value":child,"readonly":_vm.readonly,"board":_vm.board,"tree":_vm.tree},on:{"add":_vm.handle_add,"deleted":function($event){return _vm.$emit('deleted', $event)}}})}),1),_vm._v(" "),(_vm.loadingChild)?_c('div',{staticClass:"tasks"},_vm._l((5),function(i){return _c('div',{key:i,staticClass:"task"},[_c('div',{staticClass:"notification media"},[_c('div',{staticClass:"skeleton-task"})])])}),0):_vm._e(),_vm._v(" "),(_vm.isAuthorised && _vm.task.id && (!_vm.tree || _vm.updateTree) && !_vm.readonly)?_c('div',{staticClass:"field"},[_c('div',{staticClass:"button is-light is-small is-fullwidth",on:{"click":_vm.task_add}},[_c('x-icon',{attrs:{"name":"plus"}}),_vm._v(" "),_c('span',[_vm._v("Add child")])],1)]):_vm._e(),_vm._v(" "),(!_vm.tree || _vm.updateTree)?_c('div',{staticClass:"field"},[_c('label',{staticClass:"label"},[_vm._v("Estimate")]),_vm._v(" "),_c('b-number-input',{attrs:{"disabled":!_vm.isAuthorised || _vm.task.isRunning() || _vm.readonly,"min":1,"max":10,"controlsPosition":"compact","expanded":"","size":"is-small"},on:{"input":function($event){return _vm.on_input()}},model:{value:(_vm.task.interval),callback:function ($$v) {_vm.$set(_vm.task, "interval", $$v)},expression:"task.interval"}})],1):_vm._e()],1),_vm._v(" "),((!_vm.tree || _vm.updateTree) && !_vm.readonly)?_c('div',{staticClass:"card-footer"},[_c('div',{staticClass:"card-footer-item",on:{"click":_vm.handle_delete}},[_c('x-icon',{attrs:{"name":"trash"}})],1)]):_vm._e(),_vm._v(" "),((!_vm.tree || _vm.updateTree))?_c('div',{staticClass:"close",on:{"click":function($event){return _vm.close()}}},[_c('x-icon',{attrs:{"name":"minimize"}})],1):_vm._e()]):_vm._e()])],2)]):_vm._e()}
-var Taskvue_type_template_id_44f0b7d4_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./components/Task.vue?vue&type=template&id=0f3267d8&
+var Taskvue_type_template_id_0f3267d8_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.task && _vm.task.settings)?_c('div',{staticClass:"task",class:{'is-active': _vm.updateTree}},[_vm._ssrNode("<div"+(_vm._ssrAttr("id",("task-" + (_vm.task.id))))+">","</div>",[_c('transition',{attrs:{"name":"fade"}},[_c('div',{staticClass:"notification media",class:{'is-warning': _vm.task.status === 'running'}},[_c('div',{staticClass:"media-left"},[(_vm.tree)?_c('div',{staticClass:"button",class:{'is-static': !_vm.children || _vm.children.length === 0},on:{"click":function($event){_vm.editing = !_vm.editing; _vm.updateTree = false}}},[_c('x-icon',{attrs:{"name":"tree"}})],1):_c('div',{staticClass:"button is-small",class:{'is-static': !_vm.isAuthorised || ['stopped', 'complete'].includes(_vm.task.status)},on:{"click":function($event){return _vm.task_done()}}},[_c('x-icon',{attrs:{"name":"check"}})],1)]),_vm._v(" "),_c('div',{staticClass:"media-content",on:{"click":_vm.dblClick}},[_c('ce',{staticClass:"title",attrs:{"placeholder":"Untitled","elm":"h4","editable":Boolean(_vm.isAuthorised) && _vm.task.status !== 'running' && !_vm.readonly},on:{"input":function($event){return _vm.on_input()}},model:{value:(_vm.task.title),callback:function ($$v) {_vm.$set(_vm.task, "title", $$v)},expression:"task.title"}}),_vm._v(" "),(_vm.tree)?_c('small',{staticClass:"field"},[_vm._v(_vm._s(_vm.task.interval * _vm.task.tomato)+"m")]):_c('div',{staticClass:"level is-mobile"},[_c('div',{staticClass:"level-left"},[(Boolean(_vm.board) && _vm.task.assignee)?_c('div',{staticClass:"level-item"},[_c('b-tooltip',{attrs:{"label":("Assigned to " + (_vm.convertName(_vm.task.assignee)))}},[_c('avatar',{staticClass:"is-16x16",attrs:{"value":_vm.task.assignee.profile.media}})],1)],1):_vm._e(),_vm._v(" "),_c('div',{staticClass:"level-item"},[_c('b-rate',{staticClass:"is-small",attrs:{"disabled":!_vm.editing || _vm.readonly},on:{"input":_vm.setPriority},model:{value:(_vm.task.settings.priority),callback:function ($$v) {_vm.$set(_vm.task.settings, "priority", $$v)},expression:"task.settings.priority"}})],1)])])],1),_vm._v(" "),(!['stopped', 'complete'].includes(_vm.task.status) && !_vm.tree)?_c('div',{staticClass:"media-right clickable"},[(!_vm.readonly)?_c('div',{staticClass:"buttons"},[_c('div',{staticClass:"button is-hidden-mobile is-text"},[_vm._v("\n                            "+_vm._s(_vm.task.times.length)+" / "+_vm._s(_vm.task.interval)+"\n                        ")]),_vm._v(" "),(_vm.task.status !== 'running')?_c('div',{staticClass:"button is-text is-hidden-mobile"},[_vm._v("\n                            "+_vm._s(_vm.fancyTimeFormat(_vm.task.totalTimeLeft()))+"\n                        ")]):_vm._e(),_vm._v(" "),_c('div',{staticClass:"button",class:{'is-static': !_vm.isAuthorised},on:{"click":function($event){return _vm.task_run()}}},[_c('x-icon',{staticClass:"is-medium",attrs:{"name":_vm.task.status ===  'running' ? 'pause' : 'play'}})],1)]):_vm._e()]):(_vm.tree)?_c('div',{staticClass:"media-right"},[_c('b-rate',{attrs:{"disabled":_vm.readonly,"value":_vm.task.settings.priority},on:{"input":_vm.setPriority}})],1):_vm._e()])]),_vm._ssrNode(" "),_c('transition',{attrs:{"name":"bounce"}},[(_vm.editing)?_c('div',{staticClass:"card"},[(_vm.task.parent && !_vm.tree)?_c('div',{staticClass:"card-header"},[_c('ce',{staticClass:"card-header-title title",attrs:{"placeholder":"Untitled","elm":"h4","editable":_vm.isAuthorised && _vm.task.status !== 'running' && !_vm.readonly},on:{"input":function($event){return _vm.on_input()}},model:{value:(_vm.task.title),callback:function ($$v) {_vm.$set(_vm.task, "title", $$v)},expression:"task.title"}})],1):_vm._e(),_vm._v(" "),(_vm.task.parent && !_vm.tree)?_c('div',{staticClass:"card-content"},[_c('b-rate',{staticClass:"is-small",attrs:{"custom-text":"Priority","disabled":!_vm.isAuthorised || !_vm.editing},on:{"input":_vm.setPriority},model:{value:(_vm.task.settings.priority),callback:function ($$v) {_vm.$set(_vm.task.settings, "priority", $$v)},expression:"task.settings.priority"}})],1):_vm._e(),_vm._v(" "),_c('div',{staticClass:"card-content"},[(!_vm.tree || _vm.updateTree)?_c('ce',{staticClass:"note",attrs:{"elm":"div","placeholder":"Note","allow-paste-html":"","editable":_vm.isAuthorised && !_vm.task.isRunning() && !_vm.readonly},on:{"input":function($event){return _vm.on_input()}},model:{value:(_vm.task.description),callback:function ($$v) {_vm.$set(_vm.task, "description", $$v)},expression:"task.description"}}):_vm._e(),_vm._v(" "),(_vm.currentUser && Boolean(_vm.board) && _vm.task.user.id === _vm.currentUser.id)?_c('div',{staticClass:"level is-mobile"},[_c('div',{staticClass:"level-left"},[_c('b-switch',{attrs:{"disabled":!_vm.isAuthorised,"rounded":false},on:{"input":function($event){return _vm.on_input()}},model:{value:(_vm.task.settings['collaborate']),callback:function ($$v) {_vm.$set(_vm.task.settings, 'collaborate', $$v)},expression:"task.settings['collaborate']"}},[_vm._v("\n                                Allow collaborate\n                            ")])],1),_vm._v(" "),_c('div',{staticClass:"level-right"},[_c('user-selector',{attrs:{"disabled":!_vm.isAuthorised},on:{"input":function($event){return _vm.on_input()}},model:{value:(_vm.task.assignee),callback:function ($$v) {_vm.$set(_vm.task, "assignee", $$v)},expression:"task.assignee"}})],1)]):_vm._e(),_vm._v(" "),_c('draggable',_vm._b({staticClass:"tasks",attrs:{"list":_vm.children},on:{"change":_vm.re_order}},'draggable',_vm.dragOptions,false),_vm._l((_vm.children),function(child){return _c('task',{key:child.id,attrs:{"value":child,"readonly":_vm.readonly,"board":_vm.board,"tree":_vm.tree},on:{"add":_vm.handle_add,"deleted":function($event){return _vm.$emit('deleted', $event)}}})}),1),_vm._v(" "),(_vm.loadingChild)?_c('div',{staticClass:"tasks"},_vm._l((5),function(i){return _c('div',{key:i,staticClass:"task"},[_c('div',{staticClass:"notification media"},[_c('div',{staticClass:"skeleton-task"})])])}),0):_vm._e(),_vm._v(" "),(_vm.isAuthorised && _vm.task.id && (!_vm.tree || _vm.updateTree) && !_vm.readonly)?_c('div',{staticClass:"field"},[_c('div',{staticClass:"button is-light is-small is-fullwidth",on:{"click":_vm.task_add}},[_c('x-icon',{attrs:{"name":"plus"}}),_vm._v(" "),_c('span',[_vm._v("Add child")])],1)]):_vm._e(),_vm._v(" "),(!_vm.tree || _vm.updateTree)?_c('div',{staticClass:"field"},[_c('label',{staticClass:"label"},[_vm._v("Estimate")]),_vm._v(" "),_c('b-number-input',{attrs:{"disabled":!_vm.isAuthorised || _vm.task.isRunning() || _vm.readonly,"min":1,"max":10,"controlsPosition":"compact","expanded":"","size":"is-small"},on:{"input":function($event){return _vm.on_input()}},model:{value:(_vm.task.interval),callback:function ($$v) {_vm.$set(_vm.task, "interval", $$v)},expression:"task.interval"}})],1):_vm._e()],1),_vm._v(" "),((!_vm.tree || _vm.updateTree) && !_vm.readonly)?_c('div',{staticClass:"card-footer"},[_c('div',{staticClass:"card-footer-item",on:{"click":_vm.handle_delete}},[_c('x-icon',{attrs:{"name":"trash"}})],1)]):_vm._e(),_vm._v(" "),((!_vm.tree || _vm.updateTree))?_c('div',{staticClass:"close",on:{"click":function($event){return _vm.close()}}},[_c('x-icon',{attrs:{"name":"minimize"}})],1):_vm._e()]):_vm._e()])],2)]):_vm._e()}
+var Taskvue_type_template_id_0f3267d8_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./components/Task.vue?vue&type=template&id=44f0b7d4&
+// CONCATENATED MODULE: ./components/Task.vue?vue&type=template&id=0f3267d8&
 
 // CONCATENATED MODULE: ./node_modules/babel-loader/lib??ref--2-0!./node_modules/vue-loader/lib??vue-loader-options!./components/Task.vue?vue&type=script&lang=js&
 //
@@ -6552,7 +6676,7 @@ const Taskvue_type_script_lang_js_ = __webpack_require__(2);
     async task_done() {
       if (!this.isAuthorised) return;
 
-      if (this.children.length === 0) {
+      if (this.children.length === 0 || this.children.filter(x => x.status === 'complete').length === this.children.length) {
         this.task.changeStatus('complete');
         await this.$store.commit('task/UPDATE_TASK', this.task);
       } else {
@@ -6618,8 +6742,8 @@ function Task_injectStyles (context) {
 
 var Task_component = Object(componentNormalizer["a" /* default */])(
   components_Taskvue_type_script_lang_js_,
-  Taskvue_type_template_id_44f0b7d4_render,
-  Taskvue_type_template_id_44f0b7d4_staticRenderFns,
+  Taskvue_type_template_id_0f3267d8_render,
+  Taskvue_type_template_id_0f3267d8_staticRenderFns,
   false,
   Task_injectStyles,
   null,
@@ -7474,9 +7598,6 @@ var User_component = Object(componentNormalizer["a" /* default */])(
 )
 
 /* harmony default export */ var User = (User_component.exports);
-// EXTERNAL MODULE: external "buefy"
-var external_buefy_ = __webpack_require__(8);
-
 // CONCATENATED MODULE: ./plugins/component.js
 
 

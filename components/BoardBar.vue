@@ -4,10 +4,12 @@
             <div class="header">
                 <div class="media" v-if="currentUser">
                     <div class="media-content">
-                        <button class="button is-text is-selected" @click="isActive = true">
-                            <x-icon v-if="gb" :name="kind2Icon(gb.kind)"></x-icon>
-                            <b class="clickable">{{ gb ? gb.title : 'Create workspace' }}</b>
-                        </button>
+                        <b-tooltip label="Focus to work of meeting with others">
+                            <button class="button is-text is-selected" @click="isActive = true">
+                                <x-icon v-if="gb" :name="kind2Icon(gb.kind)"></x-icon>
+                                <b class="clickable">{{ gb ? gb.title : 'Create workspace' }}</b>
+                            </button>
+                        </b-tooltip>
                     </div>
                     <div class="media-right">
                         <div class="buttons">
@@ -22,27 +24,31 @@
             <transition name="fade">
                 <div v-if="!minimize && gb" class="members">
                     <div class="wrapper" v-if="members.length">
-                        <div class="level is-mobile" v-for="user in members" :key="user.id">
-                            <div class="level-left">
-                                <div class="media">
+                        <div class="member">
+                            <div class="columns is-gapless">
+                                <div class="column is-1" v-for="user in members" :key="user.id">
+                                    <avatar :class="user.profile.extra && user.profile.extra.status"
+                                            class="is-24x24"
+                                            :value="user.profile.media"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-box">
+                            <div class="wrapper" id="chat-box" ref="chat-box">
+                                <div v-for="c in chat.results" :key="c.id" class="media">
                                     <div class="media-left">
-                                        <avatar :class="user.profile.extra && user.profile.extra.status"
+                                        <avatar :class="c.user.profile.extra && c.user.profile.extra.status"
                                                 class="is-24x24"
-                                                :value="user.profile.media"/>
+                                                :value="c.user.profile.media"/>
                                     </div>
                                     <div class="media-content">
-                                        <b>{{ convertName(user) }}</b>
+                                        <b><small>{{ convertName(c.user) }}</small></b> <span>{{ c.msg }}</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="level-right">
-                                <small>{{ getScore(user).toFixed(2) }}m</small>
-                            </div>
                         </div>
-                    </div>
-                    <div class="wrapper" v-if="loading.member">
-                        <div class="level" v-for="i in 5" :key="i">
-                            <div class="skeleton-user"></div>
+                        <div class="chat-form">
+                            <b-input v-model="newMessage" placeholder="Message" @keyup.enter.native="send"/>
                         </div>
                     </div>
                 </div>
@@ -51,7 +57,9 @@
         <b-modal :can-cancel="false" :active.sync="isActive" scroll="keep">
             <div class="modal-card">
                 <header class="modal-card-head">
-                    <div class="modal-card-title uppercase">{{ form.title ? form.title : 'Create new workspace' }}</div>
+                    <div class="modal-card-title uppercase">
+                        {{ form.title ? form.title : 'Create new workspace' }}
+                    </div>
                     <div class="modal-card-icon">
                         <div class="buttons">
                             <div v-if="gb" class="button is-danger is-small" @click="join(gb)">Left</div>
@@ -63,40 +71,26 @@
                 </header>
                 <section class="modal-card-body">
                     <div>
-                        <p class="notification is-warning">Focus to work of meeting with others</p>
-                        <div class="field">
-                            <b-input :disabled="!authorised" size="is-medium" v-model="form.title"
-                                     placeholder="Workspace name"></b-input>
+                        <div class="field is-floating-label">
+                            <label class="label">Name</label>
+                            <div class="control is-clearfix">
+                                <b-input :disabled="!authorised" size="is-medium" v-model="form.title"
+                                         placeholder="Workspace name"/>
+                            </div>
                         </div>
                         <div v-if="authorised" class="field is-floating-label">
                             <label class="label">Options</label>
                             <div class="control is-clearfix">
                                 <div class="card">
                                     <div class="card-content">
-                                        <div class="level">
-                                            <div class="level-left"><span class="label">Kind</span></div>
+                                        <div class="level is-mobile">
+                                            <div class="level-left">Enable to search</div>
                                             <div class="level-right">
-                                                <b-dropdown append-to-body v-model="form.kind" aria-role="list">
-                                                    <button class="button is-small" type="button" slot="trigger">
-                                                        <template>
-                                                            <span>{{ kinds[form.kind].title }}</span>
-                                                        </template>
-                                                        <x-icon name="chevron-down"></x-icon>
-                                                    </button>
-                                                    <b-dropdown-item v-for="val in Object.keys(kinds)" :key="val"
-                                                                     :value="val" aria-role="listitem">
-                                                        <div class="media">
-                                                            <div class="media-content">
-                                                                <h3>{{ kinds[val].title }}</h3>
-                                                                <small>{{ kinds[val].help }}</small>
-                                                            </div>
-                                                        </div>
-                                                    </b-dropdown-item>
-                                                </b-dropdown>
+                                                <b-switch :rounded="false" v-model="form.settings.allow_search"/>
                                             </div>
                                         </div>
-                                        <div class="level">
-                                            <div class="level-left"><span class="label">Private</span></div>
+                                        <div class="level is-mobile">
+                                            <div class="level-left">Private</div>
                                             <div class="level-right">
                                                 <b-switch :rounded="false" v-model="form.is_private"/>
                                             </div>
@@ -106,8 +100,8 @@
                                                      password-reveal
                                                      placeholder="Password to access workspace"/>
                                         </div>
-                                        <div class="level">
-                                            <div class="level-left"><span class="label">Collaborate</span></div>
+                                        <div class="level is-mobile">
+                                            <div class="level-left">Collaborate</div>
                                             <div class="level-right">
                                                 <b-switch :rounded="false" v-model="form.settings.collaborate"/>
                                             </div>
@@ -118,9 +112,23 @@
                         </div>
                         <div v-if="authorised" class="columns">
                             <div class="column">
-                                <b-switch size="is-medium" :rounded="false" v-model="form.settings.allow_search">Allow
-                                    search
-                                </b-switch>
+                                <b-dropdown append-to-body v-model="form.kind" aria-role="list">
+                                    <button class="button is-small" type="button" slot="trigger">
+                                        <template>
+                                            <span>{{ kinds[form.kind].title }}</span>
+                                        </template>
+                                        <x-icon name="chevron-down"></x-icon>
+                                    </button>
+                                    <b-dropdown-item v-for="val in Object.keys(kinds)" :key="val"
+                                                     :value="val" aria-role="listitem">
+                                        <div class="media">
+                                            <div class="media-content">
+                                                <h3>{{ kinds[val].title }}</h3>
+                                                <small>{{ kinds[val].help }}</small>
+                                            </div>
+                                        </div>
+                                    </b-dropdown-item>
+                                </b-dropdown>
                             </div>
                             <div class="column">
                                 <button v-if="authorised" class="button is-primary is-fullwidth" @click="save">
@@ -240,7 +248,17 @@ export default {
                     title: "Default",
                     help: "Anyone can add and run workspace's tasks"
                 },
-            }
+                "TEMPLATE": {
+                    title: "Template",
+                    help: "Anyone can add and run workspace's tasks"
+                },
+            },
+            chat: {
+                results: [],
+                count: 0
+            },
+            newMessage: null,
+            channel: null
         }
     },
     methods: {
@@ -284,22 +302,29 @@ export default {
             }
         },
         connectSocket() {
-            if (this.gb && Pusher && typeof Pusher === 'object') {
+            if (this.gb && Pusher && typeof Pusher === 'function') {
+                this.channel = null;
                 let pusher = new Pusher('eccf1067acf541fbc5d4', {
                     cluster: 'ap1'
                 });
-                let channel = pusher.subscribe(`board_${this.gb.id}`);
-                channel.bind('change-user-score', function (data) {
+                this.channel = pusher.subscribe(`board_${this.gb.id}`);
+                this.channel.bind('change-user-score', function (data) {
                     if (data) {
 
                     }
                 }.bind(this));
-                channel.bind('change-user-status', function (data) {
+                this.channel.bind('change-user-status', function (data) {
                     if (data) {
                         let index = this.members.map(u => u.id).indexOf(data.user);
                         if (index >= 0) {
                             this.members[index].profile.extra.status = data.status;
                         }
+                    }
+                }.bind(this));
+                this.channel.bind('new_message', function (data) {
+                    if (data) {
+                        this.chat.results.push(data);
+                        this.toBottom();
                     }
                 }.bind(this));
             }
@@ -318,9 +343,38 @@ export default {
                 this.wsMembers = [];
             }
         },
-        getScore(user) {
-            return 0;
+        async fetchMessages() {
+            if (this.gb) {
+                this.loading.message = true;
+                this.chat = await this.$axios.$get(`/task/boards/${this.gb.id}/messages/`, {
+                    params: {
+                        room: `BOARD_${this.gb.id}`
+                    }
+                }).then(res => {
+                    return {
+                        "count": res.count,
+                        "results": res.results.reverse()
+                    }
+                });
+                this.loading.message = false;
+                this.toBottom();
+            }
         },
+        send() {
+            if (this.gb && this.newMessage && this.newMessage.length >= 2)
+                this.$axios.$post('/general/messages/', {
+                    msg: this.newMessage,
+                    room: `board_${this.gb.id}`
+                }).then(() => {
+                    this.newMessage = null;
+                })
+        },
+        toBottom() {
+            if (process['client']) {
+                let elm = document.querySelector("#chat-box");
+                elm.scrollTo(0, elm.offsetHeight * 2);
+            }
+        }
     },
     computed: {
         gb() {
@@ -342,9 +396,12 @@ export default {
             if (this.gb) {
                 this.minimize = false;
                 this.init(this.gb);
+                this.connectSocket();
                 this.fetchMembers();
+                this.fetchMessages();
             } else {
                 this.init();
+                this.minimize = true;
             }
         },
         isActive() {
@@ -354,15 +411,17 @@ export default {
         }
     },
     mounted() {
-        this.connectSocket()
+        this.connectSocket();
     },
     created() {
         if (this.gb) {
             this.init(this.gb);
             this.fetchMembers();
+            this.fetchMessages();
             this.minimize = false;
         } else {
             this.init();
+            this.minimize = true;
         }
     }
 }

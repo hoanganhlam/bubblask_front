@@ -287,7 +287,7 @@ export default {
         },
         async task_done() {
             if (!this.isAuthorised) return;
-            if (this.children.length === 0) {
+            if (this.children.length === 0 || (this.children.filter(x => x.status === 'complete').length === this.children.length)) {
                 this.task.changeStatus('complete');
                 await this.$store.commit('task/UPDATE_TASK', this.task);
             } else {

@@ -1,6 +1,6 @@
 <template>
     <div v-bind:class="{'has-custom': $route.path === '/'}" v-bind:style="settings.color">
-        <header v-if="!isRunning && !$route.path.includes('/workspace')" class="header">
+        <header class="header">
             <nav class="navbar" role="navigation" aria-label="main navigation">
                 <div class="navbar-brand">
                     <n-link class="navbar-item logo" to="/">
@@ -17,6 +17,21 @@
                 </div>
                 <div class="navbar-menu" v-bind:class="{'is-active' : burgerActive}">
                     <div class="navbar-end">
+                        <div class="sound-bar navbar-item clickable" @click="playing = !playing">
+                            <div class="bars" v-if="playing">
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                            </div>
+                            <x-icon :name="playing ? 'pause' : 'play'"/>
+                        </div>
                         <div class="navbar-item">
                             <div>
                                 <span class="field">Total: </span>
@@ -141,15 +156,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="field" v-if="notify.msg">
-                                            <div
-                                                :class="`content notification ${notify.ssf ? 'is-light': 'is-danger'}`">
-                                                <p v-if="typeof notify.msg === 'string'">{{ notify.msg }}</p>
-                                                <ul v-else>
-                                                    <li v-for="m in notify.msg">{{ m }}</li>
-                                                </ul>
-                                            </div>
-                                        </div>
                                     </div>
                                 </x-dropdown>
                             </li>
@@ -194,6 +200,9 @@
             </main>
         </div>
         <board-bar/>
+        <div id="music_list">
+            <audio controls autoplay></audio>
+        </div>
     </div>
 </template>
 
@@ -205,6 +214,7 @@ import {debounce, cloneDeep} from "lodash"
 import {Task} from "~/plugins/task";
 import Template from "../pages/board/index";
 import BoardBar from "@/components/BoardBar";
+import {SnackbarProgrammatic as Snackbar} from 'buefy';
 
 export default {
     components: {BoardBar, Template, BInput, Avatar, Options},
@@ -227,7 +237,8 @@ export default {
             },
             is_online: true,
             strictTemp: false,
-            forceSidebar: true
+            forceSidebar: true,
+            playing: false
         }
     },
     methods: {
@@ -237,6 +248,7 @@ export default {
             await this.fetchTasks();
         },
         async handleSubmit() {
+            this.notify = {msg: null, ssf: true}
             if (this.logging) {
                 await this.$auth.login({
                     email: this.form.email,
@@ -244,11 +256,14 @@ export default {
                 }).then(res => {
                     if (res) {
                         this.fetchTasks();
-                        this.notify.msg = "Login successfully :D";
+                        this.notify.msg = "LOGIN_SUCCESS";
                     } else {
-                        this.notify.msg = "Login Failed :(";
+                        this.notify.msg = "LOGIN_FAIL";
                         this.notify.ssf = false;
                     }
+                }).catch(() => {
+                    this.notify.msg = "LOGIN_FAIL";
+                    this.notify.ssf = false;
                 })
             } else {
                 this.$axios.post('/auth/rest-auth/registration/', {
@@ -258,24 +273,22 @@ export default {
                 }).then((res) => {
                     if (res) {
                         this.logging = true;
-                        this.notify.msg = "Register successfully, please login!";
+                        this.notify.msg = "REGISTER_SUCCESS";
                     } else {
-                        this.notify.msg = "Register Failed :(";
+                        this.notify.msg = "REGISTER_FAILED";
                         this.notify.ssf = false;
                     }
                 }).catch(error => {
+                    this.notify.msg = "REGISTER_FAILED";
+                    this.notify.ssf = false;
                     let fields = Object.keys(error.response.data);
-                    this.notify.msg = [];
+                    this.notify.fields = [];
                     fields.forEach(field => {
-                        this.notify.msg.push(`${field} - ${error.response.data[field][0]}`)
+                        this.notify.fields.push(`${field}_${error.response.data[field][0]}`)
                     });
                     this.notify.ssf = false;
                 });
             }
-            let _this = this;
-            setTimeout(function () {
-                _this.notify = {msg: null, ssf: true}
-            }, 2000)
         },
         async setStrict(val) {
             if (this.currentUser) {
@@ -387,6 +400,44 @@ export default {
                     })
                 }
             }
+        },
+        initAudio() {
+            const files = [
+                "1vo-SrAf-cd_61Cf9gA4OTGwmQLqTcTm-",
+                "17CrXGkzHXul_m3fBUj1TRI1Q6ARitLhb",
+                "1hmaOuM-xv0mUl1bgDdEqJLxwpOwIdQuc",
+                "144D2pyG8d-QcJ_zcZdfpmeTgkLtMVQSz",
+                "18sYxO-y-tbJpzoGmFukg9qRozMcDv62o",
+                "1ANCvTOiSTALtZKe9IYx4MIcQMQJ8f-fE",
+                "1Hmo8dQ0W0PVKtn9DxdiPyLugbu2jnSFv",
+                "1N-kmHus4ZReAb8E14K2-TWczLy34pd6H",
+            ];
+            // Current index of the files array
+            let i = 0;
+            // Get the audio element
+            this.music_player = document.querySelector("#music_list audio");
+
+            // function for moving to next audio file
+            function next() {
+                // Check for last audio file in the playlist
+                if (i === files.length - 1) {
+                    i = 0;
+                } else {
+                    i++;
+                }
+                // Change the audio element source
+                this.music_player.src = `https://docs.google.com/uc?export=download&id=${files[i]}`;
+            }
+
+            // Check if the player is selected
+            if (!this.music_player) {
+                throw "Playlist Player does not exists ...";
+            } else {
+                // Start the player
+                this.music_player.src = `https://docs.google.com/uc?export=download&id=${files[i]}`;
+                // Listen for the music ended event, to play the next audio file
+                this.music_player.addEventListener('ended', next, false)
+            }
         }
     },
     created() {
@@ -434,9 +485,29 @@ export default {
         strictTemp() {
             this.setStrict(this.strictTemp);
         },
+        notify: {
+            deep: true,
+            handler: function () {
+                if (this.notify.msg) {
+                    Snackbar.open({
+                        duration: 10000,
+                        message: this.notify.msg,
+                        type: this.notify.ssf ? 'is-success' : 'is-warning',
+                    });
+                }
+            }
+        },
+        playing() {
+            if (this.playing) {
+                this.music_player.play()
+            } else {
+                this.music_player.pause()
+            }
+        }
     },
     async mounted() {
         if (process['client']) {
+            this.initAudio();
             let _this = this;
             await this.fetchTasks();
             setInterval(function () {
@@ -516,14 +587,11 @@ export default {
     bottom: 0;
     min-width: 320px;
     background: #FFFFFF;
-    padding: .375rem;
     box-shadow: 0 1px 5px 0 rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.02);
     display: flex;
     flex-direction: column;
 
     .header {
-
-
         .button {
 
         }
@@ -532,7 +600,7 @@ export default {
     .members {
         flex: 1;
         position: relative;
-        margin-top: .75rem;
+        margin-top: .25rem;
 
         .wrapper {
             position: absolute;
@@ -543,6 +611,8 @@ export default {
             overflow: auto;
             padding-right: .5rem;
             margin-right: -.5rem;
+            display: flex;
+            flex-direction: column;
 
             &::-webkit-scrollbar {
                 width: 3px;
@@ -554,6 +624,38 @@ export default {
 
             &::-webkit-scrollbar-thumb {
                 background: #cacbd1;
+            }
+
+            .member {
+                background: #F0F0F0;
+                padding: .25rem;
+                border-radius: 50px;
+                margin: 0 .5rem;
+            }
+
+            .chat-form {
+                padding: .5rem;
+                background: #F9F9F9;
+            }
+
+            .chat-box {
+                flex: 1;
+                position: relative;
+                margin-top: 1rem;
+
+                .media {
+                    padding: 0 .5rem;
+
+                    .media-left {
+                        margin-right: .75rem;
+                    }
+                }
+
+                .media + .media {
+                    border-top: 0;
+                    margin-top: .5rem;
+                    padding-top: 0;
+                }
             }
         }
     }
@@ -630,6 +732,82 @@ export default {
             color: var(--task-text-color);
         }
     }
+}
+
+.bars {
+    height: 24px;
+    width: 50px;
+    position: relative;
+}
+
+.bar {
+    background: #666;
+    bottom: 1px;
+    height: 3px;
+    position: absolute;
+    width: 3px;
+    animation: sound 0ms -800ms linear infinite alternate;
+}
+
+@keyframes sound {
+    0% {
+        opacity: .35;
+        height: 3px;
+    }
+    100% {
+        opacity: 1;
+        height: 1rem;
+    }
+}
+
+.bar:nth-child(1) {
+    left: 1px;
+    animation-duration: 474ms;
+}
+
+.bar:nth-child(2) {
+    left: 5px;
+    animation-duration: 433ms;
+}
+
+.bar:nth-child(3) {
+    left: 9px;
+    animation-duration: 407ms;
+}
+
+.bar:nth-child(4) {
+    left: 13px;
+    animation-duration: 458ms;
+}
+
+.bar:nth-child(5) {
+    left: 17px;
+    animation-duration: 400ms;
+}
+
+.bar:nth-child(6) {
+    left: 21px;
+    animation-duration: 427ms;
+}
+
+.bar:nth-child(7) {
+    left: 25px;
+    animation-duration: 441ms;
+}
+
+.bar:nth-child(8) {
+    left: 29px;
+    animation-duration: 419ms;
+}
+
+.bar:nth-child(9) {
+    left: 33px;
+    animation-duration: 487ms;
+}
+
+.bar:nth-child(10) {
+    left: 37px;
+    animation-duration: 442ms;
 }
 
 @media screen and (max-width: 1023px) {

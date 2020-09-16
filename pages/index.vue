@@ -198,8 +198,6 @@ export default {
         },
         tasks() {
             let board = this.gb && this.gb.kind !== 'GHOST' ? this.gb.id : null;
-            console.log(board);
-            console.log(this.$store.state.task.tasks);
             return this.hierarchy(this.$store.state.task.tasks, {idKey: 'id', parentKey: 'parent'}).filter(x => {
                 return x.board === board;
             });

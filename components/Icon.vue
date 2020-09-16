@@ -1,5 +1,5 @@
 <template>
-    <span class="icon">
+    <span v-if="path" class="icon">
         <svg viewBox="0 0 24 24">
             <path :d="path" :transform="transform"/>
         </svg>
@@ -16,6 +16,7 @@
         },
         computed: {
             path() {
+                if (!this.name) return null;
                 return typeof icons[this.name] === "string" ? icons[this.name] : icons[this.name].path;
             },
             transform() {

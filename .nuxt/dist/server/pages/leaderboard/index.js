@@ -37,7 +37,7 @@ var staticRenderFns = []
 // CONCATENATED MODULE: ./pages/leaderboard/index.vue?vue&type=template&id=3663a490&
 
 // EXTERNAL MODULE: ./components/Avatar.vue + 15 modules
-var Avatar = __webpack_require__(7);
+var Avatar = __webpack_require__(8);
 
 // CONCATENATED MODULE: ./node_modules/babel-loader/lib??ref--2-0!./node_modules/vue-loader/lib??vue-loader-options!./pages/leaderboard/index.vue?vue&type=script&lang=js&
 //

@@ -64,42 +64,52 @@
                     <div class="column">
                         <div class="level is-mobile" v-if="updating">
                             <div class="level-left">
-                                <div class="field" v-if="board.parent === null">
-                                    <b-switch :rounded="false" v-model="board['is_interface']">Template</b-switch>
-                                </div>
+                                <b-dropdown append-to-body v-model="board.kind" aria-role="list">
+                                    <button class="button is-small" type="button" slot="trigger">
+                                        <template>
+                                            <span>{{ kinds[board.kind].title }}</span>
+                                        </template>
+                                        <x-icon name="chevron-down"></x-icon>
+                                    </button>
+                                    <b-dropdown-item v-for="val in Object.keys(kinds)" :key="val"
+                                                     :value="val" aria-role="listitem">
+                                        <div class="media">
+                                            <div class="media-content">
+                                                <h3>{{ kinds[val].title }}</h3>
+                                                <small>{{ kinds[val].help }}</small>
+                                            </div>
+                                        </div>
+                                    </b-dropdown-item>
+                                </b-dropdown>
                             </div>
                             <div class="level-right">
                                 <b-dropdown position="is-bottom-left" :trap-focus="true">
                                     <div slot="trigger" class="navbar-item clickable">
                                         <x-icon name="cogs"></x-icon>
-                                        <span>Privacy</span>
+                                        <span>Options</span>
                                     </div>
                                     <b-dropdown-item custom style="min-width: 300px;">
                                         <div class="level is-mobile">
-                                            <div class="level-left">Public</div>
+                                            <div class="level-left">Enable to search</div>
                                             <div class="level-right">
-                                                <b-switch :rounded="false"
-                                                          v-model="board.settings['is_public']"></b-switch>
+                                                <b-switch :rounded="false" v-model="board.settings.allow_search"/>
                                             </div>
                                         </div>
                                         <div class="level is-mobile">
-                                            <div class="level-left">Team</div>
+                                            <div class="level-left">Private</div>
                                             <div class="level-right">
-                                                <b-switch :rounded="false"
-                                                          v-model="board.settings['is_team']"></b-switch>
+                                                <b-switch :rounded="false" v-model="board.is_private"/>
                                             </div>
                                         </div>
-                                        <div class="field"
-                                             v-if="!board.settings['is_public'] && board.settings['is_team']">
-                                            <b-input expanded placeholder="Password"
-                                                     v-model="board.settings.password"></b-input>
-                                            <p class="help">Use password to join!</p>
+                                        <div class="field" v-if="board.is_private">
+                                            <b-input icon="pound" expanded v-model="board.password" type="password"
+                                                     password-reveal
+                                                     placeholder="Password to access"/>
                                         </div>
                                         <div class="level is-mobile">
-                                            <div class="level-left">Readonly</div>
+                                            <div class="level-left">Collaborate</div>
                                             <div class="level-right">
-                                                <b-switch :rounded="false"
-                                                          v-model="board.settings['is_readonly']"></b-switch>
+                                                <b-switch :rounded="false" v-model="board.settings.collaborate"/>
                                             </div>
                                         </div>
                                     </b-dropdown-item>
@@ -126,6 +136,7 @@ import BTagInput from "../../../components/taginput/Taginput";
 import BInput from "../../../components/input/Input";
 import TaskBoard from "../../../components/TaskBoard";
 import {Task} from "@/plugins/task";
+import {SnackbarProgrammatic as Snackbar} from 'buefy';
 
 export default {
     name: "TemplateDetail",
@@ -165,7 +176,21 @@ export default {
                 slug: null
             },
             boardSlug: null,
-            loading: false
+            loading: false,
+            kinds: {
+                "GHOST": {
+                    title: "Ghost",
+                    help: "No-one can see your tasks"
+                },
+                "DEFAULT": {
+                    title: "Default",
+                    help: "Anyone can add and run workspace's tasks"
+                },
+                "TEMPLATE": {
+                    title: "Template",
+                    help: "The board can be clone but task can't run!"
+                },
+            }
         }
     },
     head() {
@@ -196,7 +221,7 @@ export default {
                 if (this.board.id) {
                     if (this.currentUser.id === this.board.user) {
                         return !this.updating;
-                    } else if (!this.board.settings['is_readonly']) {
+                    } else if (this.board.kind === 'TEMPLATE') {
                         return !this.updating;
                     }
                 } else {
@@ -209,7 +234,7 @@ export default {
     methods: {
         handleUpdate() {
             let data = {};
-            const fields = ['title', 'description', 'slug', 'text_tags', 'is_interface', 'media', 'settings'];
+            const fields = ['title', 'description', 'slug', 'text_tags', 'kind', 'media', 'settings'];
             fields.forEach(field => {
                 if (field === 'media' && this.board['media']) {
                     data[field] = this.board['media'].id;
@@ -217,22 +242,33 @@ export default {
                     data[field] = this.board[field];
                 }
             });
-            if (this.currentUser && this.currentUser.id === this.board.user) {
+            if (this.currentUser && this.currentUser.id === this.board.user.id) {
                 this.$axios.$put(`/task/boards/${this.boardSlug}/`, data).then(res => {
+                    Snackbar.open({
+                        message: "BOARD_UPDATE_SUCCESS",
+                        type: 'is-warning',
+                    });
                     if (res.slug !== this.boardSlug) {
                         this.$router.replace({path: `/board/${res.slug}`});
                         this.boardSlug = res.slug;
                     }
-                }).then(() => {
+                }).finally(() => {
                     this.updating = false;
                 })
             }
         },
         useBoard() {
             this.$axios.$post(`/task/boards/${this.board.id}/clone/`).then(res => {
-                this.$router.replace({path: `/board/${res.slug}`})
+                this.$router.replace({path: `/board/${res.slug}`});
+                Snackbar.open({
+                    message: "BOARD_CLONE_SUCCESS",
+                    type: 'is-success',
+                });
             }).catch(() => {
-
+                Snackbar.open({
+                    message: "BOARD_CLONE_FAILED",
+                    type: 'is-danger',
+                });
             })
         },
         launchBoard() {

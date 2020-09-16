@@ -744,7 +744,7 @@ header.header {
     }
 
     .fuh-button.fuh-fixed {
-        padding: .96rem 1rem !important;
+        padding: .6rem !important;
 
         span:last-child {
             display: none;
@@ -763,6 +763,11 @@ header.header {
 
     .level-left + .level-right {
         margin-top: 1rem;
+    }
+
+    .sound-bar {
+        display: inline-flex;
+        width: 100%;
     }
 }
 
@@ -810,16 +815,21 @@ header.header {
         min-width: unset;
         width: calc(100% - 2rem) !important;
     }
-
+    .navbar-menu {
+        padding: 0;
+    }
     .navbar-end {
         .dropdown-trigger,
         .dropdown {
             width: 100%;
         }
-
         .navbar-item {
             padding: 1rem 0.75rem;
-            border-bottom: 1px solid #EEE;
+            border-top: 1px solid #EEE;
+
+            &:not(:last-child) {
+
+            }
         }
     }
 
@@ -833,6 +843,10 @@ header.header {
 
     [contenteditable] {
         font-size: 1rem !important;
+    }
+
+    .modal-content, .modal-card {
+        margin: 0;
     }
 }
 
