@@ -3,42 +3,49 @@
     "name": "board",
     "path": "/board",
     "component": "/Users/apple/Desktop/OpenSource/bubblask/pages/board/index.vue",
-    "chunkName": "pages/board/index"
+    "chunkName": "pages/board/index",
+    "_name": "_07149929"
   },
   {
     "name": "leaderboard",
     "path": "/leaderboard",
     "component": "/Users/apple/Desktop/OpenSource/bubblask/pages/leaderboard/index.vue",
-    "chunkName": "pages/leaderboard/index"
+    "chunkName": "pages/leaderboard/index",
+    "_name": "_05ac3a00"
   },
   {
     "name": "privacy",
     "path": "/privacy",
     "component": "/Users/apple/Desktop/OpenSource/bubblask/pages/privacy.vue",
-    "chunkName": "pages/privacy"
+    "chunkName": "pages/privacy",
+    "_name": "_02b3de70"
   },
   {
     "name": "board-id",
     "path": "/board/:id",
     "component": "/Users/apple/Desktop/OpenSource/bubblask/pages/board/_id/index.vue",
-    "chunkName": "pages/board/_id/index"
+    "chunkName": "pages/board/_id/index",
+    "_name": "_423af794"
   },
   {
     "name": "board-id-mindmap",
     "path": "/board/:id/mindmap",
     "component": "/Users/apple/Desktop/OpenSource/bubblask/pages/board/_id/mindmap.vue",
-    "chunkName": "pages/board/_id/mindmap"
+    "chunkName": "pages/board/_id/mindmap",
+    "_name": "_be0f8fe8"
   },
   {
     "name": "index",
     "path": "/",
     "component": "/Users/apple/Desktop/OpenSource/bubblask/pages/index.vue",
-    "chunkName": "pages/index"
+    "chunkName": "pages/index",
+    "_name": "_171029dc"
   },
   {
     "name": "user",
     "path": "/:user",
     "component": "/Users/apple/Desktop/OpenSource/bubblask/pages/_user/index.vue",
-    "chunkName": "pages/_user/index"
+    "chunkName": "pages/_user/index",
+    "_name": "_6b302c26"
   }
 ]

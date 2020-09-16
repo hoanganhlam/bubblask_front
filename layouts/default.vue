@@ -418,6 +418,8 @@ export default {
             this.music_player = document.querySelector("#music_list audio");
 
             // function for moving to next audio file
+            const _this = this;
+
             function next() {
                 // Check for last audio file in the playlist
                 if (i === files.length - 1) {
@@ -426,7 +428,7 @@ export default {
                     i++;
                 }
                 // Change the audio element source
-                this.music_player.src = `https://docs.google.com/uc?export=download&id=${files[i]}`;
+                _this.music_player.src = `https://docs.google.com/uc?export=download&id=${files[i]}`;
             }
 
             // Check if the player is selected
