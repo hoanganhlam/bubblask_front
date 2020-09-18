@@ -93,7 +93,7 @@
                 </div>
             </div>
         </div>
-        <div v-if="!runningTask" class="hero is-secondary is-small" style="min-height: 50vh">
+        <div v-if="!runningTask" class="hero is-secondary is-small">
             <div class="hero-body">
                 <div class="container small" v-if="setting.is_strict">
                     <div class="notification is-warning content">

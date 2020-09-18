@@ -1,56 +1,17 @@
 <template>
     <div v-bind:class="{'has-custom': $route.path === '/'}" v-bind:style="settings.color">
-        <header class="header">
-            <nav class="navbar" role="navigation" aria-label="main navigation">
-                <div class="navbar-brand">
-                    <n-link class="navbar-item logo" to="/">
-                        <img src="/logo.svg" alt="Bubblask">
-                        <span class="primary">BUBBLASK</span>
-                        <span class="second">.com</span>
-                    </n-link>
-                    <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
-                       @click="burgerActive = !burgerActive">
-                        <span aria-hidden="true"></span>
-                        <span aria-hidden="true"></span>
-                        <span aria-hidden="true"></span>
-                    </a>
-                </div>
-                <div class="navbar-menu" v-bind:class="{'is-active' : burgerActive}">
-                    <div class="navbar-end">
-                        <div class="sound-bar navbar-item clickable" @click="playing = !playing">
-                            <div class="bars" v-if="playing">
-                                <div class="bar"></div>
-                                <div class="bar"></div>
-                                <div class="bar"></div>
-                                <div class="bar"></div>
-                                <div class="bar"></div>
-                                <div class="bar"></div>
-                                <div class="bar"></div>
-                                <div class="bar"></div>
-                                <div class="bar"></div>
-                                <div class="bar"></div>
-                            </div>
-                            <x-icon :name="playing ? 'pause' : 'play'"/>
-                        </div>
-                        <div class="navbar-item">
-                            <div>
-                                <span class="field">Total: </span>
-                                <span class="value">{{ displayTasks.length }}</span>
-                            </div>
-                        </div>
-                        <div class="navbar-item">
-                            <div>
-                                <span class="field">Time: </span>
-                                <span class="value">{{ totalTime }}m</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </header>
         <div v-bind:class="{'main-content': !isRunning}">
             <div class="sidebar" v-if="!isRunning" v-bind:class="{'active': forceSidebar}">
                 <aside class="menu">
+                    <div class="menu-child">
+                        <ul class="menu-list">
+                            <li>
+                                <n-link class="logo" to="/" v-bind:class="{'is-active': $route.path === '/'}">
+                                    <img src="/logo.svg" alt="Bubblask"/>
+                                </n-link>
+                            </li>
+                        </ul>
+                    </div>
                     <div class="menu-child">
                         <ul class="menu-list">
                             <li>
@@ -184,17 +145,51 @@
                 <nuxt class="main-body"/>
                 <footer class="footer" v-if="!isRunning">
                     <div class="container small">
-                        <div class="level is-mobile">
-                            <div class="level-left">
-                                <div class="buttons">
-                                    <div class="button is-text">About</div>
-                                    <n-link to="/privacy" class="button is-text">Privacy</n-link>
+                        <nav class="navbar" role="navigation" aria-label="main navigation">
+                            <div class="navbar-brand">
+                                <div class="sound-bar navbar-item clickable" @click="playing = !playing">
+                                    <div class="bars" v-if="playing">
+                                        <div class="bar"></div>
+                                        <div class="bar"></div>
+                                        <div class="bar"></div>
+                                        <div class="bar"></div>
+                                        <div class="bar"></div>
+                                        <div class="bar"></div>
+                                        <div class="bar"></div>
+                                        <div class="bar"></div>
+                                        <div class="bar"></div>
+                                        <div class="bar"></div>
+                                    </div>
+                                    <div class="button">
+                                        <x-icon :name="playing ? 'pause' : 'play'"/>
+                                    </div>
+                                </div>
+                                <div class="navbar-item">
+                                    <div>
+                                        <span class="field">Total: </span>
+                                        <span class="value">{{ displayTasks.length }}</span>
+                                    </div>
+                                </div>
+                                <div class="navbar-item">
+                                    <div>
+                                        <span class="field">Time: </span>
+                                        <span class="value">{{ totalTime }}m</span>
+                                    </div>
+                                </div>
+                                <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
+                                   @click="burgerActive = !burgerActive">
+                                    <span aria-hidden="true"></span>
+                                    <span aria-hidden="true"></span>
+                                    <span aria-hidden="true"></span>
+                                </a>
+                            </div>
+                            <div class="navbar-menu" v-bind:class="{'is-active' : burgerActive}">
+                                <div class="navbar-end">
+                                    <n-link to="/privacy" class="navbar-item">Privacy</n-link>
+                                    <p class="navbar-item">Made with ❤️</p>
                                 </div>
                             </div>
-                            <div class="level-right">
-                                <p><strong>Made</strong> with ❤️</p>
-                            </div>
-                        </div>
+                        </nav>
                     </div>
                 </footer>
             </main>
@@ -256,11 +251,8 @@ export default {
                 }).then(res => {
                     if (res) {
                         this.fetchTasks();
-                        this.notify.msg = "LOGIN_SUCCESS";
-                    } else {
-                        this.notify.msg = "LOGIN_FAIL";
-                        this.notify.ssf = false;
                     }
+                    this.notify.msg = "LOGIN_SUCCESS";
                 }).catch(() => {
                     this.notify.msg = "LOGIN_FAIL";
                     this.notify.ssf = false;
@@ -412,23 +404,23 @@ export default {
                 "1Hmo8dQ0W0PVKtn9DxdiPyLugbu2jnSFv",
                 "1N-kmHus4ZReAb8E14K2-TWczLy34pd6H",
             ];
-            // Current index of the files array
-            let i = 0;
             // Get the audio element
             this.music_player = document.querySelector("#music_list audio");
 
             // function for moving to next audio file
             const _this = this;
 
+            function getRandomInt(min, max) {
+                min = Math.ceil(min);
+                max = Math.floor(max);
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
+
             function next() {
                 // Check for last audio file in the playlist
-                if (i === files.length - 1) {
-                    i = 0;
-                } else {
-                    i++;
-                }
+                let ran = getRandomInt(0, 7);
                 // Change the audio element source
-                _this.music_player.src = `https://docs.google.com/uc?export=download&id=${files[i]}`;
+                _this.music_player.src = `https://docs.google.com/uc?export=download&id=${files[ran]}`;
             }
 
             // Check if the player is selected
@@ -436,7 +428,8 @@ export default {
                 throw "Playlist Player does not exists ...";
             } else {
                 // Start the player
-                this.music_player.src = `https://docs.google.com/uc?export=download&id=${files[i]}`;
+                this.music_player.src = `https://docs.google.com/uc?export=download&id=${files[getRandomInt(0, 7)]}`;
+                this.music_player.pause();
                 // Listen for the music ended event, to play the next audio file
                 this.music_player.addEventListener('ended', next, false)
             }
@@ -695,7 +688,6 @@ export default {
         color: var(--bg-color-primary-text);
 
         &:not(.is-fullheight) {
-            min-height: calc(50vh - 49px);
         }
 
         .button.is-text,

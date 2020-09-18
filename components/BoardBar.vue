@@ -372,7 +372,9 @@ export default {
         toBottom() {
             if (process['client']) {
                 let elm = document.querySelector("#chat-box");
-                elm.scrollTo(0, elm.offsetHeight * 2);
+                if (elm) {
+                    elm.scrollTo(0, elm.offsetHeight * 2);
+                }
             }
         }
     },
