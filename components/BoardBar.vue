@@ -413,7 +413,12 @@ export default {
         }
     },
     mounted() {
-        this.connectSocket();
+        if (process['client']) {
+            this.connectSocket();
+            if (document.body.clientWidth < 500) {
+                this.minimize = true;
+            }
+        }
     },
     created() {
         if (this.gb) {

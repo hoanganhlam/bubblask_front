@@ -527,7 +527,7 @@ header.header {
             width: 100%;
             height: 100%;
             display: flex;
-            align-content: space-between;
+            justify-content: space-between;
             flex-direction: column;
         }
 
@@ -670,7 +670,7 @@ header.header {
 .sidebar-control {
     position: absolute;
     top: calc(50% - 70px);
-    right: -21px;
+    right: -23px;
     border-left: 0;
     border-color: #eee;
     padding: 1.5rem .5rem;

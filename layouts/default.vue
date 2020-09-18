@@ -516,6 +516,10 @@ export default {
                 newDateObj.setTime(oldDateObj.getTime() + (5 * 60 * 1000));
                 localStorage.setItem('time_off', newDateObj.toISOString());
             }, 1000);
+            if (document.body.clientWidth < 500) {
+                _this.forceSidebar = false;
+            }
+
             // Track
             window.fhApp = 'bubblask';
             window.fhStyle = {
