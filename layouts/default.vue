@@ -190,11 +190,11 @@
                                 </div>
                             </div>
                         </nav>
+                        <board-bar/>
                     </div>
                 </footer>
             </main>
         </div>
-        <board-bar/>
         <div id="music_list">
             <audio controls autoplay></audio>
         </div>
