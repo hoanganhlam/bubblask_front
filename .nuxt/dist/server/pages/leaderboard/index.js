@@ -29,17 +29,28 @@ __webpack_require__.r(__webpack_exports__);
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./pages/leaderboard/index.vue?vue&type=template&id=3663a490&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._ssrNode("<div class=\"hero is-dark\"><div class=\"hero-body\"><div class=\"container small\"><h1 class=\"title\">LeaderBoard</h1> <div class=\"subtitle\">See how others work</div></div></div></div> "),_vm._ssrNode("<div class=\"hero\">","</div>",[_vm._ssrNode("<div class=\"hero-body\">","</div>",[_vm._ssrNode("<div class=\"container medium\">","</div>",[_vm._ssrNode("<div class=\"columns is-multiline\">","</div>",_vm._l((_vm.response.results),function(u,i){return _vm._ssrNode("<div class=\"column is-4\">","</div>",[_vm._ssrNode("<div class=\"box user clickable\">","</div>",[_vm._ssrNode("<div class=\"media\">","</div>",[_vm._ssrNode("<div class=\"media-left\">"+_vm._ssrEscape(_vm._s(i + 1))+"</div> "),_vm._ssrNode("<div class=\"media-left\">","</div>",[_c('Avatar',{staticClass:"is-32x32",attrs:{"value":u.profile.media}})],1),_vm._ssrNode(" "),_vm._ssrNode("<div class=\"media-content\">","</div>",[_vm._ssrNode("<div>","</div>",[_c('n-link',{attrs:{"to":("/" + (u.username))}},[_vm._v(_vm._s(_vm.convertName(u)))])],1)]),_vm._ssrNode(" "+((u.profile.extra)?("<div class=\"media-right\"><small>"+_vm._ssrEscape(_vm._s((u.profile.extra.temp_score / (60 * 60)).toFixed(2))+"h")+"</small></div>"):"<!---->"))],2)])])}),0)])])])],2)}
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./pages/leaderboard/index.vue?vue&type=template&id=75caccdb&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._ssrNode("<div class=\"hero is-light\">","</div>",[_vm._ssrNode("<div class=\"hero-body\">","</div>",[_vm._ssrNode("<div class=\"container\">","</div>",[_vm._ssrNode("<div class=\"level is-mobile\">","</div>",[_vm._ssrNode("<div class=\"level-left\">","</div>",[_vm._ssrNode("<div class=\"level-item\">","</div>",[_c('n-link',{staticClass:"button",attrs:{"to":"/"}},[_c('x-icon',{attrs:{"name":"chevron-left"}})],1)],1),_vm._ssrNode(" <div class=\"level-item\"><h1 class=\"title\">LeaderBoard</h1></div>")],2)]),_vm._ssrNode(" <div class=\"subtitle\">See how others work</div>")],2)])]),_vm._ssrNode(" "),_vm._ssrNode("<div class=\"hero\">","</div>",[_vm._ssrNode("<div class=\"hero-body\">","</div>",[_vm._ssrNode("<div class=\"container medium\">","</div>",[_vm._ssrNode("<div class=\"columns is-multiline\">","</div>",_vm._l((_vm.response.results),function(u,i){return _vm._ssrNode("<div class=\"column is-4\">","</div>",[_vm._ssrNode("<div class=\"box user clickable\">","</div>",[_vm._ssrNode("<div class=\"media\">","</div>",[_vm._ssrNode("<div class=\"media-left\">"+_vm._ssrEscape(_vm._s(i + 1))+"</div> "),_vm._ssrNode("<div class=\"media-left\">","</div>",[_c('Avatar',{staticClass:"is-32x32",attrs:{"value":u.profile.media}})],1),_vm._ssrNode(" "),_vm._ssrNode("<div class=\"media-content\">","</div>",[_vm._ssrNode("<div>","</div>",[_c('n-link',{attrs:{"to":("/" + (u.username))}},[_vm._v(_vm._s(_vm.convertName(u)))])],1)]),_vm._ssrNode(" "+((u.profile.extra)?("<div class=\"media-right\"><small>"+_vm._ssrEscape(_vm._s((u.profile.extra.temp_score / (60 * 60)).toFixed(2))+"h")+"</small></div>"):"<!---->"))],2)])])}),0)])])])],2)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./pages/leaderboard/index.vue?vue&type=template&id=3663a490&
+// CONCATENATED MODULE: ./pages/leaderboard/index.vue?vue&type=template&id=75caccdb&
 
 // EXTERNAL MODULE: ./components/Avatar.vue + 15 modules
 var Avatar = __webpack_require__(8);
 
 // CONCATENATED MODULE: ./node_modules/babel-loader/lib??ref--2-0!./node_modules/vue-loader/lib??vue-loader-options!./pages/leaderboard/index.vue?vue&type=script&lang=js&
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //

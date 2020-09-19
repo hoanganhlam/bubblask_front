@@ -496,12 +496,12 @@ header.header {
 }
 
 .main-content {
-    min-height: calc(100vh - 48px);
     position: relative;
 
     .main-body {
         overflow: auto;
         margin-bottom: 2.75rem;
+        min-height: 100vh;
     }
 
     .sidebar {
@@ -728,6 +728,16 @@ header.header {
 
     .sound-bar {
         display: inline-flex;
+    }
+
+    .section {
+        padding: .75rem;
+    }
+
+    .hero:not(.is-fullheight) {
+        .hero-body {
+            padding: .75rem 0;
+        }
     }
 }
 

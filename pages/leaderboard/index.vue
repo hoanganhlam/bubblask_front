@@ -1,9 +1,20 @@
 <template>
     <div>
-        <div class="hero is-dark">
+        <div class="hero is-light">
             <div class="hero-body">
-                <div class="container small">
-                    <h1 class="title">LeaderBoard</h1>
+                <div class="container">
+                    <div class="level is-mobile">
+                        <div class="level-left">
+                            <div class="level-item">
+                                <n-link to="/" class="button">
+                                    <x-icon name="chevron-left"></x-icon>
+                                </n-link>
+                            </div>
+                            <div class="level-item">
+                                <h1 class="title">LeaderBoard</h1>
+                            </div>
+                        </div>
+                    </div>
                     <div class="subtitle">See how others work</div>
                 </div>
             </div>

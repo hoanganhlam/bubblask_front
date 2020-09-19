@@ -3,7 +3,14 @@
         <div class="container">
             <div class="level is-mobile">
                 <div class="level-left">
-                    <h1 class="title is-spaced">Board</h1>
+                    <div class="level-item">
+                        <n-link to="/" class="button">
+                            <x-icon name="chevron-left"></x-icon>
+                        </n-link>
+                    </div>
+                    <div class="level-item">
+                        <h1 class="title is-spaced">Board</h1>
+                    </div>
                 </div>
                 <div class="level-right">
                     <div v-if="currentUser" class="button is-dark" @click="create">
