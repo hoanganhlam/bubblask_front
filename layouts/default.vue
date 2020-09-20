@@ -160,9 +160,11 @@
                                         <div class="bar"></div>
                                         <div class="bar"></div>
                                     </div>
-                                    <div class="button">
-                                        <x-icon :name="playing ? 'pause' : 'play'"/>
-                                    </div>
+                                    <b-tooltip label="online radio focus music">
+                                        <div class="button">
+                                            <x-icon :name="playing ? 'pause' : 'play'"/>
+                                        </div>
+                                    </b-tooltip>
                                 </div>
                                 <div class="navbar-item">
                                     <div>
@@ -715,6 +717,7 @@ export default {
 
     .hero.is-secondary {
         background: var(--bg-color-secondary);
+        min-height: 50vh;
 
         a {
             color: var(--link-color);

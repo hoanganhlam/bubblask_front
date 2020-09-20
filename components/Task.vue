@@ -188,6 +188,7 @@ export default {
             if (this.task && this.task.settings && this.task.settings.collaborate) {
                 return true;
             }
+            if (!Boolean(this.currentUser)) return true;
             return Boolean(this.currentUser) && (this.currentUser.id === this.task.user.id || (Boolean(this.currentUser.assignee) && this.currentUser.assignee.id === this.currentUser.id));
         }
     },

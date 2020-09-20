@@ -5,23 +5,23 @@
     "../server/index.ssr.html",
     "7.cb25252.js",
     "LICENSES",
-    "app.ecb3b39.css",
+    "app.1baf9ae.css",
     "app.f4c0c1e.js",
     "manifest.e00d1733.json",
     "pages/_user/index.7a1ace7.js",
     "pages/board/_id/index.098ae4b.js",
     "pages/board/_id/mindmap.21ed33a.js",
     "runtime.17cbb41.js",
-    "styles.2d64c0b.js",
-    "styles.db1ce85.css",
+    "styles.785780e.js",
+    "styles.a6c25de.css",
     "vendors/commons.a6daab7.js"
   ],
   "initial": [
     "runtime.17cbb41.js",
     "vendors/commons.a6daab7.js",
-    "styles.db1ce85.css",
-    "styles.2d64c0b.js",
-    "app.ecb3b39.css",
+    "styles.a6c25de.css",
+    "styles.785780e.js",
+    "app.1baf9ae.css",
     "app.f4c0c1e.js"
   ],
   "async": [
@@ -44,6 +44,10 @@
     ],
     "40800887": [
       13
+    ],
+    "53263813": [
+      12,
+      11
     ],
     "55475547": [
       12,
@@ -1421,7 +1425,7 @@
       12,
       11
     ],
-    "2957f717": [
+    "6ffe2e5a": [
       12,
       11
     ],
@@ -1429,7 +1433,7 @@
       12,
       11
     ],
-    "2e5d7fd5": [
+    "7503b718": [
       12,
       11
     ],
@@ -1593,15 +1597,11 @@
       12,
       11
     ],
-    "7d911a1b": [
-      12,
-      11
-    ],
     "c385f0f6": [
       12,
       11
     ],
-    "fad2ba4e": [
+    "582bc0d1": [
       12,
       11
     ],
@@ -2223,7 +2223,7 @@
       "runtime.17cbb41.js"
     ],
     "ed305750": [
-      "styles.2d64c0b.js"
+      "styles.785780e.js"
     ],
     "07a97964": [
       "vendors/commons.a6daab7.js"
