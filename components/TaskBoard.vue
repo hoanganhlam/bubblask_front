@@ -84,7 +84,12 @@ export default {
             return this.$store.state.config.settings.timer
         },
         authorised() {
-            return !(Boolean(this.board) && this.board.settings && !this.board.settings['collaborate']);
+            return !(
+                    this.board && this.board.settings && !this.board.settings['collaborate']
+                ) ||
+                (
+                    this.currentUser && this.board && this.board['user_id'] === this.currentUser.id
+                );
         }
     },
     methods: {

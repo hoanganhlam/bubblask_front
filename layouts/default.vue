@@ -234,7 +234,7 @@ export default {
             },
             is_online: true,
             strictTemp: false,
-            forceSidebar: true,
+            forceSidebar: false,
             playing: false
         }
     },
@@ -692,6 +692,7 @@ export default {
         background-size: cover;
         background: var(--bg-color-primary);
         color: var(--bg-color-primary-text);
+        min-height: 50vh;
 
         &:not(.is-fullheight) {
         }

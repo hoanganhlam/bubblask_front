@@ -1065,12 +1065,12 @@ var Taginput_component = Object(componentNormalizer["a" /* default */])(
 
 "use strict";
 
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./components/TaskBoard.vue?vue&type=template&id=c3815e9e&
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./components/TaskBoard.vue?vue&type=template&id=65643be8&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"board"},[(!_vm.readonly && _vm.authorised)?_vm._ssrNode("<div class=\"media\">","</div>",[_vm._ssrNode("<div class=\"media-content\">","</div>",[_vm._ssrNode("<div class=\"task has-text-centered\">","</div>",[_vm._ssrNode("<div class=\"notification\">","</div>",[_c('x-icon',{attrs:{"name":"plus"}})],1)])]),_vm._ssrNode(" "),_c('n-link',{staticClass:"media-right",attrs:{"to":"/board/visual"}},[_c('div',{staticClass:"task"},[_c('div',{staticClass:"notification"},[_c('x-icon',{attrs:{"name":"file-tree-outline"}})],1)])])],2):_vm._e(),_vm._ssrNode(" "),(!_vm.loading && _vm.activeTasks.length)?_c('draggable',_vm._b({on:{"change":_vm.handle_order},model:{value:(_vm.activeTasks),callback:function ($$v) {_vm.activeTasks=$$v},expression:"activeTasks"}},'draggable',_vm.dragOptions,false),_vm._l((_vm.activeTasks),function(task,i){return _c('task',{key:i,staticClass:"master",attrs:{"value":task,"readonly":_vm.readonly,"tree":_vm.tree,"board":_vm.board},on:{"add":_vm.handle_add_child,"editing":function($event){_vm.disabledDrag = $event},"deleted":function($event){return _vm.$emit('deleted', $event)}}})}),1):_vm._e(),_vm._ssrNode(" "+((_vm.loading)?("<div class=\"tasks\">"+(_vm._ssrList((5),function(i){return ("<div class=\"task\"><div class=\"notification media\"><div class=\"skeleton-task\"></div></div></div>")}))+"</div>"):"<!---->"))],2)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./components/TaskBoard.vue?vue&type=template&id=c3815e9e&
+// CONCATENATED MODULE: ./components/TaskBoard.vue?vue&type=template&id=65643be8&
 
 // EXTERNAL MODULE: ./plugins/task.js
 var plugins_task = __webpack_require__(5);
@@ -1166,7 +1166,7 @@ const _ = __webpack_require__(2);
     },
 
     authorised() {
-      return !(Boolean(this.board) && this.board.settings && !this.board.settings['collaborate']);
+      return !(this.board && this.board.settings && !this.board.settings['collaborate']) || this.currentUser && this.board && this.board['user_id'] === this.currentUser.id;
     }
 
   },
