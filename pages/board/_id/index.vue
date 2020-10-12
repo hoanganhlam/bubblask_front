@@ -123,6 +123,9 @@
                             <b-tag-input icon="tag" placeholder="Hash tag" v-model="board.text_tags"/>
                         </div>
                         <task-board :tasks="storeTasks" :board="board" :readonly="!updating"/>
+                        <div v-if="updating" class="button is-text is-small is-fullwidth" @click="remove">
+                            <x-icon name="trash"></x-icon>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -287,6 +290,15 @@ export default {
                     assignee: this.board.tasks[i]['assignee'],
                 }));
             }
+        },
+        remove() {
+            this.$axios.$delete(`/task/boards/${this.boardSlug}/`).then(res => {
+                Snackbar.open({
+                    message: "BOARD_DELETED",
+                    type: 'is-warning',
+                });
+                this.$router.replace({path: `/board/`});
+            })
         }
     },
     watch: {

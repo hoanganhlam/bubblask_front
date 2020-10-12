@@ -113,7 +113,7 @@ export default {
             let order = this.activeTasks.map(x => x.id);
             if (this.currentUser) {
                 if (this.board && this.board.id) {
-                    this.$axios.$put(`/task/boards/${this.boardSlug}/`, {
+                    this.$axios.$put(`/task/boards/${this.board.slug}/`, {
                         task_order: order
                     })
                 } else {

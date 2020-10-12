@@ -74,6 +74,9 @@
                     </div>
                     <div class="buttons timer-control">
                         <div v-if="(runningTask === null || !setting.is_strict)" class="button is-primary"
+                             @click="task_break(25)">Pomodoro
+                        </div>
+                        <div v-if="(runningTask === null || !setting.is_strict)" class="button is-primary"
                              @click="task_break(5)">Short Break
                         </div>
                         <div v-if="(runningTask === null || !setting.is_strict)" class="button is-primary"
@@ -182,7 +185,7 @@ export default {
     data() {
         return {
             timer: 0,
-            mode: "POMODORO TIMER",
+            mode: "ONLINE POMODORO TIMER",
             showNote: false,
             wsPassword: null,
             askPassword: false,
@@ -226,10 +229,13 @@ export default {
     methods: {
         async task_break(m) {
             this.mode = m === 5 ? "Short Break" : "Long Break";
+            if (m === 25) {
+                this.mode = "Pomodoro"
+            }
             await this.$store.commit('task/SET_RUNNING', null);
             if (!this.setting.is_strict) {
                 this.timer = m * 60;
-                this.toTop(41);
+                this.toTop(0);
             }
         },
         move_text(flag, index, time) {
