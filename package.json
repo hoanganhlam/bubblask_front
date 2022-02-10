@@ -22,7 +22,7 @@
         "dotenv": "latest",
         "lodash": "latest",
         "moment": "^2.27.0",
-        "node-sass": "^4.13.1",
+        "node-sass": "^7.0.0",
         "nuxt": "^2.14.4",
         "pug": "^2.0.4",
         "pug-plain-loader": "^1.0.0",
