@@ -21,7 +21,7 @@
         "cookie-universal-nuxt": "^2.1.4",
         "dotenv": "latest",
         "lodash": "latest",
-        "moment": "^2.27.0",
+        "moment": "^2.29.4",
         "node-sass": "^4.13.1",
         "nuxt": "^2.14.4",
         "pug": "^2.0.4",
